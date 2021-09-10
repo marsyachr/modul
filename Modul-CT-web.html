@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Marsya Sibarani" />
+
+
+<title>Modul Pelatihan Pengelolaan dan Analisis Data Camera Trap</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<h2 id="toc-title">Daftar Isi</h2>
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Modul Pelatihan</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Modul-CT-web.html">Camera Trap</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><strong>Modul Pelatihan Pengelolaan dan Analisis Data <em>Camera Trap</em> </strong></h1>
+<h4 class="author">Marsya Sibarani</h4>
+<h4 class="date">September 2021</h4>
+
+</div>
+
+
+<div id="a.-pendahuluan" class="section level1">
+<h1>A. Pendahuluan</h1>
+<p><em>Camera trap</em> merupakan kamera yang memiliki sensor panas atau gerakan sehingga dapat menghasilkan foto secara otomatis. Penggunaan <em>camera trap</em> untuk survei dan pemantauan satwa liar semakin meningkat dalam beberapa tahun belakangan ini. Hal ini karena <em>camera trap</em> dapat mendeteksi satwa elusif di habitatnya secara nonintrusif, dapat aktif selama beberapa bulan di lapangan sehingga manghasilkan <em>survey effort</em> yang lebih tinggi daripada pengamatan langsung oleh manusia, dan dapat menyimpan informasi spasial (berupa koordinat temuan) dan temporal (tanggal dan jam temuan) rekaman keberadaan satwa.</p>
+<p>Penggunaan <em>camera trap</em> tidak hanya menghasilkan rekaman satwa target, melainkan juga satwa lain yang berbagi habitat dengan satwa target tersebut. Karena data yang dihasilkan sangat banyak, pengelolaan dan analisis hasil <em>camera trap</em> cukup rumit, tetapi juga berpotensi menghasilkan banyak penelitian, terutama terkait ekologi spesies yang jarang dipelajari.</p>
+<p>Untuk mendukung peningkatan kapasitas peneliti dan praktisi konservasi mengenai pengelolaan dan analisis data <em>camera trap</em>, Wildlife Conservation Society-Indonesia Program menyusun modul pelatihan ini. Modul ini disusun dengan maksud sebagai pelengkap pelatihan tatap muka bagi staf UPT. Agar dapat digunakan oleh pihak lain juga, kami membuat versi untuk pengguna umum di mana data yang digunakan bukan data survei <em>camera trap</em> yang sebenarnya. Data praktik dapat diunduh melalui tautan berikut: <a href="https://bit.ly/modulCT" class="uri">https://bit.ly/modulCT</a>.</p>
+<div id="sekilas-tentang-r" class="section level3">
+<h3>Sekilas tentang R</h3>
+<p>Modul ini secara khusus berisi tentang penggunaan bahasa pemrograman R untuk menganalisis data <em>camera trap</em>. R adalah sebuah bahasa pemrograman untuk melakukan komputasi dan membuat grafik. Dibandingkan bahasa pemrograman lain, R memiliki banyak <em>package</em> (kumpulan fungsi tambahan) yang dibuat khusus untuk studi ekologi sehingga R sering digunakan oleh peneliti dan praktisi ekologi dan konservasi.</p>
+<p>R memiliki jenis antarmuka pengguna yang disebut <em>command-line interface</em> (CLI), yaitu sistem antarmuka yang memproses perintah kepada program komputer dalam bentuk baris-baris teks. Antarmuka pengguna yang biasanya familiar dengan kita adalah <em>graphical user interface</em> (GUI), yaitu sistem antarmuka di mana pengguna komputer berinteraksi dengan program komputer melalui gambar ikon, misalnya kita mengklik gambar disket untuk menyimpan dokumen di Microsoft Word. Untuk pemula, program komputer GUI mungkin lebih mudah dipelajari dibandingkan CLI, tetapi untuk jangka panjang, CLI lebih praktis dan efisien. Perintah pada program yang menggunakan CLI dapat disimpan dalam bentuk <em>script</em> sehingga langkah-langkah pengolahan dan analisis dapat terdokumentasikan dengan baik dan dapat diulang kembali (<em>repeatable</em>) atau dimodifikasi untuk penggunaan data/studi lain (<em>reproducible</em>). <em>Script</em> juga dapat dibagikan (<em>shareable</em>) sehingga bisa digunakan oleh orang lain dengan mudah.</p>
+<p><em>Script</em> R pada modul ini ditunjukkan oleh teks dengan warna latar belakang abu-abu dan dapat langsung di-<em>copy</em> dan <em>paste</em> pada R kalian. Hasil perintah R (jika ada keluaran) akan tampak di bawah perintah, bisa berupa grafik atau teks bertipe <em>font</em> <em>monospace</em> <code>seperti ini</code>. R dapat diunduh dari tautan <a href="https://www.r-project.org" class="uri">https://www.r-project.org</a>. Selain itu, disarankan juga mengunduh RStudio <a href="https://www.rstudio.com" class="uri">https://www.rstudio.com</a>, yaitu aplikasi tambahan yang dapat mempermudah manajemen <em>script</em> dan <em>working directory</em>; meng-<em>highlight</em> komponen berbeda dalam perintah sehingga mudah dimengerti; dan mengintegrasikan plot, <em>help page</em>, dan komponen lain dalam satu jendela RStudio. “Mesin” yang melakukan komputasi adalah R, sedangkan RStudio hanya tampilan antarmuka pengguna tambahan saja. Oleh karena itu, kita perlu mengunduh dan memasang keduanya.</p>
+<p>Modul ini tidak memuat tutorial dasar R karena sudah banyak sumber yang tersedia secara gratis terkait hal tersebut, misalnya <a href="https://bookdown.org/aepstk/intror" class="uri">https://bookdown.org/aepstk/intror</a> yang menyediakan pengantar R dalam bahasa Indonesia. Selain R, kita akan menggunakan perangkat lunak <em>Picture Information Extractor</em> (PIE) untuk me-<em>rename</em> dan menghasilkan <em>spreadsheet metadata</em> foto. PIE dapat diunduh dari <a href="https://pie-picture-information-extractor.en.softonic.com/" class="uri">https://pie-picture-information-extractor.en.softonic.com/</a>.</p>
+</div>
+</div>
+<div id="b.-identifikasi-dan-pengelolaan-data-camera-trap" class="section level1">
+<h1>B. Identifikasi dan Pengelolaan Data <em>Camera Trap</em></h1>
+<div id="komponen-data-camera-trap" class="section level2">
+<h2>Komponen Data <em>Camera Trap</em></h2>
+<p>Data <em>camera trap</em> terdiri dari tiga komponen utama, yaitu data pemasangan kamera, foto atau video hasil survei, dan data identifikasi rekaman kamera.</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Data pemasangan kamera</strong> adalah data berupa <em>spreadsheet</em> yang memuat informasi mengenai pemasangan dan pengambilan kamera. Data ini selanjutnya akan disebut sebagai data <strong>Deployment</strong>. Informasi yang wajib ada dalam data pemasangan kamera adalah:</p>
+<ul>
+<li>ID unik lokasi<br />
+Setiap lokasi kamera harus memiliki ID unik. Penamaan ID dilakukan sesuai kesepakatan instansi dan dapat berupa kombinasi angka dan huruf. Contoh: BBS_IPZ2015_001, BBS_IPZ2019_005. Jika di satu lokasi dipasang dua kamera yang berhadapan (biasanya dilakukan untuk survei populasi harimau), ID lokasi hanya satu, tetapi perlu ditambahkan kolom lain yang berisi informasi nama atau ID kamera.</li>
+<li>Koordinat GPS lokasi pemasangan kamera<br />
+Jika survei dilakukan dalam skala lokal, dapat menggunakan <em>projected coordinate reference system</em> (CRS), misalnya UTM. Jika survei berskala regional dan mencakup lebih dari satu zona UTM, lebih baik menggunakan <em>geographic</em> CRS, misalnya WGS84. Jika dua kamera berhadapan dipasang di satu lokasi, koordinat yang dicantumkan hanyalah satu.</li>
+<li>Tanggal dan jam pemasangan kamera</li>
+<li>Tanggal dan jam pengambilan kamera</li>
+<li>Tanggal dan jam foto terakhir<br />
+Tanggal pemasangan dan pengambilan kamera digunakan untuk menghitung <em>survey effort</em> atau <em>trap nights</em>, yaitu selisih antara tanggal pengambilan dan pemasangan kamera. Namun, terkadang kamera mati sebelum diambil akibat daya baterai habis atau kerusakan sistem. Untuk kasus seperti ini, <em>survey effort</em> dihitung sebagai selisih antara tanggal foto terakhir dan tanggal pemasangan kamera. Perhitungan <em>survey effort</em> juga dapat dilakukan dengan data tanggal dan jam agar lebih akurat hingga satuan menit/detik.</li>
+</ul></li>
+<li><p><strong>Foto atau video hasil survei</strong><br />
+Data ini merupakan kumpulan foto atau video yang dihasilkan dari pemasangan <em>camera trap</em>. Data disimpan dalam folder yang dinamakan sesuai dengan ID lokasi kamera. Jika dua kamera dipasang di satu lokasi, di dalam folder ID lokasi perlu ditambahkan folder ID kamera <em>atau</em> folder dinamakan ID kamera saja tanpa folder ID lokasi.</p></li>
+<li><p><strong>Data identifikasi rekaman kamera</strong><br />
+Data ini berupa <em>spreadsheet</em> yang berisi informasi identifikasi temuan kamera, selanjutnya disebut sebagai data <strong>Images</strong>. <em>Spreadsheet</em> wajib berisi informasi berikut:</p>
+<ul>
+<li>Nama file foto atau video<br />
+Foto atau video disarankan di-<em>rename</em> terlebih dahulu dengan format: ID Lokasi, tanggal temuan, jam temuan. Penamaan ulang dapat dilakukan dengan <em>software</em> seperti Picture Information Extractor. Foto atau video yang di-<em>rename</em> dapat memudahkan pencarian foto dibandingkan jika tidak di-<em>rename</em>.</li>
+<li>Identifikasi foto atau video<br />
+Jenis temuan (satwa, <em>blank</em>, staf, pelaku tindakan ilegal, dsb) dan spesies satwa yang ditemukan</li>
+<li>ID lokasi rekaman</li>
+<li>Tanggal dan jam rekaman<br />
+Dapat diisikan dalam satu kolom atau di kolom tanggal dan jam yang terpisah.</li>
+</ul></li>
+</ol>
+<p>Hubungan tiap komponen diperlihatkan dalam bagan berikut. Variabel yang menjadi penghubung antarkomponen ini penting. Kesalahan pengetikan (<em>typo</em>) atau data yang tidak lengkap akan membuat analisis lebih rumit.</p>
+<div class="figure">
+<img src="pics/komponendatact.JPG" alt="" />
+<p class="caption">Komponen data <em>camera trap</em></p>
+</div>
+</div>
+<div id="metode-pengarsipan-data-camera-trap" class="section level2">
+<h2>Metode Pengarsipan Data <em>Camera Trap</em></h2>
+<ol style="list-style-type: decimal">
+<li><p>Cara Manual<br />
+Data identifikasi temuan kamera diidentifikasi dan dientri ke dalam <em>spreadsheet</em> secara manual. Perangkat lunak yang dapat digunakan adalah Microsoft Excel (paling umum) atau Microsoft Access.</p></li>
+<li><p>Cara Otomatis<br />
+Otomatis merujuk pada “cara menghasilkan <em>spreadsheet</em>”, bukan proses identifikasi spesies dari foto/video. Saat ini, sudah mulai dikembangkan <em>machine learning software</em> untuk mengidentifikasi satwa dari foto <em>camera trap</em> (misalnya di Afrika Selatan <a href="http://www.wildid.app/" class="uri">http://www.wildid.app/</a>), tetapi belum ada yang dapat mengidentifikasi satwa di hutan hujan tropis karena sebagian besar foto buram dan latar belakang hutan menyulitkan identifikasi. Berikut ini dipaparkan secara singkat beberapa perangkat lunak yang dapat menghasilkan <em>spreadsheet</em> identifikasi secara otomatis.</p>
+<ol style="list-style-type: lower-alpha">
+<li>CameraSweet (<a href="https://smallcats.org/resources/#camerasweet" class="uri">https://smallcats.org/resources/#camerasweet</a>) oleh Jim Sanderson<br />
+Foto rekaman satwa diidentifikasi dengan memindahkan foto ke dalam folder dengan hierarki: <em>Site</em> &gt;&gt; ID Lokasi &gt;&gt; Nama spesies &gt;&gt; Jumlah individu. Menggunakan aplikasi <code>Renamer</code>, foto dalam hierarki folder tersebut di-<em>rename</em> dengan format tanggal dan jam. Kemudian, <em>spreadsheet</em> rekaman dalam format .txt dibuat secara otomatis dengan aplikasi <code>DataOrganize</code>. Aplikasi-aplikasi tersebut terdapat dalam satu paket sistem Camera Sweet.</li>
+</ol>
+<div class="figure">
+<img src="pics/jimsanderson.png" style="width:75.0%" alt="" />
+<p class="caption">Hierarki folder. (Sumber: Presentasi Jim Sanderson)</p>
+</div>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Wild.ID (<a href="http://35.188.216.67:8080/Wild.ID/index.jsp" class="uri">http://35.188.216.67:8080/Wild.ID/index.jsp</a>)<br />
+Wild.ID merupakan perangkat lunak yang dikembangkan oleh Tropical Ecology Assessment and Monitoring Network (<a href="https://www.teamnetwork.org" class="uri">https://www.teamnetwork.org</a>). Wild.ID menyediakan <em>interface</em> yang ramah pengguna. Foto satwa dimasukkan ke dalam perangkat lunak, kemudian diindentifikasi satu per satu atau per kelompok foto (foto yang jeda waktu rekamannya hanya beberapa detik). Informasi yang dapat diatributkan pada foto adalah nama spesies, jumlah individu, dan keterangan tambahan yang dapat diisi dengan jenis kelamin, kelas usia, atau perilaku. <em>Spreadsheet</em> dihasilkan dengan mengekspor data foto yang sudah di-<em>assign</em>. Data keluaran dapat dibuat dalam format .csv atau .xlsx.</li>
+</ol>
+<div class="figure">
+<img src="pics/wildid.JPG" style="width:80.0%" alt="" />
+<p class="caption"><em>Interface</em> Wild.ID</p>
+</div>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>camtrapR (<a href="https://www.rdocumentation.org/packages/camtrapR/versions/0.99.9" class="uri">https://www.rdocumentation.org/packages/camtrapR/versions/0.99.9</a>)<br />
+<code>camtrapR</code> merupakan sebuah <em>package</em> R untuk memproses dan menganalisis data <em>camera trap</em>. Proses identifikasi satwa dari foto dilakukan sebelum memproses data menggunakan R melalui dua cara yaitu (1) meng-<em>assign</em> identifikasi spesies sebagai <em>metadata tagging</em> foto atau (2) seperti Camera Sweet, spesies difolderkan dalam subdirektori folder lokasi. <code>camtrapR</code> kemudian akan membaca <em>metadata tagging</em> atau subdirektori nama spesies dan menghasilkan <em>spreadsheet</em> rekaman foto.<br />
+Catatan: Walaupun <em>spreadsheet</em> foto tidak dihasilkan oleh camtrapR, misalnya dientri secara manual atau menggunakan sistem otomatisasi lain, fungsi-fungsi untuk menganalisis data pada <code>camtrapR</code> tetap dapat dipakai, misalnya fungsi membuat matriks deteksi untuk pemodelan okupansi atau membuat peta temuan spesies.</li>
+</ol></li>
+</ol>
+<p>Hingga pada waktu modul ini ditulis, WCS-IP lanskap Sumatera bagian Selatan masih menggunakan sistem entri data <em>camera trap</em> secara manual menggunakan Microsoft Excel. Hal ini dilakukan karena sistem otomatisasi hanya memungkinkan identifikasi nama spesies dan jumlah individu dan belum bisa menambahkan informasi lain, misalnya jenis kelamin dan kelas usia satwa.</p>
+<p>Dengan menggunakan sistem <em>metadata tagging</em> seperti <code>camtrapR</code>, sebenarnya kita bisa menambahkan informasi tersebut sebagai <em>tag</em>, tetapi <em>tag</em> foto dalam <em>metadata</em> akan dimasukkan dalam satu kolom di dalam <em>spreadsheet</em> yang dihasilkan <code>camtrapR</code>. Hal ini akan menyulitkan perapihan data jika urutan <em>tag</em> tidak sama (<code>species|age|sex</code> vs. <code>species|sex|age</code>) atau ada data yang kosong (<code>species|age|sex</code> dan <code>species|sex</code>).</p>
+<p>Metode mana pun yang dipakai tidak menjadi masalah asalkan kita dapat meminimalisasi kemungkinan terjadinya kesalahan entri data serta dapat menghasilkan <em>spreadsheet</em> berisi data <strong>Deployment</strong> dan data <strong>Images</strong>.</p>
+</div>
+<div id="tahap-pengelolaan-data" class="section level2">
+<h2>Tahap Pengelolaan Data</h2>
+<p>Berikut adalah tahap-tahap pengelolaan data <em>camera trap</em> secara manual setelah dilakukan survei di lapangan.</p>
+<ol style="list-style-type: decimal">
+<li>Mempersiapkan data <strong>Deployment</strong> (pemasangan dan pengambilan kamera)<br />
+Data ini dipersiapkan oleh tim yang melakukan survei lapangan. Format tanggal perlu disamakan dalam satu <em>dataset</em>. Misalnya, menggunakan yyyy/mm/dd atau dd-mm-yyyy asalkan konsisten untuk seluruh survei. Tanggal rekaman terakhir dapat diperoleh setelah kita menyelesaikan data <strong>Images</strong>. Contoh data <strong>Deployment</strong> yang akan kita pakai untuk tutorial ini.</li>
+</ol>
+<table>
+<colgroup>
+<col width="11%" />
+<col width="5%" />
+<col width="5%" />
+<col width="6%" />
+<col width="24%" />
+<col width="23%" />
+<col width="21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Location ID</th>
+<th align="left">Camera</th>
+<th align="right">X</th>
+<th align="right">Y</th>
+<th align="left">Camera Deployment Begin Date</th>
+<th align="left">Camera Deployment End Date</th>
+<th align="left">Camera last picture date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">IDN-108-L0001</td>
+<td align="left">A</td>
+<td align="right">103341</td>
+<td align="right">9867882</td>
+<td align="left">2019-06-28</td>
+<td align="left">2019-11-15</td>
+<td align="left">2019-11-15</td>
+</tr>
+<tr class="even">
+<td align="left">IDN-108-L0001</td>
+<td align="left">B</td>
+<td align="right">103341</td>
+<td align="right">9867882</td>
+<td align="left">2019-06-28</td>
+<td align="left">2019-11-15</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">IDN-108-L0002</td>
+<td align="left">A</td>
+<td align="right">199767</td>
+<td align="right">9844289</td>
+<td align="left">2019-06-28</td>
+<td align="left">2019-11-15</td>
+<td align="left">2019-11-15</td>
+</tr>
+<tr class="even">
+<td align="left">IDN-108-L0002</td>
+<td align="left">B</td>
+<td align="right">199767</td>
+<td align="right">9844289</td>
+<td align="left">2019-06-28</td>
+<td align="left">2019-11-15</td>
+<td align="left">2019-11-15</td>
+</tr>
+<tr class="odd">
+<td align="left">IDN-108-L0003</td>
+<td align="left">A</td>
+<td align="right">225412</td>
+<td align="right">9864805</td>
+<td align="left">2019-06-29</td>
+<td align="left">2019-11-16</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">IDN-108-L0003</td>
+<td align="left">B</td>
+<td align="right">225412</td>
+<td align="right">9864805</td>
+<td align="left">2019-06-29</td>
+<td align="left">2019-11-16</td>
+<td align="left">2019-11-16</td>
+</tr>
+</tbody>
+</table>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Memfolderkan foto/video hasil rekaman kamera<br />
+Setelah kamera diambil dari lapangan, foto-foto (atau video) hasil survei segera disimpan dalam folder yang dinamakan sesuai dengan ID lokasi di data <strong>Deployment</strong>.</p></li>
+<li><p>Mengubah nama foto (<em>rename</em>)<br />
+Tahap ini tidak wajib dilakukan, tetapi penamaan ulang foto akan mempermudah pencarian foto. Cara untuk mengubah nama foto menggunakan Picture Information Extractor (PIE):</p>
+<ul>
+<li>Buka aplikasi PIE, lalu pilih folder ID lokasi tempat menyimpan foto-foto yang akan diubah namanya.</li>
+<li>Pilih semua foto (Ctrl+A) dalam folder tersebut.</li>
+<li>Klik <em>Metadata</em> &gt;&gt; <em>Auto Rename</em> &gt;&gt; <em>Settings..</em></li>
+<li>Pada bagian <em>Renaming Scheme</em>, masukkan format nama foto. Contoh yang disarankan: LocationID_%Y-%M-%D_%H-%N-%S</li>
+<li>Klik OK</li>
+</ul></li>
+<li><p>Memindahkan <em>metadata</em> foto ke dalam <em>spreadsheet</em> <strong>Image</strong><br />
+Untuk membuat data <strong>Images</strong>, kita membutuhkan kolom <strong>nama foto</strong> dan <strong>tanggal-jam</strong>. Tentu akan memakan banyak waktu jika kita mengentri data tersebut satu per satu sehingga kita membutuhkan bantuan aplikasi untuk mengekstrak data yang kita butuhkan. Cara untuk mengekspor <em>metadata</em> menggunakan PIE adalah:</p>
+<ul>
+<li>Pilih folder Location ID tempat menyimpan foto-foto <em>camera trap</em> yang akan diekstrak <em>metadata</em>-nya (ekstrak <em>metadata</em> hanya bisa dilakukan per satu folder dan tidak bisa mencakup subfolder).</li>
+<li>Pada <em>menu bar</em>, pilih <strong>Metadata</strong>, kemudian <strong>Generate Report…</strong></li>
+<li>Centang pilihan <strong>Date Taken</strong></li>
+<li>Beri nama <strong>Output file</strong></li>
+<li>Pada bagian <strong>Delimiter</strong>, pilih:
+<ul>
+<li><em>Comma</em> jika pemisah desimal Microsoft Excel komputer kita adalah titik, atau</li>
+<li><em>Semicolon</em> jika pemisah desimal adalah koma.</li>
+</ul></li>
+<li>Pilih <strong>OK</strong>, lalu <em>file</em> .csv akan muncul di folder yang dipilih.</li>
+<li><em>Copy</em> dan <em>paste</em>:
+<ul>
+<li>Kolom <code>Name</code> ke kolom <code>Image Id</code> pada <em>spreadsheet</em> <strong>Image</strong></li>
+<li>Kolom <code>Date Taken</code> ke kolom <code>Date_Time Captured</code> Contoh <em>spreadsheet</em> <strong>Image</strong> yang sudah diisi informasi dari <em>metadata</em> foto:</li>
+</ul></li>
+</ul></li>
+<li><p>Mengidentifikasi temuan kamera<br />
+Kolom di data <strong>Images</strong> yang diisi pada tahap identifikasi adalah:</p>
+<ul>
+<li><code>Photo Type</code>:
+<ul>
+<li><code>Set up</code>: foto tim saat pemasangan kamera</li>
+<li><code>End</code>: foto tim saat pengambilan kamera</li>
+<li><code>Blank</code>: foto kosong</li>
+<li><code>Animal</code>: foto satwa</li>
+<li><code>Staff</code>: foto tim lapangan selain saat pemasangan atau pengambilan kamera</li>
+<li><code>Unknown</code>: foto satwa yang belum dapat diidentifikasi hingga tingkat spesies</li>
+<li><code>Unidentifiable</code>: foto satwa yang tidak dapat diidentifikasi, misalnya hanya telinga atau hanya ujung ekor</li>
+</ul></li>
+<li><code>Genus Species</code>: Kolom ini diisi dengan nama spesies yang terekam dalam foto</li>
+<li><code>Age</code>: Kategori usia satwa, <code>Adult</code>, <code>Subadult</code>, <code>Juvenile</code>, atau <code>Infant</code>. Jika terdapat lebih dari satu individu dalam kategori satwa yang berbeda, kategori usia dipisahkan dengan titik koma atau tanda lain asalkan konsisten untuk seluruh dataset. Contoh <code>Adult;Juvenile</code>. Jika tidak diketahui, diisi dengan <code>Unknown</code></li>
+<li><code>Sex</code>: Kategori jenis kelamin: <code>Female</code>, <code>Male</code>, <code>Unknown</code></li>
+<li><code>Count</code>: Jumlah individu yang terlihat di foto tersebut</li>
+</ul></li>
+<li><p>Membuat kolom <code>Time</code><br />
+Kolom <code>Time</code> akan digunakan untuk <a href="#tumpang-tindih-pola-aktivitas-temporal">analisis tumpang-tindih pola aktivitas temporal</a>. Kolom <code>Time</code> diisi dengan nilai yang berkisar antara 0 (pukul 00.00) hingga 1 (pukul 23.59). Microsoft Excel menyimpan data tanggal sebagai integer yang menyatakan hari ke-<em>n</em> dimulai dari tanggal 1 Januari 1900. Dengan kata lain, tanggal 1 Januari 1900 disimpan sebagai angka 1, tanggal 1 Januari 1901 bernilai 367, dan 3 September 2021 bernilai 44.448. Data jam disimpan sebagai angka desimal dengan kisaran 0 hingga 1 dan data tanggal-jam disimpan sebagai penjumlahan antara angka integer dan desimal tersebut. Misalnya tanggal 3 September 2021 pukul 12.00 siang memiliki value <span class="math inline">\(44.448 + 0,5 = 44.448,5\)</span>. Oleh karena itu, kita dapat memperoleh data <code>Time</code> dari kolom <code>Date_Time Captured</code> dengan cara mengurangkannya tanggal-jam dengan integer tanggal-jam. Rumus Excel untuk melakukan kalkulasi tersebut adalah <span class="math inline">\(=cell - \text{INT}(cell)\)</span>.</p>
+<div class="figure">
+<img src="pics/time.png" style="width:80.0%" alt="" />
+<p class="caption">Cara menghitung <code>Time</code></p>
+</div></li>
+<li><p>Menentukan <em>independent event</em><br />
+Berdasarkan O’Brien dkk. (2003), <em>independent event</em> (IE) didefinisikan sebagai foto berurutan suatu spesies yang jaraknya lebih dari 30 menit. Dalam menyajikan laporan survei <em>camera trap</em>, jumlah foto spesies merupakan metrik yang kurang baik dalam merepresentasikan <em>capture rate</em> karena satu individu spesies dapat terekam hingga ratusan kali jika ia berkeliaran terus di depan kamera (misalnya kuau raja yang berdansa mencari pasangan) atau beristirahat di depan kamera. Oleh karena itu, dibutuhkan suatu jeda waktu untuk menentukan bahwa suatu rekaman bersifat independen dengan rekaman setelahnya. Untuk menentukan IE dari <em>spreadsheet</em> <strong>Images</strong> lakukan hal berikut menggunakan Microsoft Excel:</p>
+<ul>
+<li><p>Pilih semua data (Ctrl+A) dan klik <strong>Data</strong> &gt;&gt; <strong>Filter</strong> untuk memunculkan tombol <em>filter</em>.</p></li>
+<li><p>Urutkan data dengan urutan persis seperti berikut:</p>
+<ul>
+<li><code>Date_Time Captured</code>: <em>oldest to newest</em></li>
+<li><code>Genus Species</code>: <em>A to Z</em></li>
+<li><code>Location ID</code>: <em>A to Z</em></li>
+</ul></li>
+<li><p>Masukkan formula berikut untuk menentukan IE<br />
+<span class="math display">\[=\text{IF}(lokasi_n &lt;&gt; lokasi_{n-1}, 1, \text{IF}(spesies_n &lt;&gt; spesies_{n-1}, 1, \text{IF}(waktu_n-waktu_{n-1} &gt; 1/48, 1, 0)))\]</span><br />
+Keterangan:</p>
+<ul>
+<li><span class="math inline">\(lokasi_n\)</span> : sel nama lokasi <code>Location ID</code> di baris tempat formula diletakkan</li>
+<li><span class="math inline">\(lokasi_{n-1}\)</span> : sel ID lokasi di baris sebelum baris formula</li>
+<li><span class="math inline">\(spesies\)</span> : sel spesies <code>Genus Species</code></li>
+<li><span class="math inline">\(waktu\)</span> : sel waktu <code>Date_Time Captured</code></li>
+<li>1 merupakan nilai jika rekaman adalah IE</li>
+<li>0 merupakan nilai jika rekaman bukan IE</li>
+<li>1/48 setara dengan 30 menit (1 hari dibagi 24 jam, lalu dibagi 2)</li>
+</ul>
+<p>Formula tersebut jika ditranslasi ke bahasa sehari-hari menjadi: jika nama lokasi berbeda, maka IE; jika spesies berbeda, maka IE; jika selisih waktu dengan rekaman sebelumnya &gt; 30 menit, maka IE; selain itu, bukan IE.</p>
+<p>Catatan: Jika Excel menggunakan tanda koma sebagai penanda desimal, ubah koma pada formula tersebut dengan titik koma (;). <em>Package</em> <code>camtrapR</code> juga memiliki argumen untuk memilih IE pada perintah <code>recordTable</code>, tapi tidak dibahas di sini karena kita tidak men-<em>generate spreadsheet</em> menggunakan <code>camtrapR</code>.</p></li>
+</ul></li>
+</ol>
+<div class="figure">
+<img src="pics/IE.png" style="width:95.0%" alt="" />
+<p class="caption">Formula <em>independent event</em></p>
+</div>
+</div>
+</div>
+<div id="c.-analisis-data-camera-trap" class="section level1">
+<h1>C. Analisis Data <em>Camera Trap</em></h1>
+<div id="menentukan-working-directory-r" class="section level2">
+<h2>Menentukan <em>Working Directory</em> R</h2>
+<p>Sebelum melakukan analisis menggunakan R, kita perlu untuk menentukan <em>working directory</em> terlebih dahulu, yaitu folder di komputer kita di mana kita akan menyimpan <em>script</em>, data <em>input</em>, dan data <em>output</em>. Pertama, buka RStudio. Klik <strong>File</strong> &gt;&gt; <strong>New Project</strong>. Pilih salah satu antara opsi berikut:</p>
+<ul>
+<li>Pilih <strong>New Directory</strong> jika kita ingin membuat folder baru dan menjadikan folder tersebut sebagai <em>working directory</em>. Pilih <strong>New Project</strong>, lalu klik <strong>Browse…</strong> untuk memilih direktori tempat kita akan menyimpan <em>project</em> baru. Beri nama folder yang akan kita buat di bagian <strong>Directory name:</strong>. Klik <strong>Create Project</strong>.</li>
+</ul>
+<p>Atau</p>
+<ul>
+<li>Pilih <strong>Existing Directory</strong> jika folder yang ingin kita jadikan <em>working directory</em> sudah ada. Pada <strong>Project working directory</strong>, klik <strong>Browse…</strong> untuk memilih folder yang akan dijadikan <em>working directory</em>. Klik <strong>Create Project</strong>.</li>
+</ul>
+<p>Cek <em>working directory</em> dengan perintah berikut:</p>
+<pre class="r"><code>getwd()</code></pre>
+<p>Cara lain untuk menentukan <em>working directory</em> adalah dengan menggunakan perintah <code>setwd(...)</code>. Titik-titik diisi dengan direktori folder tersebut. Subfolder dipisahkan dengan tanda <code>\\</code> atau <code>/</code>. Contohnya:</p>
+<pre class="r"><code>setwd(&quot;E:/Sumatra Program/Activities &amp; Programs/Pelatihan Analisis Data CT&quot;)
+# atau
+setwd(&quot;E:\\Sumatra Program\\Activities &amp; Programs\\Pelatihan Analisis Data CT&quot;)</code></pre>
+<p>Setelah menentukan <em>working directory</em>, pindahkan data <em>camera trap</em> yang akan digunakan ke dalam folder tersebut.</p>
+<p>Jika telah selesai analisis data atau sudah muak menggunakan R, aplikasi R bisa kita tutup. Saat menutup R, akan ada pilihan untuk menyimpan <em>workspace image</em> atau tidak. <em>Workspace image</em> adalah objek-objek yang kita buat di R. Jika tidak disimpan, kita perlu mengulang proses memanggil dan membuat data kembali. Namun, jika data yang disimpan besar (misalnya data raster berukuran hingga beberapa <em>gigabytes</em>), R akan menjadi lambat saat kita membuka data. Jika data disimpan, setelah kita menutup program R dan membukanya kembali, objek-objek yang kita buat masih ada.</p>
+<p>Untuk membuka kembali R <em>project</em> setelah menutupnya, kita bisa membuka R dengan cara membuka folder yang dijadikan <em>working directory</em> melalui <em>windows explorer</em>, kemudian klik dua kali <em>file</em> dengan tipe <strong>R Project</strong>. Setelah diklik, RStudio akan terbuka dengan tampilan sesuai dengan terakhir kali kita gunakan.</p>
+</div>
+<div id="memanggil-data" class="section level2">
+<h2>Memanggil Data</h2>
+<p>Secara <em>default</em>, R hanya dapat membaca data dalam format <em>comma separated value</em> (.csv) dan <em>tab-separated value</em> (.txt). Oleh karena itu, <em>spreadsheet</em> Excel perlu disimpan dalam format .csv terlebih dahulu dengan cara:<br />
+- Pilih <strong>Save As</strong><br />
+- Pilih format <strong>CSV (Comma delimited)</strong></p>
+<p>Setelah file disimpan, kita dapat memanggil data ke dalam R menggunakan perintah <code>read.csv(....)</code>.</p>
+<pre class="r"><code># Jika data tidak di working directory
+ct2019 &lt;- read.csv(&#39;E:\directory file\Camera trap mock data.csv&#39;)
+
+# Jika data berada di working directory:
+ct2019 &lt;- read.csv(&#39;Camera trap mock data.csv&#39;)
+
+View(ct2019) # menampilkan data yang dipanggil
+names(ct2019) # melihat nama kolom
+
+# Run ?read.csv untuk melihat cara lengkap penggunaan perintah tersebut</code></pre>
+<p>Selain, .csv dan .txt, kita bisa memanggil data dalam format Microsoft Excel Workbook (.xls dan .xlsx), tetapi kita membutuhkan <em>package</em> tambahan, yaitu <code>readxl</code>. Pertama, <em>install</em> terlebih dahulu <em>package</em> tersebut dengan cara:<br />
+- Pada jendela kanan bawah RStudio, pilih Packages &gt;&gt; Install &gt;&gt; ketik <code>readxl</code> &gt;&gt; Install.<br />
+atau<br />
+- Ketik dan jalankan perintah <code>install.packages("readxl")</code>.</p>
+<p>Untuk memanggil data dalam format Excel:</p>
+<pre class="r"><code>library(readxl) # mengaktifkan package 
+
+ct2019_t &lt;- read_excel(&quot;Camera trap mock data.xlsx&quot;, # nama file
+                       sheet=&quot;Image&quot;)</code></pre>
+<p>Jika terdapat <em>warnings</em>, artinya di data kita terdapat satu atau lebih kolom 1000 baris pertamanya kosong. Hal ini terjadi karena <code>read_excel</code> tidak membaca seluruh kolom untuk menebak tipe data kolom tersebut, melainkan hanya 1000 baris pertama. Jika 1000 baris pertama pada suatu kolom kosong, <code>read_excel</code> akan menerka tipe data kolom tersebut sebagai <em>logical</em> sehingga data nonbiner yang ada di &gt; baris ke-1000 akan dianggap <em>error</em>. Untuk mengatasinya, tambahkan argumen <code>guess_max=3000</code> di perintah <code>read_excel</code>. Angka 3000 bisa diganti angka berapapun yang lebih tinggi dari nomor baris data pertama pada kolom yang dianggap error.</p>
+<pre class="r"><code>ct2019_t &lt;- read_excel(&quot;Camera trap mock data.xlsx&quot;, # nama file
+                       sheet=&quot;Image&quot;, # nama sheet
+                       guess_max=3000) 
+
+class(ct2019_t) # tipe data: tibble</code></pre>
+<pre><code>[1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
+<pre class="r"><code>ct2019_t </code></pre>
+<pre><code># A tibble: 53,797 x 14
+   `Location ID`  Grid Camera `Image Id` Location `Photo Type` `Genus Species`
+   &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;          
+ 1 IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal       Argusianus arg~
+ 2 IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal       Argusianus arg~
+ 3 IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal       Argusianus arg~
+ 4 IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal       Argusianus arg~
+ 5 IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal       Argusianus arg~
+ 6 IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal       Argusianus arg~
+ 7 IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal       Argusianus arg~
+ 8 IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal       Argusianus arg~
+ 9 IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal       Argusianus arg~
+10 IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal       Argusianus arg~
+# ... with 53,787 more rows, and 7 more variables: `Date_Time Captured` &lt;dttm&gt;,
+#   Time &lt;dbl&gt;, Age &lt;chr&gt;, Sex &lt;chr&gt;, Count &lt;dbl&gt;, `Independent Event` &lt;dbl&gt;,
+#   Keterangan &lt;lgl&gt;</code></pre>
+<p>Jika kita memanggil data dengan tipe <em>data frame</em>, seluruh data akan ditampikan. Namun khusus tibble, R hanya menampilkan 10 baris pertama data dan jumlah kolom sebanyak yang muat di jendela RStudio. Oleh karena itu, kita akan menggunakan data <em>tibble</em> untuk analisis data selanjutnya agar data yang ditampilkan lebih praktis.</p>
+</div>
+<div id="statistika-deskriptif" class="section level2">
+<h2>Statistika Deskriptif</h2>
+<p>Beberapa pertanyaan sederhana yang biasanya muncul terkait hasil <em>camera trap</em> adalah:</p>
+<ol style="list-style-type: decimal">
+<li>Spesies apa saja yang ditemukan?</li>
+<li>Berapa jumlah foto dan <em>independent event</em> tiap spesies?</li>
+<li>Spesies apa yang paling sering dan paling sedikit terekam?</li>
+<li>Berapa jumlah foto dan <em>independent event</em> spesies X?</li>
+<li>Di mana saja spesies X ditemukan?</li>
+</ol>
+<p>Untuk menjawab pertanyaan tersebut, kita dapat menggunakan data <em>camera trap</em> dengan penghitungan yang sederhana. Penghitungan ini dapat dilakukan menggunakan <em>base</em> R, tetapi kita akan menggunakan <em>package</em> <code>tidyverse</code> karena dapat mempermudah langkah-langkah yang cukup rumit jika dilakukan dengan perintah dasar R.</p>
+<p><em>Package</em> <code>tidyverse</code> sebenarnya merupakan kumpulan dari beberapa <em>package</em> R. Beberapa perintah yang akan sering kita gunakan adalah <code>group_by</code>, <code>summarise</code>, <code>filter</code>, dan <code>subset</code>. Perintah <code>group_by</code> berfungsi untuk mengelompokkan data berdasarkan variabel (kolom) tertentu. Contoh dalam konteks data <em>camera trap</em> adalah mengelompokkan jumlah <em>independent event</em> berdasarkan lokasi, berdasarkan lokasi dan spesies, dan berdasarkan jenis kelamin satwa. Perintah <code>summarise</code> digunakan bersama dengan perintah <code>group_by</code> dan berfungsi untuk meringkaskan observasi berdasarkan kategori yang kita masukkan dalam <code>group_by</code>. Hasil dari perintah ini adalah <em>data frame</em> baru yang terdiri dari kolom kategori dan kolom-kolom yang berisi ringkasan. Ringkasan yang dimaksud dapat berupa rata-rata, median, simpangan baku, jumlah observasi (<em>count</em>), dan sebagainya (lihat <code>?group_by</code> dan <code>?summarise</code>).</p>
+<p>Fungsi <code>filter</code> dan <code>subset</code> hampir sama, yaitu untuk memilih data berdasarkan kriteria tertentu, misalnya rekaman spesies tertentu atau data dari suatu ID lokasi. Perintah <code>subset</code> merupakan perintah dasar R, sedangkan <code>filter</code> merupakan perintah dari <em>package</em> <code>tidyverse</code>. Cara penggunaannya hampir sama. Perbedaannya adalah <code>subset</code> memiliki argumen <code>select</code> untuk memilih kolom tertentu dari data utama, sedangkan <code>filter</code> tidak. Jika ingin memilih suatu kolom, kita harus menggunakan perintah terpisah, yaitu <code>select</code>.</p>
+<pre class="r"><code>subset(ct2019_t, `Genus Species` == &quot;Paguma larvata&quot;, select=`Date_Time Captured`)</code></pre>
+<pre><code># A tibble: 184 x 1
+   `Date_Time Captured`
+   &lt;dttm&gt;              
+ 1 2019-09-03 04:18:34 
+ 2 2019-09-03 04:18:34 
+ 3 2019-09-03 04:18:34 
+ 4 2019-09-03 04:20:35 
+ 5 2019-09-03 04:20:35 
+ 6 2019-09-03 04:20:36 
+ 7 2019-09-03 04:20:42 
+ 8 2019-09-03 04:20:42 
+ 9 2019-08-03 03:10:19 
+10 2019-08-03 03:10:19 
+# ... with 174 more rows</code></pre>
+<pre class="r"><code>filter(ct2019_t, `Genus Species` == &quot;Paguma larvata&quot;) %&gt;% 
+  select(`Date_Time Captured`)</code></pre>
+<pre><code># A tibble: 184 x 1
+   `Date_Time Captured`
+   &lt;dttm&gt;              
+ 1 2019-09-03 04:18:34 
+ 2 2019-09-03 04:18:34 
+ 3 2019-09-03 04:18:34 
+ 4 2019-09-03 04:20:35 
+ 5 2019-09-03 04:20:35 
+ 6 2019-09-03 04:20:36 
+ 7 2019-09-03 04:20:42 
+ 8 2019-09-03 04:20:42 
+ 9 2019-08-03 03:10:19 
+10 2019-08-03 03:10:19 
+# ... with 174 more rows</code></pre>
+<p>Salah satu fitur <code>tidyverse</code> yang membuat <em>coding</em> lebih menyenangkan adalah tanda <em>pipe</em> <code>%&gt;%</code> (<em>shortcut</em>: Ctrl+Shift+M) yang berfungsi untuk menyatakan rangkaian pemrosesan data. Misalnya, kita ingin menampilkan jumlah IE tapir dan beruk. Tanpa <em>pipe</em>, perintahnya adalah:</p>
+<pre class="r"><code>a &lt;- group_by(ct2019_t,`Genus Species`)
+b &lt;- summarise(a, n_IE=sum(`Independent Event`))
+subset(b, `Genus Species`%in% c(&quot;Tapirus indicus&quot;,&quot;Macaca nemestrina&quot;))</code></pre>
+<pre><code># A tibble: 2 x 2
+  `Genus Species`    n_IE
+  &lt;chr&gt;             &lt;dbl&gt;
+1 Macaca nemestrina   287
+2 Tapirus indicus     101</code></pre>
+<p>Tahapan tersebut banyak membutuhkan objek transisi (<code>a</code>, <code>b</code>) sehingga kurang efisien. Jika menggunakan <em>pipe</em>, perintahnya menjadi:</p>
+<pre class="r"><code>ct2019_t %&gt;% group_by(`Genus Species`) %&gt;% 
+  summarise(n_IE=sum(`Independent Event`)) %&gt;% 
+  subset(`Genus Species`%in% c(&quot;Tapirus indicus&quot;,&quot;Macaca nemestrina&quot;))</code></pre>
+<pre><code># A tibble: 2 x 2
+  `Genus Species`    n_IE
+  &lt;chr&gt;             &lt;dbl&gt;
+1 Macaca nemestrina   287
+2 Tapirus indicus     101</code></pre>
+<p>Hasil dari perintah tersebut hanya ditampilkan, tetapi belum disimpan sebagai objek. Jika ingin menyimpannya sebagai objek agar dapat digunakan untuk proses lain, nama objek tinggal ditambahkan di awal perintah:</p>
+<pre class="r"><code>jumlah_IE &lt;- ct2019_t %&gt;% group_by(`Genus Species`) %&gt;% 
+  summarise(n_IE=sum(`Independent Event`)) %&gt;% 
+  subset(`Genus Species`%in% c(&quot;Tapirus indicus&quot;,&quot;Macaca nemestrina&quot;))</code></pre>
+<p>Kembali ke laptop.</p>
+<div id="spesies-apa-saja-yang-ditemukan" class="section level3">
+<h3>1. Spesies apa saja yang ditemukan?</h3>
+<pre class="r"><code>library(tidyverse)
+
+unique(ct2019_t$`Genus Species`[ct2019_t$`Photo Type`==&quot;Animal&quot;]) </code></pre>
+<pre><code> [1] &quot;Argusianus argus&quot;         &quot;Catopuma temminckii&quot;     
+ [3] &quot;Eupetes macrocerus&quot;       &quot;Hystrix brachyura&quot;       
+ [5] &quot;Muntiacus muntjak&quot;        &quot;Mydaus javanensis&quot;       
+ [7] &quot;Nesolagus netscheri&quot;      &quot;Pardofelis marmorata&quot;    
+ [9] &quot;Rusa unicolor&quot;            &quot;Sus scrofa&quot;              
+[11] &quot;Tapirus indicus&quot;          &quot;Tragulus sp.&quot;            
+[13] &quot;Helarctos malayanus&quot;      &quot;Lariscus insignis&quot;       
+[15] &quot;Macaca nemestrina&quot;        &quot;Neofelis diardi&quot;         
+[17] &quot;Paguma larvata&quot;           &quot;Panthera tigris&quot;         
+[19] &quot;Prionodon linsang&quot;        &quot;Sundasciurus hippurus&quot;   
+[21] &quot;Arctictis binturong&quot;      &quot;Echinosorex gymnura&quot;     
+[23] &quot;Tragulus napu&quot;            &quot;Martes flavigula&quot;        
+[25] &quot;Presbytis melalophos&quot;     &quot;Hemigalus derbyanus&quot;     
+[27] &quot;Trachypithecus cristatus&quot; &quot;Tragulus kanchil&quot;        
+[29] &quot;Tupaia tana&quot;              &quot;Prionailurus bengalensis&quot;
+[31] &quot;Rollulus rouloul&quot;         &quot;Chalcophaps indica&quot;      
+[33] &quot;Leopoldamys sabanus&quot;      &quot;Hydrornis irena&quot;         
+[35] &quot;Meiglyptes tukki&quot;         &quot;Arctonyx hoevenii&quot;       
+[37] &quot;Spilornis cheela&quot;         &quot;Elephas maximus&quot;         
+[39] &quot;Capricornis sumatraensis&quot; &quot;Sundasciurus tenuis&quot;     </code></pre>
+<pre class="r"><code># atau
+ct2019_t %&gt;% 
+  subset(`Photo Type`==&quot;Animal&quot;, select=`Genus Species`) %&gt;% 
+  unique() </code></pre>
+<pre><code># A tibble: 40 x 1
+   `Genus Species`     
+   &lt;chr&gt;               
+ 1 Argusianus argus    
+ 2 Catopuma temminckii 
+ 3 Eupetes macrocerus  
+ 4 Hystrix brachyura   
+ 5 Muntiacus muntjak   
+ 6 Mydaus javanensis   
+ 7 Nesolagus netscheri 
+ 8 Pardofelis marmorata
+ 9 Rusa unicolor       
+10 Sus scrofa          
+# ... with 30 more rows</code></pre>
+<p>Tambahkan perintah <code>%&gt;% print(n=Inf)</code> di bagian akhir untuk menampilkan semua spesies.</p>
+</div>
+<div id="berapa-jumlah-foto-dan-ie-tiap-spesies" class="section level3">
+<h3>2. Berapa jumlah foto dan IE tiap spesies?</h3>
+<pre class="r"><code>ct2019_t %&gt;% 
+  subset(`Photo Type`==&quot;Animal&quot;) %&gt;% 
+  group_by(`Genus Species`) %&gt;% 
+  summarise(n_foto = n(),
+            n_IE = sum(`Independent Event`))</code></pre>
+<pre><code># A tibble: 40 x 3
+   `Genus Species`          n_foto  n_IE
+   &lt;chr&gt;                     &lt;int&gt; &lt;dbl&gt;
+ 1 Arctictis binturong          54    11
+ 2 Arctonyx hoevenii             6     3
+ 3 Argusianus argus           1428   300
+ 4 Capricornis sumatraensis      5     1
+ 5 Catopuma temminckii         500   101
+ 6 Chalcophaps indica           15     6
+ 7 Echinosorex gymnura         297   105
+ 8 Elephas maximus             238     2
+ 9 Eupetes macrocerus            2     2
+10 Helarctos malayanus        1101   102
+# ... with 30 more rows</code></pre>
+<p>Perintah di atas hanya menampilkan summary secara sementara dan tidak menyimpan tabel. Untuk menyimpan tabel, tambahkan nama objek di depan perintah:</p>
+<pre class="r"><code>tabel_spesies &lt;- ct2019_t %&gt;% 
+  subset(`Photo Type`==&quot;Animal&quot;) %&gt;% 
+  group_by(`Genus Species`) %&gt;% 
+  summarise(n_foto = n(),
+            n_IE = sum(`Independent Event`))</code></pre>
+<p>Objek yang sudah disimpan dapat digunakan untuk penghitungan selanjutnya dan diekspor ke dalam format .csv.</p>
+<pre class="r"><code>write.csv(tabel_spesies, &quot;tabel_spesies_IPZ_2019.csv&quot;,
+          row.names=FALSE)</code></pre>
+</div>
+<div id="spesies-apa-yang-paling-sering-dan-paling-sedikit-terekam" class="section level3">
+<h3>3. Spesies apa yang paling sering dan paling sedikit terekam?</h3>
+<pre class="r"><code># Paling sering:
+tabel_spesies %&gt;% filter(n_IE==max(n_IE))</code></pre>
+<pre><code># A tibble: 1 x 3
+  `Genus Species`   n_foto  n_IE
+  &lt;chr&gt;              &lt;int&gt; &lt;dbl&gt;
+1 Muntiacus muntjak  10791   628</code></pre>
+<pre class="r"><code># Paling sedikit
+tabel_spesies %&gt;% filter(n_IE==min(n_IE))</code></pre>
+<pre><code># A tibble: 5 x 3
+  `Genus Species`          n_foto  n_IE
+  &lt;chr&gt;                     &lt;int&gt; &lt;dbl&gt;
+1 Capricornis sumatraensis      5     1
+2 Meiglyptes tukki              3     1
+3 Nesolagus netscheri          10     1
+4 Spilornis cheela              3     1
+5 Sundasciurus tenuis           3     1</code></pre>
+<pre class="r"><code># Untuk mengurutkan tabel dari jumlah IE terendah ke tertinggi
+tabel_spesies %&gt;% arrange(n_IE)</code></pre>
+<pre><code># A tibble: 40 x 3
+   `Genus Species`          n_foto  n_IE
+   &lt;chr&gt;                     &lt;int&gt; &lt;dbl&gt;
+ 1 Capricornis sumatraensis      5     1
+ 2 Meiglyptes tukki              3     1
+ 3 Nesolagus netscheri          10     1
+ 4 Spilornis cheela              3     1
+ 5 Sundasciurus tenuis           3     1
+ 6 Elephas maximus             238     2
+ 7 Eupetes macrocerus            2     2
+ 8 Trachypithecus cristatus      9     2
+ 9 Arctonyx hoevenii             6     3
+10 Rollulus rouloul              7     3
+# ... with 30 more rows</code></pre>
+<pre class="r"><code># dan sebaliknya:
+tabel_spesies %&gt;% arrange(desc(n_IE))</code></pre>
+<pre><code># A tibble: 40 x 3
+   `Genus Species`     n_foto  n_IE
+   &lt;chr&gt;                &lt;int&gt; &lt;dbl&gt;
+ 1 Muntiacus muntjak    10791   628
+ 2 Sus scrofa           10053   547
+ 3 Argusianus argus      1428   300
+ 4 Macaca nemestrina     9205   287
+ 5 Hystrix brachyura     1956   213
+ 6 Echinosorex gymnura    297   105
+ 7 Helarctos malayanus   1101   102
+ 8 Catopuma temminckii    500   101
+ 9 Tapirus indicus       1783   101
+10 Rusa unicolor         1797    63
+# ... with 30 more rows</code></pre>
+<pre class="r"><code># Untuk membuat grafik jumlah foto:
+ggplot(data = tabel_spesies) + 
+  geom_col(mapping=aes(x= `Genus Species`,
+                       y= n_foto))</code></pre>
+<p><img src="Modul-CT-web_files/figure-html/unnamed-chunk-11-1.png" width="85%" style="display: block; margin: auto;" /></p>
+<p>Iya, grafiknya jelek. Kalau terlalu banyak spesies, namanya akan bertumpuk. Untuk merotasi nama spesies sehingga tidak bertumpuk dan mengubah label sumbu X dan Y, perintah tambahannya ada di bawah ini.</p>
+<pre class="r"><code># Grafik jumlah independent event (IE)
+tabel_spesies %&gt;% 
+  ggplot() + 
+  geom_col(mapping=aes(x= `Genus Species`,
+                       y= n_IE))+
+  ylab(&quot;Jumlah Independent Event&quot;) +
+  xlab(&quot;Spesies&quot;) +
+  theme(axis.text.x = element_text(angle = 90, #rotasi 90 derajat
+                                   vjust = 0.5, 
+                                   hjust = 1))</code></pre>
+<p><img src="Modul-CT-web_files/figure-html/unnamed-chunk-12-1.png" width="85%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## Mengurutkan grafik batang dari spesies dengan jumlah IE tertinggi ke terendah
+spesies_arr &lt;- tabel_spesies %&gt;% arrange(desc(n_IE)) 
+str(spesies_arr) # tipe data `Genus Species` adalah character</code></pre>
+<pre><code>tibble [40 x 3] (S3: tbl_df/tbl/data.frame)
+ $ Genus Species: chr [1:40] &quot;Muntiacus muntjak&quot; &quot;Sus scrofa&quot; &quot;Argusianus argus&quot; &quot;Macaca nemestrina&quot; ...
+ $ n_foto       : int [1:40] 10791 10053 1428 9205 1956 297 1101 500 1783 1797 ...
+ $ n_IE         : num [1:40] 628 547 300 287 213 105 102 101 101 63 ...</code></pre>
+<pre class="r"><code>spesies_arr$`Genus Species`&lt;- factor(spesies_arr$`Genus Species`,
+                                     levels=spesies_arr$`Genus Species`)
+str(spesies_arr)</code></pre>
+<pre><code>tibble [40 x 3] (S3: tbl_df/tbl/data.frame)
+ $ Genus Species: Factor w/ 40 levels &quot;Muntiacus muntjak&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
+ $ n_foto       : int [1:40] 10791 10053 1428 9205 1956 297 1101 500 1783 1797 ...
+ $ n_IE         : num [1:40] 628 547 300 287 213 105 102 101 101 63 ...</code></pre>
+<p>Perhatikan bahwa tipe data <code>Genus Species</code> berubah menjadi <code>Factor</code> dengan urutan dari spesies dengan jumlah IE tertinggi ke terendah.</p>
+<pre class="r"><code># Membuat plot
+spesies_arr %&gt;% 
+  ggplot() + 
+  geom_col(mapping = aes(x = `Genus Species`,
+                         y = n_IE))+
+  ylab(&quot;Jumlah Independent Event&quot;) +
+  xlab(&quot;Spesies&quot;) +
+  theme(axis.text.x = element_text(angle = 90, 
+                                   vjust = 0.5, 
+                                   hjust = 1))</code></pre>
+<p><img src="Modul-CT-web_files/figure-html/unnamed-chunk-13-1.png" width="85%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Memplotkan beberapa spesies saja
+tabel_spesies %&gt;% 
+  subset(`Genus Species`%in%c(&quot;Panthera tigris&quot;,
+                              &quot;Muntiacus muntjak&quot;,
+                              &quot;Rusa unicolor&quot;,
+                              &quot;Sus scrofa&quot;,
+                              &quot;Macaca nemestrina&quot;,
+                              &quot;Argusianus argus&quot;,
+                              &quot;Tapirus indicus&quot;)) %&gt;% 
+  ggplot() + 
+  geom_col(mapping=aes(x= `Genus Species`,
+                       y= n_IE))+
+  ylab(&quot;Jumlah Independent Event&quot;) +
+  xlab(&quot;Spesies&quot;) +
+  theme(axis.text.x = element_text(angle = 90, 
+                                   vjust = 0.5, 
+                                   hjust = 1))</code></pre>
+<p><img src="Modul-CT-web_files/figure-html/unnamed-chunk-13-2.png" width="85%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="berapa-jumlah-foto-dan-ie-spesies-x" class="section level3">
+<h3>4. Berapa jumlah foto dan IE spesies X?</h3>
+<pre class="r"><code># Misalnya, kita ingin men-subset Argusianus argus
+tabel_spesies %&gt;% 
+  subset(`Genus Species` == &quot;Argusianus argus&quot;) # atau pakai perintah filter(...)</code></pre>
+<pre><code># A tibble: 1 x 3
+  `Genus Species`  n_foto  n_IE
+  &lt;chr&gt;             &lt;int&gt; &lt;dbl&gt;
+1 Argusianus argus   1428   300</code></pre>
+</div>
+<div id="di-mana-saja-spesies-x-ditemukan" class="section level3">
+<h3>5. Di mana saja spesies X ditemukan?</h3>
+<p>Untuk mendapatkan daftar nama lokasi tempat spesies X ditemukan:</p>
+<pre class="r"><code>lokasispesiesX &lt;- ct2019_t %&gt;% 
+  subset(`Genus Species` == &quot;Argusianus argus&quot;, select = `Location ID`) %&gt;% 
+  distinct()
+lokasispesiesX</code></pre>
+<pre><code># A tibble: 35 x 1
+   `Location ID`
+   &lt;chr&gt;        
+ 1 IDN-108-L0001
+ 2 IDN-108-L0002
+ 3 IDN-108-L0003
+ 4 IDN-108-L0006
+ 5 IDN-108-L0007
+ 6 IDN-108-L0009
+ 7 IDN-108-L0010
+ 8 IDN-108-L0011
+ 9 IDN-108-L0012
+10 IDN-108-L0013
+# ... with 25 more rows</code></pre>
+<p><strong>a. Membuat peta sederhana keberadaan spesies X menggunakan <em>scatter plot</em> </strong></p>
+<pre class="r"><code># Panggil data yang berisi koordinat kamera
+koord &lt;- read_excel(&quot;Camera trap mock data.xlsx&quot;,
+                     sheet=&quot;Deployment&quot;) %&gt;% 
+  #dplyr::select(`Location ID`, X=X, Y=Y) %&gt;% 
+  distinct()
+
+lokasispesiesX &lt;- lokasispesiesX %&gt;% left_join(koord) 
+
+# data frame ini bisa diekspor ke .csv untuk dipetakan menggunakan software GIS
+write.csv(lokasispesiesX, &quot;lokasispesiesX.csv&quot;)
+
+lokasispesiesX %&gt;% 
+  ggplot(aes(x = X, y = Y)) +
+  geom_point()</code></pre>
+<p><img src="Modul-CT-web_files/figure-html/unnamed-chunk-16-1.png" width="85%" style="display: block; margin: auto;" /></p>
+<p><strong>b. Membuat peta keberadaan spesies X menggunakan shapefile</strong></p>
+<p>Untuk menambahkan batas area studi, kita perlu memanggil data <em>shapefile</em> area studi menggunakan <em>package</em> <code>rgdal</code> dan <code>sp</code>. <em>Package</em> <code>rgdal</code> berfungsi untuk membaca data spasial, sedangkan <em>package</em> <code>sp</code> berfungsi untuk mendefinisikan tipe objek (<code>class</code>) data spasial yang dibuka di R serta metode pengolahannya. <em>Install package</em> tersebut lebih dahulu dengan klik <strong>Packages</strong> &gt;&gt; <strong>Install</strong> &gt;&gt; ketik <code>rgdal, sp</code> &gt;&gt; <strong>Install</strong> atau dengan perintah <code>install.packages(c("rgdal","sp"))</code>.</p>
+<pre class="r"><code>library(rgdal)
+sumatra &lt;- readOGR(&quot;E:/Spatial Data/IDN_adm/Sumatra_main-island_utm.shp&quot;)
+lokasispesies_shp &lt;- SpatialPoints(coords=lokasispesiesX[,c(&quot;X&quot;,&quot;Y&quot;)], 
+      proj4string = CRS(&quot;+proj=utm +zone=48 +south +datum=WGS84 +units=m +no_defs&quot;))</code></pre>
+<pre class="r"><code>par(mar=c(1,1,1,1)) #mengatur margin peta agar tidak terlalu lebar
+plot(lokasispesies_shp, pch=16);plot(sumatra, add=TRUE)</code></pre>
+<p><img src="Modul-CT-web_files/figure-html/unnamed-chunk-19-1.png" width="85%" style="display: block; margin: auto;" /></p>
+<p><strong>c. Memetakan jumlah <em>independent event</em> spesies X</strong></p>
+<pre class="r"><code>spesies_ie &lt;- ct2019_t %&gt;% 
+  filter(`Genus Species` == &quot;Argusianus argus&quot;, `Independent Event` == 1) %&gt;% 
+  # hanya pilih IE-nya saja
+  left_join(koord) 
+
+spesies_ie %&gt;% 
+  ggplot(aes(X, Y)) +
+  geom_count(show.legend=TRUE) +
+  labs(title=&quot;Argusianus argus&quot;,
+       size=&quot;Jumlah IE&quot;)</code></pre>
+<p><img src="Modul-CT-web_files/figure-html/unnamed-chunk-20-1.png" width="85%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="relative-abundance-index-rai" class="section level2">
+<h2><em>Relative Abundance Index</em> (RAI)</h2>
+<p>Walaupun menghitung <em>independent event</em> dapat mengurangi bias akibat deteksi satwa yang sama lebih dari satu kali, <em>independent event</em> belum memperhitungkan upaya survei (<em>survey effort</em>). Misalnya, terdapat dua lokasi pemasangan kamera, lokasi A dan lokasi M. Kamera aktif selama 20 hari di lokasi A, sedangkan hanya dua hari di lokasi M karena kabel kamera digigit tikus. Di kedua lokasi, terdapat dua <em>independent event</em> (IE) tikus bulan. Jika kita hanya membandingkan jumlah IE, kita akan mendapatkan kesimpulan yang salah tentang tikus bulan. Di lokasi A, dibutuhkan waktu 20 hari untuk mendapatkan 2 IE. Di lokasi M, hanya dibutuhkan 2 hari untuk mendapatkan 2 IE. Jika kamera tidak dirusak tikus, mungkin saja dapat terekam &gt; 2 IE di lokasi M jika kamera aktif selama 20 hari. Oleh karena itu, jika kita ingin membandingkan temuan antarlokasi, lebih baik menggunakan metrik laju temuan (<em>capture rate</em>), yaitu jumlah temuan per satuan upaya survei.</p>
+<p>Dalam studi <em>camera trap</em>, upaya survei seringkali disebut sebagai <em>trap nights</em> atau jumlah hari aktif kamera. <em>Trap nights</em> dapat dihitung dengan mengurangi tanggal kamera terakhir aktif dan tanggal kamera mulai aktif. Tanggal kamera terakhir aktif idealnya adalah tanggal kamera diambil, tetapi seringkali kamera sudah tidak aktif (daya baterai habis atau <em>error</em>) sebelum diambil sehingga lebih baik menggunakan tanggal terakhir kali kamera merekam foto/video. Untuk menghitung <em>trap nights</em>, kita akan menggunakan <em>sheet</em> <strong>Deployment</strong>.</p>
+<pre class="r"><code># Memanggil data
+deploy &lt;- read_excel(&quot;Camera trap mock data.xlsx&quot;,
+                     sheet=&quot;Deployment&quot;) %&gt;% 
+  subset(`Camera Failure Details`==&quot;Functioning&quot;) %&gt;% #kamera yang berfungsi saja
+  mutate(tnight=as.vector(difftime(`Camera last picture date`,
+                      `Camera Deployment Begin Date`,
+                      units=&quot;days&quot;))) 
+
+# difftime: untuk menghitung perbedaan waktu. Tipe output: &#39;difftime&#39;
+# as.vector: untuk mengubah tipe objek &#39;difftime&#39; jadi &#39;numeric&#39;
+# Hal ini perlu dilakukan karena keluaran difftime memiliki satuan &#39;days&#39; 
+# yang akan mengganggu perhitungan RAI.</code></pre>
+<p>Survei <em>camera trap</em> untuk memantau populasi harimau biasanya menggunakan dua kamera yang saling berhadapan sehingga di data frame sebelumnya, terdapat dua nilai <em>trap nights</em> untuk satu lokasi kamera. Satu lokasi dianggap masih “aktif” jika terdapat setidaknya satu kamera yang aktif. Contoh: kamera A dan kamera B merupakan kamera yang berhadapan di lokasi yang sama. Kamera A aktif selama 30 hari, sedangkan kamera B mati di tengah survei sehingga hanya aktif selama 10 hari. Jumlah <em>trap nights</em> pada lokasi tersebut adalah 30 hari, yaitu nilai maksimal antara kamera A dan kamera B. Oleh karena itu, untuk menghitung <em>trap nights</em> per lokasi:</p>
+<pre class="r"><code>tn_loc &lt;- deploy %&gt;% 
+  group_by(`Location ID`) %&gt;% 
+  summarise(tn_grid = max(tnight))
+
+# Untuk menghitung total trap nights seluruh survei: 
+totaltn &lt;- sum(tn_loc$tn_grid)</code></pre>
+<p>Indeks laju temuan yang sering digunakan untuk studi <em>camera trap</em> adalah <em>Relative Abundance Index</em> (RAI) yang dipopulerkan oleh <a href="http://doi.org/10.1017/S1367943003003172">O’Brien et al. (2003)</a>. RAI terdiri dari dua macam, yaitu:</p>
+<ul>
+<li><p>RAI<sub>1</sub>: jumlah hari yang dibutuhkan untuk mendapat satu temuan, dihitung dengan rumus <span class="math inline">\(\frac{\sum trap \text{ }nights}{\sum IE}\)</span></p></li>
+<li><p>RAI<sub>2</sub>: kebalikan dari RAI<sub>1</sub>, yaitu jumlah temuan yang didapatkan per hari, dihitung dengan rumus <span class="math inline">\(\frac{\sum IE}{\sum trap \text{ }nights}\)</span>. Biasanya RAI<sub>2</sub> dihitung dalam satuan jumlah temuan per 100 <em>trap nights</em> karena sebagian besar satwa jarang terekam sehingga rumusnya menjadi jumlah <span class="math inline">\(\frac{\sum IE}{\sum trap \text{ }nights/100}\)</span><br />
+Walaupun indeks ini dinamakan kepadatan relatif, sebenarnya indeks ini lebih merepresentasikan <em>capture rate</em> dibandingkan kepadatan relatif. Asumsi awalnya adalah RAI<sub>2</sub> akan meningkat jika kepadatan spesies meningkat (semakin banyak satwa, semakin besar kemungkinan satwa tersebut terdeteksi). Namun, asumsi ini masih diragukan. Misalnya, suatu kamera dapat merekam ratusan <em>independent events</em> kuau raja jika berada dekat dengan <em>dancing ground</em>. Hal ini bukan berarti RAI tidak berguna, melainkan lebih baik memperlakukan RAI sebagai indeks <em>capture rate</em> daripada menganggapnya sebagai representasi kepadatan relatif.</p></li>
+</ul>
+<p>Untuk selanjutnya, kita akan menyebut RAI<sub>2</sub> sebagai RAI saja. Untuk menghitung RAI per spesies untuk keseluruhan survei, jumlah <em>independent event</em> setiap spesies dibagi dengan total <em>trap nights</em> per 100.</p>
+<pre class="r"><code># Menghitung RAI
+tabel_spesies &lt;- tabel_spesies %&gt;%
+  mutate(RAI = n_IE/(totaltn/100)) #rumus RAI
+
+tabel_spesies</code></pre>
+<pre><code># A tibble: 40 x 4
+   `Genus Species`          n_foto  n_IE    RAI
+   &lt;chr&gt;                     &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1 Arctictis binturong          54    11 0.120 
+ 2 Arctonyx hoevenii             6     3 0.0329
+ 3 Argusianus argus           1428   300 3.29  
+ 4 Capricornis sumatraensis      5     1 0.0110
+ 5 Catopuma temminckii         500   101 1.11  
+ 6 Chalcophaps indica           15     6 0.0657
+ 7 Echinosorex gymnura         297   105 1.15  
+ 8 Elephas maximus             238     2 0.0219
+ 9 Eupetes macrocerus            2     2 0.0219
+10 Helarctos malayanus        1101   102 1.12  
+# ... with 30 more rows</code></pre>
+<p>Untuk menghitung RAI per spesies per lokasi, kita perlu melakukan beberapa langkah, yaitu:</p>
+<ul>
+<li>membuat data frame <code>species_loc</code> yang terdiri dari kolom spesies, ID lokasi, dan jumlah IE</li>
+<li>menggabungkan <code>species_loc</code> dengan <code>tn_loc</code></li>
+<li>menghitung RAI</li>
+</ul>
+<pre class="r"><code>species_RAI &lt;- ct2019_t %&gt;% 
+  subset(`Photo Type` == &quot;Animal&quot;) %&gt;% 
+  group_by(`Genus Species`, `Location ID`) %&gt;% 
+  summarise(n_IE = sum(`Independent Event`, na.rm=T)) %&gt;% 
+  left_join(tn_loc) %&gt;% 
+  mutate(RAI = n_IE/(tn_grid/100))</code></pre>
+<p>Karena RAI dihitung untuk setiap lokasi, kita dapat menghitung ukuran keterpusatan (rata-rata atau median) dan ukuran keragaman (simpangan baku atau kuartil) RAI setiap spesies. Kita juga dapat menggunakan uji statistik untuk melihat apakah ada perbedaan signifikan RAI antara dua atau lebih spesies.</p>
+<div id="membuat-box-plot-rai-spesies" class="section level3">
+<h3>Membuat box plot RAI spesies</h3>
+<pre class="r"><code>ggplot(species_RAI, aes(`Genus Species`, RAI)) +
+  geom_boxplot() +
+  labs(x=&quot;Spesies&quot;, y=&quot;RAI&quot;)+
+  theme(axis.text.x = element_text(angle = 90, 
+                                   vjust = 0.5, 
+                                   hjust = 1))</code></pre>
+<p><img src="Modul-CT-web_files/figure-html/unnamed-chunk-21-1.png" width="85%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Boxplotnya padat karena spesiesnya kebanyakan.
+
+# Pilih beberapa spesies saja:
+species_RAI %&gt;% 
+  subset(`Genus Species` %in% c(&quot;Helarctos malayanus&quot;,&quot;Tapirus indicus&quot;,
+                                &quot;Muntiacus muntjak&quot;,&quot;Rusa unicolor&quot;)) %&gt;% 
+  ggplot(aes(`Genus Species`, RAI)) +
+  geom_boxplot() +
+  labs(x=&quot;Spesies&quot;, y=&quot;RAI&quot;)</code></pre>
+<p><img src="Modul-CT-web_files/figure-html/unnamed-chunk-21-2.png" width="85%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="menghitung-ukuran-keterpusatan-central-tendency-dan-keragaman-spread-rai" class="section level3">
+<h3>Menghitung ukuran keterpusatan (<em>central tendency</em>) dan keragaman (<em>spread</em>) RAI</h3>
+<pre class="r"><code>species_RAI %&gt;% 
+  group_by(`Genus Species`) %&gt;% 
+  summarise(n = n(),
+            rerata = mean(RAI),
+            simpanganbaku = sd(RAI),
+            median = median(RAI),
+            kuartil_bawah = quantile(RAI, probs=0.25),
+            kuartil_atas = quantile(RAI, probs=0.75),
+            hamparan = IQR(RAI)) # hamparan = interquartile range = Q3 - Q1</code></pre>
+<pre><code># A tibble: 40 x 8
+   `Genus Species`     n rerata simpanganbaku median kuartil_bawah kuartil_atas
+   &lt;chr&gt;           &lt;int&gt;  &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Arctictis bint~     9  0.867        0.319   0.714         0.709        0.719
+ 2 Arctonyx hoeve~     1  2.05        NA       2.05          2.05         2.05 
+ 3 Argusianus arg~    35  6.08        13.5     1.43          0.719        4.91 
+ 4 Capricornis su~     1  0.685       NA       0.685         0.685        0.685
+ 5 Catopuma temmi~    33  2.13         1.96    1.37          0.709        2.78 
+ 6 Chalcophaps in~     5  0.853        0.316   0.709         0.709        0.719
+ 7 Echinosorex gy~    18  4.08         6.19    1.74          0.716        3.57 
+ 8 Elephas maximus     2  0.674        0.0160  0.674         0.668        0.679
+ 9 Eupetes macroc~     1  1.43        NA       1.43          1.43         1.43 
+10 Helarctos mala~    42  1.70         1.42    1.35          0.714        2.11 
+# ... with 30 more rows, and 1 more variable: hamparan &lt;dbl&gt;</code></pre>
+</div>
+<div id="memetakan-nilai-rai-spesies" class="section level3">
+<h3>Memetakan nilai RAI spesies</h3>
+<p>Ada dua cara memetakan nilai RAI, yaitu menggunakan <em>scatter plot</em> (tetapi tidak bisa menambahkan batas kawasan) dan menggunakan <em>package</em> pengolahan data spasial.</p>
+<pre class="r"><code># Data koordinat
+ct_coordinates &lt;- deploy %&gt;% 
+  select(`Location ID`, X, Y) %&gt;% 
+  distinct()
+
+# Menggabungkan data spesies dan koordinat
+species_xy &lt;- species_RAI %&gt;% left_join(ct_coordinates)</code></pre>
+<p><strong>a. Menggunakan <em>scatter plot</em> </strong></p>
+<pre class="r"><code># Membuat plot RAI beruang madu
+species_xy %&gt;% 
+  filter(`Genus Species`==&quot;Helarctos malayanus&quot;) %&gt;% 
+  ggplot(aes(x=X, y=Y, size=RAI)) +
+  geom_point()</code></pre>
+<p><img src="Modul-CT-web_files/figure-html/unnamed-chunk-24-1.png" width="85%" style="display: block; margin: auto;" /></p>
+<p><strong>b. Menggunakan data spasial</strong></p>
+<pre class="r"><code>library(rgdal);library(sp)
+beruang &lt;- species_xy %&gt;% filter(`Genus Species`==&quot;Helarctos malayanus&quot;)
+beruang_shp &lt;- SpatialPoints(coords=beruang[,c(&quot;X&quot;,&quot;Y&quot;)], 
+    proj4string = CRS(&quot;+proj=utm +zone=48 +south +datum=WGS84 +units=m +no_defs&quot;))
+
+# Batas kawasan
+sumatra &lt;- readOGR(&quot;E:/Spatial Data/IDN_adm/Sumatra_main-island_utm.shp&quot;)</code></pre>
+<pre><code>OGR data source with driver: ESRI Shapefile 
+Source: &quot;E:\Spatial Data\IDN_adm\Sumatra_main-island_utm.shp&quot;, layer: &quot;Sumatra_main-island_utm&quot;
+with 1 features
+It has 70 fields</code></pre>
+<pre class="r"><code># Membuat plot RAI beruang madu
+par(mar=c(1,1,1,1))
+plot(beruang_shp, pch=16, cex=sqrt(beruang$RAI))
+plot(sumatra, add=TRUE)</code></pre>
+<p><img src="Modul-CT-web_files/figure-html/unnamed-chunk-25-1.png" width="85%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="uji-statistik" class="section level3">
+<h3>Uji statistik</h3>
+<p>Misalnya, kita ingin mengetahui apakah ada perbedaan signifikan antara RAI kijang (<em>Muntiacus muntjak</em>) dan rusa sambar (<em>Rusa unicolor</em>). Pada <em>box plot</em> sebelumnya secara visual RAI spesies tampak memiliki distribusi nonnormal, tetapi kita akan mencoba melakukan uji normalitas menggunakan uji Shapiro-Wilkkita akan menggunakan uji nonparametrik Wilcoxon <em>rank sum test</em>. (Jika distribusi data normal, uji yang digunakan adalah <em>t-test</em> dengan perintah <code>t.test(...)</code>.)</p>
+<pre class="r"><code># Subset data
+kijang &lt;- species_RAI$RAI[species_RAI$`Genus Species`==&quot;Muntiacus muntjak&quot;]
+rusa &lt;- species_RAI$RAI[species_RAI$`Genus Species`==&quot;Rusa unicolor&quot;]
+
+# Uji normalitas
+shapiro.test(kijang) # p-value &lt; 0.05, distribusi data tidak normal</code></pre>
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  kijang
+W = 0.86553, p-value = 9.035e-06</code></pre>
+<pre class="r"><code>shapiro.test(rusa) # p-value &lt; 0.05, distribusi data tidak normal</code></pre>
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  rusa
+W = 0.81845, p-value = 0.0001156</code></pre>
+<pre class="r"><code># Uji Wilcoxon 
+wilcox.test(kijang, rusa)</code></pre>
+<pre><code>
+    Wilcoxon rank sum test with continuity correction
+
+data:  kijang and rusa
+W = 1699, p-value = 1.215e-10
+alternative hypothesis: true location shift is not equal to 0</code></pre>
+<p>Karena <em>p-value</em> &lt; 0.05, H<sub>0</sub> ditolak sehingga kesimpulannya adalah terdapat perbedaan signifikan RAI kijang dan rusa.</p>
+</div>
+</div>
+<div id="tumpang-tindih-pola-aktivitas-temporal" class="section level2">
+<h2>Tumpang-tindih Pola Aktivitas Temporal</h2>
+<p>Untuk menghitung tumpang-tindih pola aktivitas antara dua spesies, kita menggunakan package <code>overlap</code>. Tutorial lengkap mengenai <em>package</em> ini dapat dilihat di <a href="https://cran.r-project.org/web/packages/overlap/overlap.pdf">tautan berikut</a>. Indeks tumpang-tindih temporal berkisar antara 0 (tidak ada tumpang-tindih) hingga 1 (tumpang-tindih sempurna). Biasanya, indeks ini digunakan untuk membandingkan pola aktivitas temporal antara predator-mangsa atau sesama kompetitor.</p>
+<p>Pasang terlebih dahulu <em>package</em> <code>overlap</code> dengan perintah <code>install.packages("overlap")</code>. Data yang digunakan untuk menghitung tumpang-tindih temporal adalah jam rekaman spesies dalam skala 0 (pukul 00.00) hingga 1 (pukul 23.59), yaitu kolom “Time” pada <em>spreadsheet</em> <em>Image</em> (bagian xx), tetapi hanya rekaman independen yang akan digunakan. Variabel waktu ini kemudian akan kita konversi ke dalam skala radian dengan cara = <span class="math inline">\(waktu \times 2 \times\pi\)</span>. Perintah <code>overlapEst</code> akan mengestimasi indeks tumpang-tindih. <em>Confidence interval</em> estimasi dihitung dengan metode <em>bootstraping</em> menggunakan perintah <code>bootEst</code>.</p>
+<pre class="r"><code>library(overlap)
+
+## 1. Memfilter independent events
+IE &lt;- subset(ct2019_t, `Independent Event`==1 &amp; `Photo Type`==&quot;Animal&quot;)
+
+## 2. Konversi Time ke radian
+timerad &lt;- IE$Time*2*pi
+
+## 3. Subset Time spesies yang akan dihitung tumpang-tindihnya
+# Misalnya, harimau dan kijang
+sp_a &lt;- timerad[IE$`Genus Species`==&quot;Panthera tigris&quot;]
+sp_b &lt;- timerad[IE$`Genus Species`==&quot;Muntiacus muntjak&quot;]
+
+## 4. Mengestimasi indeks tumpang-tindih
+(ovrlp &lt;- overlapEst(sp_a, sp_b) )</code></pre>
+<pre><code>    Dhat1     Dhat4     Dhat5 
+0.7679167 0.7661066 0.7707006 </code></pre>
+<pre class="r"><code>## 5. Kalkulasi confidence interval
+# Untuk latihan ini, gunakan 1000 resample supaya hasil keluar cepat.
+# Untuk analisis sesungguhnya, gunakan setidaknya 10.000.
+bs_a &lt;- resample(sp_a, 1000)
+bs_b &lt;- resample(sp_b, 1000)
+
+length(sp_a);length(sp_b)</code></pre>
+<pre><code>[1] 30</code></pre>
+<pre><code>[1] 628</code></pre>
+<pre class="r"><code># Jika jumlah IE setiap spesies &gt; 75, gunakan &quot;Dhat4&quot;. Jika tidak, &quot;Dhat1&quot;
+bsOut &lt;- bootEst(bs_a, bs_b, type=&quot;Dhat1&quot;)  
+bsMean &lt;- mean(bsOut)
+# Confidence interval:
+bootCI(ovrlp[&quot;Dhat1&quot;], bsOut)[&#39;basic0&#39;, ] </code></pre>
+<pre><code>    lower     upper 
+0.6385326 0.8713607 </code></pre>
+<pre class="r"><code>## 6. Membuat plot tumpang-tindih
+overlapPlot(sp_a, sp_b, main=&quot;Tumpang-Tindih Pola Aktivitas&quot;)
+legend(&#39;topright&#39;, c(&quot;Harimau&quot;, &quot;Kijang&quot;), lty=c(1,2), col=c(1,4), bty=&#39;n&#39;)</code></pre>
+<p><img src="Modul-CT-web_files/figure-html/tempoverlap-1.png" width="85%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Untuk mengubah label sumbu x dan y, tampilan garis, dan menambah rug
+overlapPlot(sp_a, sp_b, main=&quot;Tumpang-Tindih Pola Aktivitas&quot;,
+            xlab=&quot;Waktu&quot;, # label sumbu x
+            ylab=&quot;Densitas Kernel&quot;, # label sumbu y
+            linetype = c(1,1), # jenis garis
+            linewidth = c(2,2), # tebal garis
+            linecol=c(&quot;#619CFF&quot;,&quot;#F8766D&quot;), # warna garis
+            olapcol = &quot;lavenderblush&quot;, # warna area tumpang-tindih
+            rug = TRUE) # menambah rug
+legend(&#39;topright&#39;, c(&quot;Harimau&quot;, &quot;Kijang&quot;), 
+       lty=c(1,1), # jenis garis
+       col=c(&quot;#619CFF&quot;,&quot;#F8766D&quot;), # warna garis
+       lwd=c(2,2), # tebal garis
+       bty=&#39;n&#39;)</code></pre>
+<p><img src="Modul-CT-web_files/figure-html/tempoverlap2-1.png" width="85%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
