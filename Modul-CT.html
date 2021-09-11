@@ -1182,7 +1182,7 @@ plot(sumatra, add=TRUE)</code></pre>
 </div>
 <div id="uji-statistik" class="section level3">
 <h3>Uji statistik</h3>
-<p>Misalnya, kita ingin mengetahui apakah ada perbedaan signifikan antara RAI kijang (<em>Muntiacus muntjak</em>) dan rusa sambar (<em>Rusa unicolor</em>). Pada <em>box plot</em> sebelumnya secara visual RAI spesies tampak memiliki distribusi nonnormal, tetapi kita akan mencoba melakukan uji normalitas menggunakan uji Shapiro-Wilkkita akan menggunakan uji nonparametrik Wilcoxon <em>rank sum test</em>. (Jika distribusi data normal, uji yang digunakan adalah <em>t-test</em> dengan perintah <code>t.test(...)</code>.)</p>
+<p>Misalnya, kita ingin mengetahui apakah ada perbedaan signifikan antara RAI kijang (<em>Muntiacus muntjak</em>) dan rusa sambar (<em>Rusa unicolor</em>). Pada <em>box plot</em> sebelumnya secara visual RAI spesies tampak memiliki distribusi nonnormal. Hal tersebut akan kita uji menggunakan uji normalitas Shapiro-Wilk. Jika distribusi data nonnormal, kita akan menggunakan uji nonparametrik Wilcoxon <em>rank sum test</em>. Jika distribusi data normal, uji yang digunakan adalah <em>t-test</em> dengan perintah <code>t.test(...)</code>.</p>
 <pre class="r"><code># Subset data
 kijang &lt;- species_RAI$RAI[species_RAI$`Genus Species`==&quot;Muntiacus muntjak&quot;]
 rusa &lt;- species_RAI$RAI[species_RAI$`Genus Species`==&quot;Rusa unicolor&quot;]
