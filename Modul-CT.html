@@ -1243,7 +1243,7 @@ bsMean &lt;- mean(bsOut)
 # Confidence interval:
 bootCI(ovrlp[&quot;Dhat1&quot;], bsOut)[&#39;basic0&#39;, ] </code></pre>
 <pre><code>    lower     upper 
-0.6389787 0.8656772 </code></pre>
+0.6451901 0.8738690 </code></pre>
 <pre class="r"><code>## 6. Membuat plot tumpang-tindih
 overlapPlot(sp_a, sp_b, main=&quot;Tumpang-Tindih Pola Aktivitas&quot;)
 legend(&#39;topright&#39;, c(&quot;Harimau&quot;, &quot;Kijang&quot;), lty=c(1,2), col=c(1,4), bty=&#39;n&#39;)</code></pre>
@@ -1312,7 +1312,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2",
+      selectors: "h1,h2,h3",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
