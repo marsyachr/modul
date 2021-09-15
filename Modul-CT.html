@@ -910,7 +910,7 @@ ggplot(data = tabel_spesies) +
   geom_col(mapping=aes(x= `Genus Species`,
                        y= n_foto))</code></pre>
 <p><img src="Modul-CT_files/figure-html/unnamed-chunk-11-1.png" width="85%" style="display: block; margin: auto;" /></p>
-<p>Iya, grafiknya jelek. Kalau terlalu banyak spesies, namanya akan bertumpuk. Untuk merotasi nama spesies sehingga tidak bertumpuk dan mengubah label sumbu X dan Y, perintah tambahannya ada di bawah ini.</p>
+<p>Iya, grafiknya jelek. Nama-nama spesies pada grafik yang dihasilkan bertumpuk karena nama spesiesnya terlalu banyak. Solusinya, kita perlu merotasi nama spesies agar dapat dibaca. Selain itu, kita juga akan mengubah label sumbu X dan Y agar lebih intuitif. Perintah untuk melakukan hal-hal tersebut ada di bawah ini.</p>
 <pre class="r"><code># Grafik jumlah independent event (IE)
 tabel_spesies %&gt;% 
   ggplot() + 
@@ -1062,8 +1062,8 @@ deploy &lt;- read_excel(&quot;Camera trap mock data.xlsx&quot;,
 totaltn &lt;- sum(tn_loc$tn_grid)</code></pre>
 <p>Indeks laju temuan yang sering digunakan untuk studi <em>camera trap</em> adalah <em>Relative Abundance Index</em> (RAI) yang dipopulerkan oleh <a href="http://doi.org/10.1017/S1367943003003172">O’Brien et al. (2003)</a>. RAI terdiri dari dua macam, yaitu:</p>
 <ul>
-<li><p>RAI<sub>1</sub>: jumlah hari yang dibutuhkan untuk mendapat satu temuan, dihitung dengan rumus <span class="math inline">\(\frac{\sum trap \text{ }nights}{\sum IE}\)</span></p></li>
-<li><p>RAI<sub>2</sub>: kebalikan dari RAI<sub>1</sub>, yaitu jumlah temuan yang didapatkan per hari, dihitung dengan rumus <span class="math inline">\(\frac{\sum IE}{\sum trap \text{ }nights}\)</span>. Biasanya RAI<sub>2</sub> dihitung dalam satuan jumlah temuan per 100 <em>trap nights</em> karena sebagian besar satwa jarang terekam sehingga rumusnya menjadi jumlah <span class="math inline">\(\frac{\sum IE}{\sum trap \text{ }nights/100}\)</span><br />
+<li><p>RAI<sub>1</sub>: jumlah hari yang dibutuhkan untuk mendapat satu temuan, dihitung dengan rumus <span class="math display">\[\frac{\sum trap \text{ }nights}{\sum IE}\]</span></p></li>
+<li><p>RAI<sub>2</sub>: kebalikan dari RAI<sub>1</sub>, yaitu jumlah temuan yang didapatkan per hari, dihitung dengan rumus <span class="math display">\[\frac{\sum IE}{\sum trap \text{ }nights}\]</span> Biasanya RAI<sub>2</sub> dihitung dalam satuan jumlah temuan per 100 <em>trap nights</em> karena sebagian besar satwa jarang terekam sehingga rumusnya menjadi jumlah <span class="math display">\[\frac{\sum IE}{\sum trap \text{ }nights/100}\]</span><br />
 Walaupun indeks ini dinamakan kepadatan relatif, sebenarnya indeks ini lebih merepresentasikan <em>capture rate</em> dibandingkan kepadatan relatif. Asumsi awalnya adalah RAI<sub>2</sub> akan meningkat jika kepadatan spesies meningkat (semakin banyak satwa, semakin besar kemungkinan satwa tersebut terdeteksi). Namun, asumsi ini masih diragukan. Misalnya, suatu kamera dapat merekam ratusan <em>independent events</em> kuau raja jika berada dekat dengan <em>dancing ground</em>. Hal ini bukan berarti RAI tidak berguna, melainkan lebih baik memperlakukan RAI sebagai indeks <em>capture rate</em> daripada menganggapnya sebagai representasi kepadatan relatif.</p></li>
 </ul>
 <p>Untuk selanjutnya, kita akan menyebut RAI<sub>2</sub> sebagai RAI saja. Untuk menghitung RAI per spesies untuk keseluruhan survei, jumlah <em>independent event</em> setiap spesies dibagi dengan total <em>trap nights</em> per 100.</p>
@@ -1170,19 +1170,15 @@ beruang_shp &lt;- SpatialPoints(coords=beruang[,c(&quot;X&quot;,&quot;Y&quot;)],
 
 # Batas kawasan
 sumatra &lt;- readOGR(&quot;E:/Spatial Data/IDN_adm/Sumatra_main-island_utm.shp&quot;)</code></pre>
-<pre><code>OGR data source with driver: ESRI Shapefile 
-Source: &quot;E:\Spatial Data\IDN_adm\Sumatra_main-island_utm.shp&quot;, layer: &quot;Sumatra_main-island_utm&quot;
-with 1 features
-It has 70 fields</code></pre>
 <pre class="r"><code># Membuat plot RAI beruang madu
 par(mar=c(1,1,1,1))
 plot(beruang_shp, pch=16, cex=sqrt(beruang$RAI))
 plot(sumatra, add=TRUE)</code></pre>
-<p><img src="Modul-CT_files/figure-html/unnamed-chunk-25-1.png" width="85%" style="display: block; margin: auto;" /></p>
+<p><img src="Modul-CT_files/figure-html/unnamed-chunk-27-1.png" width="85%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="uji-statistik" class="section level3">
 <h3>Uji statistik</h3>
-<p>Misalnya, kita ingin mengetahui apakah ada perbedaan signifikan antara RAI kijang (<em>Muntiacus muntjak</em>) dan rusa sambar (<em>Rusa unicolor</em>). Pada <em>box plot</em> sebelumnya secara visual RAI spesies tampak memiliki distribusi nonnormal. Hal tersebut akan kita uji menggunakan uji normalitas Shapiro-Wilk. Jika distribusi data nonnormal, kita akan menggunakan uji nonparametrik Wilcoxon <em>rank sum test</em>. Jika distribusi data normal, uji yang digunakan adalah <em>t-test</em> dengan perintah <code>t.test(...)</code>.</p>
+<p>Misalnya, kita ingin mengetahui apakah ada perbedaan signifikan antara RAI kijang (<em>Muntiacus muntjak</em>) dan rusa sambar (<em>Rusa unicolor</em>). Pada <em>box plot</em> sebelumnya, secara visual RAI spesies tampak memiliki distribusi nonnormal. Hal ini akan kita uji menggunakan uji normalitas Shapiro-Wilk. Jika distribusi data normal, kita akan menggunakan uji parametrik <em>t-test</em> dengan perintah <code>t.test(...)</code>. Jika distribusi data nonnormal, uji yang digunakan adalah uji nonparametrik Wilcoxon <em>rank sum test</em> dengan perintah <code>wilcox.test(...)</code>.</p>
 <pre class="r"><code># Subset data
 kijang &lt;- species_RAI$RAI[species_RAI$`Genus Species`==&quot;Muntiacus muntjak&quot;]
 rusa &lt;- species_RAI$RAI[species_RAI$`Genus Species`==&quot;Rusa unicolor&quot;]
@@ -1200,7 +1196,7 @@ W = 0.86553, p-value = 9.035e-06</code></pre>
 
 data:  rusa
 W = 0.81845, p-value = 0.0001156</code></pre>
-<pre class="r"><code># Uji Wilcoxon 
+<pre class="r"><code># Uji Wilcoxon (karena distribusi data tidak normal)
 wilcox.test(kijang, rusa)</code></pre>
 <pre><code>
     Wilcoxon rank sum test with continuity correction
@@ -1214,7 +1210,7 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 <div id="tumpang-tindih-pola-aktivitas-temporal" class="section level2">
 <h2>Tumpang-tindih Pola Aktivitas Temporal</h2>
 <p>Untuk menghitung tumpang-tindih pola aktivitas antara dua spesies, kita menggunakan package <code>overlap</code>. Tutorial lengkap mengenai <em>package</em> ini dapat dilihat di <a href="https://cran.r-project.org/web/packages/overlap/overlap.pdf">tautan berikut</a>. Indeks tumpang-tindih temporal berkisar antara 0 (tidak ada tumpang-tindih) hingga 1 (tumpang-tindih sempurna). Biasanya, indeks ini digunakan untuk membandingkan pola aktivitas temporal antara predator-mangsa atau sesama kompetitor.</p>
-<p>Pasang terlebih dahulu <em>package</em> <code>overlap</code> dengan perintah <code>install.packages("overlap")</code>. Data yang digunakan untuk menghitung tumpang-tindih temporal adalah jam rekaman spesies dalam skala 0 (pukul 00.00) hingga 1 (pukul 23.59), yaitu kolom “Time” pada <em>spreadsheet</em> <em>Image</em> (bagian xx), tetapi hanya rekaman independen yang akan digunakan. Variabel waktu ini kemudian akan kita konversi ke dalam skala radian dengan cara = <span class="math inline">\(waktu \times 2 \times\pi\)</span>. Perintah <code>overlapEst</code> akan mengestimasi indeks tumpang-tindih. <em>Confidence interval</em> estimasi dihitung dengan metode <em>bootstraping</em> menggunakan perintah <code>bootEst</code>.</p>
+<p>Pasang terlebih dahulu <em>package</em> <code>overlap</code> dengan perintah <code>install.packages("overlap")</code>. Data yang digunakan untuk menghitung tumpang-tindih temporal adalah jam rekaman spesies dalam skala 0 (pukul 00.00) hingga 1 (pukul 23.59), yaitu kolom “Time” pada <em>spreadsheet</em> <em>Image</em>, tetapi hanya rekaman independen yang akan digunakan. Variabel waktu ini kemudian akan kita konversi ke dalam skala radian dengan cara = <span class="math inline">\(waktu \times 2 \times\pi\)</span>. Perintah <code>overlapEst</code> akan mengestimasi indeks tumpang-tindih. <em>Confidence interval</em> estimasi dihitung dengan metode <em>bootstraping</em> menggunakan perintah <code>bootEst</code>.</p>
 <pre class="r"><code>library(overlap)
 
 ## 1. Memfilter independent events
@@ -1247,7 +1243,7 @@ bsMean &lt;- mean(bsOut)
 # Confidence interval:
 bootCI(ovrlp[&quot;Dhat1&quot;], bsOut)[&#39;basic0&#39;, ] </code></pre>
 <pre><code>    lower     upper 
-0.6320144 0.8727180 </code></pre>
+0.6389787 0.8656772 </code></pre>
 <pre class="r"><code>## 6. Membuat plot tumpang-tindih
 overlapPlot(sp_a, sp_b, main=&quot;Tumpang-Tindih Pola Aktivitas&quot;)
 legend(&#39;topright&#39;, c(&quot;Harimau&quot;, &quot;Kijang&quot;), lty=c(1,2), col=c(1,4), bty=&#39;n&#39;)</code></pre>
