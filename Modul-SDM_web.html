@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Marsya Sibarani" />
+
+
+<title>Modul Pemodelan Distribusi Spesies</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<h2 id="toc-title">Daftar Isi</h2>
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Modul Pelatihan</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Modul-CT.html">Camera Trap</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Modul Pemodelan Distribusi Spesies</h1>
+<h4 class="author">Marsya Sibarani</h4>
+<h4 class="date">Oktober 2021</h4>
+
+</div>
+
+
+<div id="cakupan-pelatihan" class="section level3">
+<h3>Cakupan Pelatihan</h3>
+<p>Dalam modul ini, kita akan mempelajari hal berikut:</p>
+<ol style="list-style-type: decimal">
+<li>Pemrosesan data variabel lingkungan<br />
+</li>
+<li>Pemodelan distribusi spesies dengan metode
+<ul>
+<li>Maximum Entropy (MaxEnt)</li>
+<li>Generalized Linear Modeling (GLM)</li>
+<li>Occupancy Modelling</li>
+</ul></li>
+</ol>
+<p>Alat yang digunakan untuk pelatihan ini serta tautan untuk mengunduhnya:</p>
+<ul>
+<li>Bahasa pemrograman R <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a> dan RStudio <a href="https://www.rstudio.com/products/rstudio/download/" class="uri">https://www.rstudio.com/products/rstudio/download/</a></li>
+<li>MaxEnt <a href="https://biodiversityinformatics.amnh.org/open_source/maxent/" class="uri">https://biodiversityinformatics.amnh.org/open_source/maxent/</a></li>
+</ul>
+<p>Data yang digunakan untuk pelatihan ini merupakan data hasil survei <em>camera trap</em> di <em>Intensive Protection Zone</em> (IPZ) Taman Nasional Bukit Barisan Selatan (TNBBS) sehingga tidak dapat dibagikan secara publik. Namun, pengguna modul dapat menggunakan sumber data <em>species occurrence</em> lain dengan penyesuaian tertentu agar <em>script</em> dapat bekerja.</p>
+</div>
+<div id="prasyarat" class="section level3">
+<h3>Prasyarat</h3>
+<p>Modul ini dibuat dengan asumsi bahwa pengguna modul sudah memiliki pengetahuan dan keterampilan mendasar tentang hal berikut:</p>
+<ul>
+<li>Sistem Informasi Geografis
+<ul>
+<li>Perbedaan data vektor (<em>point</em>, <em>line</em>, dan <em>polygon</em>) dan data raster</li>
+<li><em>coordinate reference system</em> (CRS)</li>
+<li>Transformasi data spasial</li>
+</ul></li>
+<li>Bahasa Pemrograman R
+<ul>
+<li>Pengelolaan <em>working directory</em></li>
+<li>Tipe-tipe objek di R</li>
+<li>Statistika dasar</li>
+<li>Visualisasi data dengan <em>base</em> R dan <em>package</em> <code>ggplot2</code></li>
+<li>Transformasi data dengan perintah <code>filter</code>, <code>subset</code>, <code>arrange</code>, <code>select</code>, <code>mutate</code>, <code>group_by</code>, <code>summarise</code></li>
+</ul></li>
+<li>Pengelolaan dan Analisis Data <em>Camera Trap</em>
+<ul>
+<li>Komponen data <em>camera trap</em></li>
+<li><em>Trap nights</em>, <em>capture rate</em>, dan <em>relative abundance index</em> (RAI)</li>
+</ul></li>
+</ul>
+</div>
+<div id="pendahuluan" class="section level1">
+<h1>Pendahuluan</h1>
+<p>Berdasarkan <span class="citation">Rondinini et al. (2006)</span>, representasi keberadaan spesies dalam ruang dapat dikategorikan menjadi tiga:</p>
+<ol style="list-style-type: decimal">
+<li><p><em>Point locality</em>, yaitu titik keberadaan spesies yang berasal dari observasi di lapangan atau koleksi spesimen.</p></li>
+<li><p><em>Geographic range</em>, yaitu batas eksternal distribusi spesies. Peta distribusi spesies di halaman IUCN merupakan contoh dari <em>geographic range</em>.</p></li>
+<li><p><em>Predicted distribution models</em>, yaitu distribusi spesies yang diprediksi berdasarkan hubungan antara spesies dan faktor-faktor lingkungan. Terdapat dua macam <em>predicted distribution models</em>:</p>
+<ul>
+<li><em>Deductive Distribution Models</em><br />
+Hubungan spesies-habitat diperoleh dari literatur dan pengetahuan ahli (<em>expert-based</em>). Contoh model distribusi spesies deduktif adalah model kesesuaian habitat &gt;5000 spesies mamalia di dunia yang dilakukan oleh <span class="citation">Rondinini et al. (2011)</span>. Model tersebut dibuat dengan mengumpulkan pengetahuan ahli tentang karakteristik habitat yang disukai spesies dari website IUCN (iucnredlist.org), kemudian preferensi habitat spesies tersebut dipetakan berdasarkan tipe tutupan lahan, elevasi, dan fitur hidrologi.<br />
+Metode ini kurang akurat dibandingkan metode induktif, tetapi efektif dilakukan jika spesies yang akan dimodelkan banyak (ribuan), data koordinat keberadaan spesies tidak tersedia untuk sebagian besar spesies, dan berskala regional atau global.</li>
+<li><em>Inductive Distribution Models</em><br />
+Hubungan spesies-habitat disimpulkan dari kondisi habitat tempat spesies ditemukan. Istilah <em>species distribution modeling</em> biasanya digunakan untuk merujuk pada proses atau metode pembuatan peta distribusi induktif.<br />
+Metode ini lebih akurat dibandingkan dengan metode deduktif karena menggunakan titik koordinat keberadaan spesies. Namun, tidak efektif untuk memodelkan banyak spesies.</li>
+</ul></li>
+</ol>
+<div class="figure">
+<img src="pics/sp%20representation.jpg" style="height:60.0%" alt="" />
+<p class="caption">Gambar 1. Representasi keberadaan spesies dalam ruang</p>
+</div>
+<p><em>Species Distribution Modelling</em> merupakan metode untuk memprediksi distribusi spasial spesies sebagai suatu fungsi terhadap variabel-variabel lingkungan. Secara umum, SDM terbagi menjadi dua kategori berdasarkan metode komputasinya:</p>
+<ol style="list-style-type: decimal">
+<li><em>Statistical Models</em><br />
+Metode ini menggunakan <em>framework</em> statistik, pada umumnya berbasis regresi linier, untuk memodelkan hubungan spesies-habitat. Contoh metode statistik untuk melakukan SDM adalah <em>generalized linear model</em> (GLM), <em>generalize additive model</em> (GAM), <em>multivariate adaptive regression splines</em>, dan <em>occupancy modeling</em>.</li>
+<li><em>Machine Learning</em><br />
+(penjeasan). Contoh metode: <em>maximum entropy</em> (Maxent) dan <em>artificial neural network</em>.</li>
+</ol>
+<div class="figure">
+<img src="pics/sdm.jpg" alt="" />
+<p class="caption">Gambar 2. Proses pemodelan distribusi spesies</p>
+</div>
+<p>Hal pertama yang perlu dilakukan untuk membuat pemodelan distribusi spesies adalah membuat konsep. Pertanyaan-pertanyaan arahan yang dapat digunakan antara lain:</p>
+<ul>
+<li>Spesies apa yang akan dimodelkan?</li>
+<li>Apa sumber daya yang digunakan spesies untuk bertahan?</li>
+<li>Faktor apa saja yang membatasi pertumbuhan populasi spesies?</li>
+<li>Gangguan manusia apa yang memengaruhi kesintasan spesies?</li>
+<li>dsb.</li>
+</ul>
+<p>Pertanyaan-pernyataan ini dapat membantu kita dalam menentukan variabel lingkungan yang akan dipakai dalam pemodelan. Setelah membuat konsep pemodelan, tahap selanjutnya adalah persiapan data, yaitu:</p>
+<ul>
+<li>Data keberadaan spesies
+<ul>
+<li>Maxent: <em>species presence</em></li>
+<li>GLM: <em>species presence</em> dan <em>absence</em></li>
+<li>Okupansi: <em>detection</em> dan <em>non-detection</em></li>
+</ul></li>
+<li>Variabel lingkungan</li>
+</ul>
+<p>Biasanya, tahap inilah yang memakan paling banyak waktu proses pemodelan, bahkan bisa mencapai &gt; 50% total waktu.</p>
+<p>Bentuk data keberadaan spesies berbeda untuk setiap metode sehingga akan dibahas pada setiap bab metode pemodelan. Namun, variabel lingkungan yang akan digunakan hampir sama sehingga akan dibahas terlebih dahulu.</p>
+</div>
+<div id="persiapan-data-pemrosesan-data-spasial-variabel-lingkungan" class="section level1">
+<h1>Persiapan Data: Pemrosesan Data Spasial Variabel Lingkungan</h1>
+<p>Untuk menentukan variabel lingkungan apa saja yang akan digunakan untuk pemodelan, kita harus mengetahui ekologi spesies yang akan dimodelkan dan skala pemodelan. Misalnya, jika kita ingin memodelkan satwa arboreal seperti siamang, faktor utama yang penting bagi keberadaannya adalah struktur tajuk pohon yang memungkinkan mereka bergerak dan sumber pakan, yaitu buah dan daun pohon di hutan primer atau sekunder. Oleh karena itu, kita dapat mengasumsikan bahwa data spasial yang memengaruhi keberadaannya adalan data yang terkait kualitas habitat hutan, misalnya persentase tajuk hutan, tutupan lahan hutan primer dan sekunder, jarak dari tepi hutan, NDVI. Namun, jika spesies yang akan dimodelkan adalah tumbuhan, mungkin faktor lingkungan terkait iklim, cuaca, dan tanah lebih berpengaruh, misalnya curah hujan tahunan, suhu minimal dan maksimal, dan komposisi tanah.</p>
+<p>Selain sumber daya, variabel lingkungan lain yang dapat memengaruhi keberadaan satwa adalah gangguan manusia. Hal ini dapat direpresentasikan sebagai pengaruh langsung, misalnya tutupan lahan perkebunan dan permukiman sebagai nonhabitat (tergantung spesiesnya), maupun secara tidak langsung, misalnya kepadatan manusia kita asumsikan berkorelasi dengan intensitas aktivitas manusia di dalam kawasan hutan atau polusi dan keberadaan jalan sebagai proksi terhadap perburuan dan perambahan.</p>
+<p>Data spasial yang akan digunakan sebagai prediktor lingkungan dalam pemodelan distribusi spesies harus memiliki <em>extent</em>, resolusi, dan CRS yang sama. Beberapa metode transformasi data spasial yang sering digunakan untuk pemrosesan prediktor lingkungan adalah:</p>
+<ol style="list-style-type: decimal">
+<li><em>Convert vector to raster</em><br />
+Digunakan jika data dasar yang digunakan dalam format vektor sehingga perlu dikonversi menjadi raster<br />
+Contoh: tutupan lahan</li>
+<li><em>Resample</em><br />
+Digunakan data dasar sudah dalam raster, tetapi extent, resolusi, atau CRS belum sama<br />
+Contoh: elevasi, NDVI</li>
+<li><em>Terrain analysis</em><br />
+Untuk memperoleh data turunan dari Digital Elevation Model (DEM)<br />
+Contoh: slope, roughness</li>
+<li><em>Euclidean distance</em><br />
+Untuk memperoleh jarak ke suatu fitur<br />
+Contoh: jarak ke tepi hutan, jarak ke pemukiman, jarak ke sungai</li>
+</ol>
+<p><em>Data Latihan</em></p>
+<p>Untuk praktik ini, kita akan menggunakan lima variabel lingkungan yang <em>open source</em>, yaitu elevasi, kemiringan lereng, <em>roughness</em>, NDVI, dan jarak dari tepi hutan. Sebelumnya, kita perlu memasang <em>package</em> yang akan digunakan untuk membuat raster variabel lingkungan dengan perintah <code>install.packages(c("rgdal","rgeos","sp","raster","tidyverse"))</code>. Jika sudah terpasang, aktifkan <em>package</em> tersebut dengan perintah <code>library</code></p>
+<pre class="r"><code>library(rgdal);library(rgeos);library(sp);library(raster)
+library(tidyverse)</code></pre>
+<p>Tahap selanjutnya adalah menentukan cakupan area pemodelan yang akan dijadikan sebagai <em>template</em> raster variabel lingkungan. Kita dapat menggunakan batas kawasan untuk hal ini.</p>
+<p>Jika area studi adalah pulau, batas ekologis distribusi spesies jelas karena area daratan dibatasi oleh laut. Namun, jika area studi adalah buatan manusia, seperti kawasan taman nasional atau cagar alam yang dikelilingi oleh fitur daratan juga, spesies dapat bergerak keluar dari batas kawasan sehingga kita perlu membuat <em>buffer</em> batas kawasan. Jarak <em>buffer</em> untuk SDM tidak ada ketentuan khusus. Intinya, kita hanya ingin melihat prediksi distribusi spesies di sekitar batas kawasan dan <em>buffer</em> ini tidak memengaruhi hasil prediksi (berbeda dengan analisis SECR di mana jarak <em>buffer</em> berpengaruh terhadap perhitungan). Jarak sejauh 3-10 km sudah cukup.</p>
+<p>Jika terdapat bagian kawasan yang berbatasan langsung dengan badan air, misalnya danau besar atau laut, bagian tersebut perlu dipotong karena merupakan nonhabitat. Hal sebaliknya berlaku jika spesies yang kita kaji spesies akuatik.</p>
+<p>Kemudian, kita perlu menentukan resolusi <em>template</em> raster. Resolusi untuk semua variabel lingkungan sebaiknya berdasarkan variabel lingkungan yang data aslinya berformat raster dan resolusinya paling besar. Misalnya diketahui ada dua variabel, yaitu elevasi beresolusi 90x90m dan citra landsat dengan resolusi 30x30m. Resolusi yang digunakan adalah 90x90m. Raster dengan resolusi lebih kecil dapat di-<em>resample</em> ke resolusi yang lebih besar dengan dirata-ratakan. Namun, men-<em>scale down</em> raster ke resolusi yang lebih kecil tidak dianjurkan.</p>
+<p>Data yang akan kita gunakan pada latihan ini yang resolusinya paling besar adalah data elevasi (90x90m). Idealnya, kita memakai resolusi ini, tetapi semakin kecil resolusi, semakin banyak jumlah petak (<em>grid/cell</em>) raster yang akan diproses sehingga waktu pemrosesan akan lebih lama. Perbedaan waktunya bisa selama beberapa jam hingga beberapa hari, tergantung besar area studi. Untuk efisiensi waktu, dalam latihan ini kita akan memakai resolusi 250x250m. Resolusi ini sebenarnya juga dapat digunakan untuk penelitian atau publikasi di jurnal ilmiah asalkan cakupan area studinya cukup besar, misalnya satu taman nasional. Namun, jika area studi kecil, seperti Stasiun Penelitian Way Canguk yang luasnya 800 hektar, resolusi ini terlalu besar.</p>
+<p>Dalam contoh ini, kita akan memakai contoh Taman Nasional Bukit Barisan Selatan dan membuat <em>buffer</em> sejauh 5 km.</p>
+<pre class="r"><code># CRS yang akan digunakan
+utm48s &lt;- CRS(&quot;+proj=utm +zone=48 +south +datum=WGS84 +units=m +no_defs&quot;)
+wgs &lt;- CRS(&quot;+proj=longlat +datum=WGS84 +no_defs&quot;)
+
+# Batas kawasan TNBBS, data sudah dalam UTM
+bbs &lt;- readOGR(&quot;Input Data/bbs_dissolve2.shp&quot;)
+
+# Batas daratan Pulau Sumatera, data dalam geographic CRS
+sumatra &lt;- readOGR(&quot;Input Data/Sumatra_main-island.shp&quot;)</code></pre>
+<pre class="r"><code># Mengubah CRS sumatra menjadi UTM 48S
+sumatra &lt;- spTransform(sumatra, utm48s)
+
+# Membuat buffer. Keluaran berformat vektor
+bbsbuffer &lt;- buffer(bbs, width=5000) #  width dalam satuan meter
+
+par(mar=c(1,1,1,1))
+plot(bbsbuffer, col=&quot;green&quot;); plot(bbs, add=T); plot(sumatra, add=T)</code></pre>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-4-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Ada bagian <em>template</em> yang masuk ke laut sehingga perlu dipotong.</p>
+<pre class="r"><code># Memotong bagian laut menggunakan batas Pulau Sumatera
+bbsbuffer &lt;- raster::intersect(bbsbuffer,sumatra)
+plot(bbsbuffer, col=&quot;green&quot;); plot(bbs, add=T); plot(sumatra, add=T)</code></pre>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-5-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Konversi polygon bbsbuffer menjadi raster dengan resolusi 250x250m
+bbstemp &lt;- raster(vals=NULL,ext=extent(bbsbuffer),resolution=c(250,250),crs=utm48s)</code></pre>
+<div id="elevasi" class="section level2">
+<h2>1.1 Elevasi</h2>
+<p>Data elevasi yang digunakan adalah Shuttle Radar Topographic Mission (SRTM) 90m Digital Elevation Model yang dapat diperoleh dari <a href="https://cgiarcsi.community/data/srtm-90m-digital-elevation-database-v4-1/" class="uri">https://cgiarcsi.community/data/srtm-90m-digital-elevation-database-v4-1/</a>. Data SRTM juga tersedia dalam resolusi yang lebih kecil, yaitu 30m, yang dapat diunduh dari <a href="https://earthexplorer.usgs.gov/" class="uri">https://earthexplorer.usgs.gov/</a>, tetapi untuk latihan ini, kita akan memakai yang 90m.</p>
+<p>Pertama, kita akan memanggil data elevasi ke R dengan perintah <code>raster</code>. Data yang asli sebenarnya berupa petak-petak berukuran sekitar 520x520km dan bisa saja area penelitian kita mencakup lebih dari satu petak SRTM. Oleh karena itu, kami sudah menggabungkan petak-petak SRTM untuk seluruh Sumatera pada data raster <strong>Sumatra_srtm90m.tif</strong>.</p>
+<pre class="r"><code># Memanggil data elevasi
+elesumatra &lt;- raster(&quot;Input Data/Sumatra_srtm90m.tif&quot;)
+
+# Resample elevasi ke template raster dengan CRS UTM 48S dan resolusi 250m
+ele &lt;- projectRaster(from=elesumatra,to=bbstemp)</code></pre>
+<p>Raster mencakup seluruh extent <code>bbstemp</code> sehingga kita perlu memotongnya menggunakan poligon <code>bbsbuffer</code></p>
+<pre class="r"><code># Sebelum dipotong
+plot(ele)
+
+# Memotong raster dengan batas poligon bbsbuffer
+ele &lt;- mask(ele, bbsbuffer)
+
+# Setelah dipotong
+plot(ele)</code></pre>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-8-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Kemudian kita menulis raster ke dalam format .asc (wajib untuk Maxent) di folder bernama <strong>Predictor</strong> di <em>working directory</em> kita. Buat folder <strong>Predictor</strong> terlebih dahulu sebelum menjalankan perintah di bawah ini.</p>
+<pre class="r"><code># Ekspor raster
+writeRaster(ele, &quot;Predictors/res250m_elevation.asc&quot;)
+
+# Hapus elesumatra agar tidak memenuhi memori
+rm(elesumatra)</code></pre>
+</div>
+<div id="kemiringan-lahan-slope-dan-keterjalan-tapak-roughness" class="section level2">
+<h2>1.2 Kemiringan lahan (<em>slope</em>) dan keterjalan tapak (<em>roughness</em>)</h2>
+<p>Slope dan roughness merupakan data turunan yang dibuat dari data elevasi menggunakan fungsi <em>terrain analysis</em>.</p>
+<pre class="r"><code># Slope
+slo &lt;- terrain(ele, opt=&quot;slope&quot;, unit=&quot;degrees&quot;)
+writeRaster(slo, &quot;Predictors/res250m_slope.asc&quot;)
+
+# Roughness
+rou &lt;- terrain(ele, opt=&quot;roughness&quot;)
+writeRaster(rou, &quot;Predictors/res250m_roughness.asc&quot;)</code></pre>
+</div>
+<div id="ndvi" class="section level2">
+<h2>1.3 NDVI</h2>
+<p><em>Normalized difference vegetation index</em> (NDVI) adalah indeks yang menguantifikasi kepadatan vegetasi berdasarkan spektrum cahaya <em>near-infrared</em> (NIR), yang dipantulkan tumbuhan, dan spektrum cahaya merah (R), yang diserap oleh tumbuhan. NDVI berkisar antara -1 (tidak ada tumbuhan, misalnya badan air) hingga +1 (kepadatan vegetasi tinggi). NDVI dihitung dengan menggunakan nilai reflektansi spektrum cahaya pada vegetasi dari citra satelit multispektral. Berikut adalah rumus untuk kalkulasi NDVI: <span class="math display">\[\text{NDVI }=\displaystyle \frac{(\text{NIR }-\text{ R})}{(\text{NIR }+\text{ R})}\]</span></p>
+<p>Nilai <em>band</em> NIR dan merah dapat diperoleh dari citra satelit Landsat, tetapi jika area studi luas, biasanya akan terdapat “lubang” awan. Namun, kita dapat menggunakan citra Landsat tahun 2019 bebas awan oleh <span class="citation">Hansen et al. (2013)</span> yang dapat diunduh dari <a href="https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.7.html" class="uri">https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.7.html</a>. Karena satu petak data besar dan akan memakan waktu yang lama jika kita run dari R, dalam latihan ini, kita akan menggunakan data yang sudah dipotong. Berdasarkan website tersebut, diketahui bahwa citra terdiri dari empat <em>band</em>, yaitu : - Layer 1: Band 3 (merah)<br />
+- Layer 2: Band 4 (NIR)<br />
+- Layer 3: Band 5 (<em>Short-Wave Infrared</em>/SWIR)<br />
+- Layer 4: Band 7 (SWIR)<br />
+Jadi, kita akan memakai layer pertama (merah) dan kedua (NIR).</p>
+<pre class="r"><code># Panggil data
+landst &lt;- brick(&quot;Input Data/Hansen_GFC-2019-v1.7_last_00N_100E_clipped.tif&quot;)
+
+# Resample data Landsat ke template raster
+landst &lt;- projectRaster(from=landst, to=bbstemp) 
+# harap bersabar karena agak lama
+
+# Pot
+landst  &lt;- mask(landst , bbsbuffer)
+
+# Hitung NDVI
+ndv &lt;- (landst[[2]] - landst[[1]]) / (landst[[2]] + landst[[1]])
+# angka di dalam kurung kotak menunjukkan urutan nomor layer
+
+writeRaster(ndv, &quot;Predictors/res250m_ndvi.asc&quot;)</code></pre>
+</div>
+<div id="jarak-dari-tepi-hutan" class="section level2">
+<h2>1.4 Jarak dari tepi hutan</h2>
+<p>Jarak dari tepi hutan bernilai 0 jika lokasi berada di luar hutan dan tepat di tepi hutan dan nilai semakin tinggi jika lokasi berada di interior hutan. Untuk mendapatkan variabel ini, kita membutuhkan peta tutupan lahan yang dapat diperoleh dari webgis KLHK. Namun, karena data tutupan lahan ini nasional, biasanya kurang akurat untuk dipakai dalam skala lokal, misalnya satu lokasi TNBBS.</p>
+<p>Khusus di TNBBS, telah tersedia data tutupan lahan yang dibuat dari data Landsat dan diklasifikasi menggunakan metode kombinasi antara <em>Maximum Likelihood Classification</em> (MLC) dan interpretasi secara visual <span class="citation">(Lubis et al. 2018)</span>. Kita akan memakai data tersebut untuk mengukur jarak dari tepi hutan ke interior hutan.</p>
+<p>Data tutupan lahan TNBBS berupa data vektor poligon yang terdiri dari 13 kategori tutupan lahan. Pertama, kita akan men-<em>subset</em> data tutupan lahan yang nonhutan, kemudian mengonversi fitur poligon ke raster sehingga fitur nonhutan memiliki nilai 1 dan hutan bernilai <code>NA</code>. Kita men-<em>subset</em> nonhutan, bukan hutan, karena perintah <code>distance</code> mengukur jarak dari suatu petak raster yang memiliki nilai ke kotak raster terdekat yang bernilai <code>NA</code>.</p>
+<pre class="r"><code># Memanggil data
+lulc &lt;- readOGR(&quot;Input Data/lulc_bbs_2000_2019_natural_human_bbsnp.shp&quot;)
+
+# 13 kategori tutupan lahan
+sort(unique(lulc$LULC_2019))
+
+# Kategori yang hutan
+hutan &lt;- c(&quot;01. Hutan&quot;, &quot;02. Hutan mangrove&quot;)
+
+# Subset nonhutan, ! artinya inversi
+nonhutan_2019 &lt;- subset(lulc, !(LULC_2019 %in% hutan))
+
+# Memberi nilai 1 untuk fitur nonhutan
+nonhutan_2019$nonhutan &lt;- 1
+
+# Konversi vektor ke raster
+# Area nonhutan akan bernilai 1, sesuai field=&quot;hutan&quot;
+# Selain itu, bernilai NA
+nonhutan_2019_raster &lt;- raster::rasterize(x=nonhutan_2019, y=bbstemp,
+                                          field=&quot;nonhutan&quot;)
+
+# Menghitung jarak ke tepi hutan
+nonhutan_2019_dist &lt;- distance(nonhutan_2019_raster)
+
+# Memotong area TNBBS dan buffer saja
+dis &lt;- mask(nonhutan_2019_dist,bbsbuffer)
+
+# Mengekspor ke format .asc
+writeRaster(dis,&quot;Predictors/res250m_distance_to_forest_edge_2019.asc&quot;)</code></pre>
+</div>
+<div id="uji-multicollinearity" class="section level2">
+<h2>Uji <em>multicollinearity</em></h2>
+<p>Sampai di sini, kita sudah memiliki lima raster lingkungan yang akan dipakai sebagai kovariat/prediktor dalam pemodelan distribusi spesies, yaitu elevasi <code>ele</code>, kemiringan lahan <code>slope</code>, keterjalan tapak <code>roughness</code>, NDVI <code>ndvi</code>, dan jarak ke tepi hutan <code>jarakth</code>.</p>
+<pre class="r"><code># Gabungkan prediktor dalam satu objek `preds`
+preds &lt;- stack(ele, slo, rou, ndv, dis)
+
+# Rename
+names(preds) &lt;- c(&quot;ele&quot;, &quot;slo&quot;, &quot;rou&quot;, &quot;ndv&quot;, &quot;dis&quot;)
+
+# Visualisasi prediktor
+plot(preds)</code></pre>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-13-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Selanjutnya, kita akan melakukan uji <em>multicollinearity</em> untuk mengetahui apakah ada variabel lingkungan yang saling berkorelasi. Dalam pemodelan distribusi spesies, sebaiknya kita tidak menggunakan variabel lingkungan yang saling berkorelasi karena akan mengaburkan hubungan antara variabel lingkungan dengan keberadaan spesies.</p>
+<p>Misalnya, keberadaan spesies owa dipengaruhi oleh tutupan tajuk pohon yang tinggi karena owa hanya dapat bergerak di pepohonan. Sementara itu, tutupan tajuk berkorelasi negatif dengan tutupan tumbuhan bawah (<em>understory</em>). Jika kita menggunakan kedua variabel lingkungan dalam model, pengaruh tutupan tajuk pohon dapat tidak muncul karena ada variabel lain yang berkorelasi dengannya dalam model, yaitu tutupan tumbuhan bawah.</p>
+<p>Kita akan menggunakan perintah <code>layerStats</code> untuk melakukan uji korelasi Pearson antara kelima prediktor.</p>
+<pre class="r"><code>corr_pred &lt;- layerStats(preds, stat = &quot;pearson&quot;, na.rm = TRUE)
+corr_pred</code></pre>
+<pre><code>$`pearson correlation coefficient`
+           ele       slo       rou        ndv       dis
+ele 1.00000000 0.4310828 0.4654733 0.05230923 0.1728235
+slo 0.43108280 1.0000000 0.9442662 0.24583976 0.1272130
+rou 0.46547333 0.9442662 1.0000000 0.28565051 0.1507951
+ndv 0.05230923 0.2458398 0.2856505 1.00000000 0.3231587
+dis 0.17282349 0.1272130 0.1507951 0.32315870 1.0000000
+
+$mean
+        ele         slo         rou         ndv         dis 
+554.2617195   7.4218407  97.0944594   0.6806674 752.5917050 </code></pre>
+<p>Tidak ada ketentuan mahabenar universal untuk menentukan tinggi atau tidaknya korelasi. Batas yang biasanya digunakan adalah antara 0,6 atau 0,7, tergantung acuan dan kepercayaan masing-masing.</p>
+<p>Berdasarkan hasil uji di atas, terlihat bahwa kelerangan dan keterjalan berkorelasi tinggi (0,94) sehingga kita hanya akan menggunakan salah satunya dalam pemodelan. Menentukan variabel mana yang dipilih juga tidak ada ketentuan khusus. Kita bisa menggunakan pertimbangan ekologis, yaitu berdasarkan pengetahuan kita tentang ekologi spesies, variabel mana yang lebih memberikan pengaruh secara langsung. Atau, bisa juga kita gunakan keduanya dalam pemodelan yang terpisah, tetapi tentunya akan memakan waktu yang lebih banyak.</p>
+<p>Untuk tujuan latihan ini, kita hanya akan menggunakan kelerengan.</p>
+</div>
+</div>
+<div id="metode-1-maxent" class="section level1">
+<h1>Metode 1: Maxent</h1>
+<div id="persiapan-data" class="section level2">
+<h2>Persiapan Data</h2>
+<p>Data yang dibutuhkan untuk pemodelan menggunakan Maxent adalah data keberadaan spesies (<em>presence only</em>) dan variabel lingkungan dalam format raster yang telah kita buat di bagian sebelumnya. Data keberadaan spesies disimpan dalam format .CSV yang terdiri dari 3 kolom: nama spesies, koordinat X, dan koordinat Y. Dalam satu analisis, kita dapat memodelkan lebih dari satu spesies. Sistem koordinat data spesies dan lingkungan harus sama, misalnya keduanya UTM atau keduanya <em>geographic</em> CRS. Berikut adalah contoh data keberadaan spesies dalam CRS UTM 48S.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Spesies</th>
+<th align="right">X</th>
+<th align="right">Y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Tragulus kanchil</td>
+<td align="right">406523</td>
+<td align="right">9416378</td>
+</tr>
+<tr class="even">
+<td align="left">Tragulus kanchil</td>
+<td align="right">407969</td>
+<td align="right">9415929</td>
+</tr>
+<tr class="odd">
+<td align="left">Tragulus kanchil</td>
+<td align="right">412237</td>
+<td align="right">9415765</td>
+</tr>
+<tr class="even">
+<td align="left">Tragulus kanchil</td>
+<td align="right">414739</td>
+<td align="right">9414233</td>
+</tr>
+<tr class="odd">
+<td align="left">Tragulus kanchil</td>
+<td align="right">418183</td>
+<td align="right">9414547</td>
+</tr>
+<tr class="even">
+<td align="left">Tragulus napu</td>
+<td align="right">405355</td>
+<td align="right">9411438</td>
+</tr>
+<tr class="odd">
+<td align="left">Tragulus napu</td>
+<td align="right">408062</td>
+<td align="right">9412467</td>
+</tr>
+<tr class="even">
+<td align="left">Tragulus napu</td>
+<td align="right">411137</td>
+<td align="right">9412834</td>
+</tr>
+<tr class="odd">
+<td align="left">Tragulus napu</td>
+<td align="right">414458</td>
+<td align="right">9411927</td>
+</tr>
+<tr class="even">
+<td align="left">Tragulus napu</td>
+<td align="right">417974</td>
+<td align="right">9412469</td>
+</tr>
+</tbody>
+</table>
+<p>Kita akan membuat file .csv untuk input Maxent dari data <em>camera trap</em>.</p>
+<pre class="r"><code>library(tidyverse);library(readxl)
+
+# Data spesies
+spdata &lt;- read_excel(&quot;Input Data/DATABASE - BBS_TIGER_SURVEY_2019.xlsx&quot;,
+                     sheet=&quot;Image&quot;) %&gt;%
+  dplyr::filter(`Genus Species` == &quot;Mydaus javanensis&quot;) %&gt;% 
+  dplyr::select(`Genus Species`, `Location ID`)
+spdata</code></pre>
+<pre><code># A tibble: 275 x 2
+   `Genus Species`   `Location ID`
+   &lt;chr&gt;             &lt;chr&gt;        
+ 1 Mydaus javanensis IDN-108-L0001
+ 2 Mydaus javanensis IDN-108-L0001
+ 3 Mydaus javanensis IDN-108-L0001
+ 4 Mydaus javanensis IDN-108-L0001
+ 5 Mydaus javanensis IDN-108-L0001
+ 6 Mydaus javanensis IDN-108-L0001
+ 7 Mydaus javanensis IDN-108-L0001
+ 8 Mydaus javanensis IDN-108-L0001
+ 9 Mydaus javanensis IDN-108-L0001
+10 Mydaus javanensis IDN-108-L0001
+# ... with 265 more rows</code></pre>
+<pre class="r"><code># Data lokasi
+locdata &lt;- read_excel(&quot;Input Data/DATABASE - BBS_TIGER_SURVEY_2019.xlsx&quot;,
+                     sheet=&quot;Deployment&quot;) %&gt;% 
+  dplyr::select(`Location ID`, X, Y) %&gt;% 
+  distinct()
+
+locdata</code></pre>
+<pre><code># A tibble: 65 x 3
+   `Location ID`       X       Y
+   &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt;
+ 1 IDN-108-L0001 410043. 9420108
+ 2 IDN-108-L0002 411656. 9420620
+ 3 IDN-108-L0003 403964. 9417453
+ 4 IDN-108-L0004 405670. 9418788
+ 5 IDN-108-L0005 408496. 9417530
+ 6 IDN-108-L0006 411770. 9417906
+ 7 IDN-108-L0007 414715. 9417847
+ 8 IDN-108-L0008 402775  9416319
+ 9 IDN-108-L0009 406523  9416378
+10 IDN-108-L0010 407969. 9415929
+# ... with 55 more rows</code></pre>
+<pre class="r"><code># Menggabungkan data temuan spesies dan lokasi
+inputdat &lt;- left_join(spdata, locdata) %&gt;% 
+  distinct() %&gt;% # menghilangkan data duplikasi
+  dplyr::select(-`Location ID`) # menghapus kolom Location ID
+  
+# Mengekspor tabel sebagai file .csv
+write.csv(inputdat, &quot;maxent_input_file.csv&quot;)</code></pre>
+</div>
+<div id="pemodelan" class="section level2">
+<h2>Pemodelan</h2>
+<p>Untuk pemodelan menggunakan Maxent, kita dapat menggunakan perangkat lunak <em>standalone</em> Maxent atau R. Tutorial lengkap penggunaan Maxent dapat diperoleh dari tautan berikut <a href="https://www.amnh.org/content/download/141371/2285439/file/LinC3_SpeciesDistModeling_Ex.pdf" class="uri">https://www.amnh.org/content/download/141371/2285439/file/LinC3_SpeciesDistModeling_Ex.pdf</a>.</p>
+<p>Namun, berikut ini akan diberikan contoh pemodelan Maxent menggunakan R dengan parameter <em>default</em>.</p>
+<p>(TBC)</p>
+</div>
+</div>
+<div id="metode-2-generalized-linear-model" class="section level1">
+<h1>Metode 2: <em>Generalized Linear Model</em></h1>
+<div id="persiapan-data-1" class="section level2">
+<h2>Persiapan Data</h2>
+<p>Data keberadaan spesies yang dibutuhkan untuk GLM dalah data <em>presence/absence</em>. Jika spesies di temukan di suatu lokasi survei, lokasi tersebut diberi nilai 1. Jika tidak ada spesies di lokasi tersebut, diberi nilai 0. Kolom spesies bisa lebih dari satu jika kita akan menganalisis multispesies. Berikut contoh data <em>input</em> GLM.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">ID Lokasi</th>
+<th align="right">spA</th>
+<th align="right">spB</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">CT001</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">CT002</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">CT003</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">CT004</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">CT005</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>Salah satu kekurangan dari metode GLM adalah kita tidak dapat memastikan ketidakberadaan spesies. Misalnya, kita survei menggunakan <em>camera trap</em> di 10 lokasi dan spesies target ditemukan di 4 lokasi. Di 6 lokasi lainnya, bukan berarti spesies tersebut benar-benar tidak ada. Bisa jadi spesies target ada, hanya <strong>tidak terdeteksi</strong>. Masalah tentang probabilitas deteksi ini akan dibahas dalam pemodelan okupansi. Namun, asumsi dalam kerangka kerja GLM adalah data <em>absence</em> dianggap sebagai <em>true absence</em>.</p>
+<p>Data yang akan kita gunakan di latihan ini adalah data rekaman spesies dari <em>camera trap</em> dan kita akan memodelkan distribusi <em>Mydaus javanensis</em>, tetapi sebagai contoh multispesies, kita akan men-<em>subset</em> juga <em>Paguma larvata</em>.</p>
+<pre class="r"><code>library(tidyverse);library(readxl)
+
+spdata &lt;- read_excel(&quot;Input Data/DATABASE - BBS_TIGER_SURVEY_2019.xlsx&quot;,
+                     sheet=&quot;Image&quot;) %&gt;%
+  dplyr::filter(`Genus Species` %in% c(&quot;Mydaus javanensis&quot;,
+                                       &quot;Paguma larvata&quot;)) 
+spdata</code></pre>
+<pre><code># A tibble: 696 x 21
+   `Deployment ID` `Location ID`  Grid Camera `Image Id` Location `Photo Type`
+   &lt;chr&gt;           &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;       
+ 1 IDN-108-D0011   IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal      
+ 2 IDN-108-D0011   IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal      
+ 3 IDN-108-D0011   IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal      
+ 4 IDN-108-D0011   IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal      
+ 5 IDN-108-D0011   IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal      
+ 6 IDN-108-D0011   IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal      
+ 7 IDN-108-D0011   IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal      
+ 8 IDN-108-D0011   IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal      
+ 9 IDN-108-D0011   IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal      
+10 IDN-108-D0011   IDN-108-L0001     1 A      GRID1A-19~ PHOTOS_~ Animal      
+# ... with 686 more rows, and 14 more variables: `Photo Type Identified
+#   by` &lt;chr&gt;, `Genus Species` &lt;chr&gt;, `IUCN Identification Number` &lt;dbl&gt;,
+#   `Date_Time Captured` &lt;dttm&gt;, Time &lt;dbl&gt;, Age &lt;chr&gt;, Sex &lt;chr&gt;, `Tiger
+#   ID` &lt;chr&gt;, `Tiger ID (Refer to ID Convention)` &lt;lgl&gt;, Count &lt;dbl&gt;, `Animal
+#   recognizable (Y/N, blank)` &lt;lgl&gt;, `Individual Animal notes` &lt;lgl&gt;,
+#   `Independent Event` &lt;dbl&gt;, Keterangan &lt;chr&gt;</code></pre>
+<p>Data spesies ini perlu kita modifikasi terlebih dahulu sebelum digabungkan dengan data koordinat lokasi.</p>
+<pre class="r"><code>spdata &lt;- spdata %&gt;% 
+  dplyr::select(`Location ID`,`Genus Species`) %&gt;% # memilih kolom lokasi dan spesies saja
+  mutate(presence=1) %&gt;% # assign nilai 1 untuk presence
+  distinct() %&gt;% # hilangkan duplikasi temuan di lokasi yang sama
+  spread(key=`Genus Species`,value=presence, fill=0) # membuat matriks lokasi X spesies 
+
+spdata</code></pre>
+<pre><code># A tibble: 39 x 3
+   `Location ID` `Mydaus javanensis` `Paguma larvata`
+   &lt;chr&gt;                       &lt;dbl&gt;            &lt;dbl&gt;
+ 1 IDN-108-L0001                   1                0
+ 2 IDN-108-L0002                   1                1
+ 3 IDN-108-L0005                   1                1
+ 4 IDN-108-L0007                   1                1
+ 5 IDN-108-L0008                   1                1
+ 6 IDN-108-L0009                   1                1
+ 7 IDN-108-L0010                   1                0
+ 8 IDN-108-L0011                   1                0
+ 9 IDN-108-L0012                   1                0
+10 IDN-108-L0013                   0                1
+# ... with 29 more rows</code></pre>
+<p>Kemudian, kita akan memanggil data lokasi kamera dan koordinat untuk menggabungkan data spesies dengan data lokasi kamera. Kita hanya akan menggunakan tiga kolom yang akan dipilih dengan perintah <code>select</code>. Data lokasi kamera yang digunakan berasal dari survei harimau sehingga dua kamera dipasang berhadapan di satu koordinat/lokasi. Oleh karena itu, kita akan menghilangkan data duplikat kamera dengan perintah <code>distinct</code>.</p>
+<pre class="r"><code>locdata &lt;- read_excel(&quot;Input Data/DATABASE - BBS_TIGER_SURVEY_2019.xlsx&quot;,
+                     sheet=&quot;Deployment&quot;) %&gt;% 
+  dplyr::select(`Location ID`, X, Y) %&gt;% 
+  distinct()
+
+locdata</code></pre>
+<pre><code># A tibble: 65 x 3
+   `Location ID`       X       Y
+   &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt;
+ 1 IDN-108-L0001 410043. 9420108
+ 2 IDN-108-L0002 411656. 9420620
+ 3 IDN-108-L0003 403964. 9417453
+ 4 IDN-108-L0004 405670. 9418788
+ 5 IDN-108-L0005 408496. 9417530
+ 6 IDN-108-L0006 411770. 9417906
+ 7 IDN-108-L0007 414715. 9417847
+ 8 IDN-108-L0008 402775  9416319
+ 9 IDN-108-L0009 406523  9416378
+10 IDN-108-L0010 407969. 9415929
+# ... with 55 more rows</code></pre>
+<p>Gabungkan data lokasi kamera dan data keberadaan spesies.</p>
+<pre class="r"><code>sploc &lt;- left_join(locdata,spdata) %&gt;%
+  replace(is.na(.), 0) # mengganti NA dengan 0
+
+sploc</code></pre>
+<pre><code># A tibble: 65 x 5
+   `Location ID`       X       Y `Mydaus javanensis` `Paguma larvata`
+   &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt;               &lt;dbl&gt;            &lt;dbl&gt;
+ 1 IDN-108-L0001 410043. 9420108                   1                0
+ 2 IDN-108-L0002 411656. 9420620                   1                1
+ 3 IDN-108-L0003 403964. 9417453                   0                0
+ 4 IDN-108-L0004 405670. 9418788                   0                0
+ 5 IDN-108-L0005 408496. 9417530                   1                1
+ 6 IDN-108-L0006 411770. 9417906                   0                0
+ 7 IDN-108-L0007 414715. 9417847                   1                1
+ 8 IDN-108-L0008 402775  9416319                   1                1
+ 9 IDN-108-L0009 406523  9416378                   1                1
+10 IDN-108-L0010 407969. 9415929                   1                0
+# ... with 55 more rows</code></pre>
+<p>Langkah selanjutnya adalah mengekstrak nilai variabel lingkungan di lokasi kamera. Kita akan kembali menggunakan <em>package</em> untuk analisis data spasial. Aktifkan <em>package</em> terlebih dahulu jika belum.</p>
+<pre class="r"><code># Membuat data spasial titik CT
+locspatial &lt;- SpatialPoints(coords=locdata[,c(&quot;X&quot;,&quot;Y&quot;)], proj4string=utm48s)
+
+# Mengekstrak variabel lingkungan
+predvalues &lt;- raster::extract(preds, locspatial)
+
+# Menggabungkan nilai prediktor dengan data temuan spesies
+glmdata &lt;- cbind(sploc, predvalues)</code></pre>
+</div>
+<div id="fit-model" class="section level2">
+<h2>Fit model</h2>
+<pre class="r"><code>fullmodel &lt;- glm(`Mydaus javanensis` ~ ele+I(ele^2)+slo+ndv+dis,
+                 data=glmdata, family=&quot;binomial&quot;)
+summary(fullmodel)</code></pre>
+<pre><code>
+Call:
+glm(formula = `Mydaus javanensis` ~ ele + I(ele^2) + slo + ndv + 
+    dis, family = &quot;binomial&quot;, data = glmdata)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.4169  -0.9430  -0.6907   1.1224   2.0915  
+
+Coefficients:
+              Estimate Std. Error z value Pr(&gt;|z|)
+(Intercept)  3.210e+00  1.252e+01   0.256    0.798
+ele          7.343e-03  1.020e-02   0.720    0.472
+I(ele^2)    -3.042e-06  8.646e-06  -0.352    0.725
+slo         -9.366e-03  7.169e-02  -0.131    0.896
+ndv         -9.308e+00  1.695e+01  -0.549    0.583
+dis          2.216e-04  2.436e-04   0.910    0.363
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 86.616  on 64  degrees of freedom
+Residual deviance: 78.823  on 59  degrees of freedom
+AIC: 90.823
+
+Number of Fisher Scoring iterations: 4</code></pre>
+<p>Hal terpenting yang perlu dilihat dari hasil di atas adalah tabel <code>Coefficients</code>. Terdapat lima kolom pada bagian tersebut, yaitu kolom nama prediktor, estimasi beta koefisien prediktor, <em>standard error</em>, <em>z-value</em>, dan <em>p-value</em> (<code>Pr(&gt;|z|)</code>). Baris pertama pada tabel tersebut adalah <em>intercept</em> persamaan linier, yaitu nilai prediksi jika seluruh prediktor bernilai 0. Baris kedua dan seterusnya adalah prediktor yang kita modelkan.</p>
+<p>Kolom <em>Estimate</em> menunjukkan estimasi beta koefisien masing-masing prediktor. Jika nilai <em>Estimate</em> negatif, semakin tinggi nilai prediktor, semakin rendah probabilitas keberadaan spesies. Sebaliknya, jika nilai <em>Estimate</em> positif, semakin tinggi nilai prediktor, semakin tinggi juga probabilitas keberadaan spesies. Namun, kita perlu mengetahui apakah hubungan tersebut signifikan dengan melihat kolom <em>p-value</em>.</p>
+<p>Jika <em>p-value</em> &lt; 0.05, beta koefisien prediktor tersebut signifikan, atau dengan kata lain, prediktor tersebut berpengaruh signifikan terhadap estimasi probabilitas keberadaan spesies. Di contoh ini, tidak ada prediktor yang signifikan pada <em>full model</em>.</p>
+</div>
+<div id="step-wise" class="section level2">
+<h2>Step wise</h2>
+<p>Langkah selanjutnya adalah mendapatkan model <em>parsimonious</em> dengan metode <em>step wise</em>. Model <em>parsimonious</em> adalah model paling sederhana (prediktor paling sedikit) yang memiliki kemampuan prediksi paling besar. Indeks yang digunakan untuk mengevaluasi model <em>parsimonious</em> adalah Akaike Information Criterion (AIC). Semakin kecil nilai AIC, model tersebut semakin <em>parsimonious</em>.</p>
+<pre class="r"><code>stepmod &lt;- step(fullmodel)</code></pre>
+<pre><code>Start:  AIC=90.82
+`Mydaus javanensis` ~ ele + I(ele^2) + slo + ndv + dis
+
+           Df Deviance    AIC
+- slo       1   78.840 88.840
+- I(ele^2)  1   78.948 88.948
+- ndv       1   79.126 89.126
+- ele       1   79.359 89.359
+- dis       1   79.662 89.662
+&lt;none&gt;          78.823 90.823
+
+Step:  AIC=88.84
+`Mydaus javanensis` ~ ele + I(ele^2) + ndv + dis
+
+           Df Deviance    AIC
+- I(ele^2)  1   78.953 86.953
+- ndv       1   79.131 87.131
+- ele       1   79.359 87.359
+- dis       1   79.792 87.792
+&lt;none&gt;          78.840 88.840
+
+Step:  AIC=86.95
+`Mydaus javanensis` ~ ele + ndv + dis
+
+       Df Deviance    AIC
+- ndv   1   79.198 85.198
+- dis   1   80.705 86.705
+&lt;none&gt;      78.953 86.953
+- ele   1   85.158 91.158
+
+Step:  AIC=85.2
+`Mydaus javanensis` ~ ele + dis
+
+       Df Deviance    AIC
+- dis   1   81.162 85.162
+&lt;none&gt;      79.198 85.198
+- ele   1   85.191 89.191
+
+Step:  AIC=85.16
+`Mydaus javanensis` ~ ele
+
+       Df Deviance    AIC
+&lt;none&gt;      81.162 85.162
+- ele   1   86.616 88.616</code></pre>
+<p>Regresi <em>step wise</em> bekerja dengan cara mengeliminasi prediktor satu per satu, lalu membandingkan dengan satu sama lain serta model lengkap. Jika model yang salah satu prediktornya dieliminasi memiliki nilai AIC lebih rendah dari model lengkap, model tersebut dipilih untuk langkah selanjutnya. Hal tersebut terjadi bertahap hingga diperoleh model dengan AIC terendah.</p>
+<p>Pada data kita, pada tahap pertama, model tanpa prediktor <code>slo</code> (kelerengan) memiliki nilai AIC terendah (88.840) jika dibandingkan dengan model tanpa salah satu variabel lain dan model lengkap (<code>&lt;none&gt;</code> pada tabel hasil <em>step wise</em>).</p>
+<p>Pada langkah kedua, “model lengkap”-nya adalah <code>Mydaus javanensis ~ ele + I(ele^2) + ndv + dis</code>, kemudian prediktor dieliminasi satu per satu. Hasilnya adalah model tanpa prediktor <code>I(ele^2)</code> (fungsi kuadratik elevasi), memiliki AIC terendah (86.953).</p>
+<p>Pada langkah ketiga dan seterusnya, diketahui bahwa model <code>Mydaus javanensis ~ ele</code> sebagai model terbaik dengan nilai AIC = 85.162.</p>
+<pre class="r"><code>summary(stepmod)</code></pre>
+<pre><code>
+Call:
+glm(formula = `Mydaus javanensis` ~ ele, family = &quot;binomial&quot;, 
+    data = glmdata)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.5476  -0.9216  -0.7323   1.1922   1.8166  
+
+Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)   
+(Intercept) -2.252667   0.856369  -2.630  0.00853 **
+ele          0.003289   0.001476   2.228  0.02588 * 
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 86.616  on 64  degrees of freedom
+Residual deviance: 81.162  on 63  degrees of freedom
+AIC: 85.162
+
+Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+<div id="membuat-response-curve" class="section level2">
+<h2>Membuat <em>response curve</em></h2>
+<p>Untuk melihat hubungan antara prediktor dengan prediksi probabilitas keberadaan spesies, kita perlu membuat <em>response curve</em>.</p>
+<div id="elevasi-1" class="section level3">
+<h3>Elevasi</h3>
+<pre class="r"><code># Data baru untuk response curve
+newDat&lt;-data.frame(ele=seq(min(glmdata$ele),max(glmdata$ele),length=100)) 
+# Prediksi
+pred &lt;- predict(stepmod, newdata=newDat, type=&quot;response&quot;, se.fit=TRUE)
+
+# Menggabungkan estimasi dan newDat
+glmpred &lt;- cbind(as.data.frame(pred), newDat)
+
+# Plot
+glmpred %&gt;% 
+  ggplot(aes(x = ele, y = fit)) +
+  geom_ribbon(aes(ymin = fit-se.fit, ymax = fit+se.fit), 
+              alpha = 0.5, linetype = &quot;dashed&quot;) +
+  geom_path(size = 1) +
+  labs(x = &quot;Elevasi&quot;, y = &quot;Probabilitas keberadaan&quot;) +
+  theme_classic() +
+  coord_cartesian(ylim = c(0,1))</code></pre>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-26-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="prediksi-spasial" class="section level2">
+<h2>Prediksi spasial</h2>
+<p>Setelah didapatkan model terbaik (model <em>parsimonious</em>), kita akan menggunakannya untuk memprediksi keberadaan <em>Mydaus javanensis</em> di area studi kita dengan perintah <code>predict</code>. Karena kita menggunakan GLM yang variabel responnya biner (1/0), kita perlu mengonversi keluaran dari <code>predict</code> menjadi angka probabilitas yang berkisar antara 0 dan 1 dengan perintah <code>calc</code> dan fungsi <code>plogis</code>.</p>
+<pre class="r"><code>probpredict &lt;- predict(preds, stepmod, fun=predict)
+probglm &lt;- calc(probpredict, fun = function(x){plogis(x)})
+plot(probglm)</code></pre>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-27-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Kita juga bisa mengekspor peta prediksi probabilitas keberadaan <em>Mydaus javanensis</em> ke dalam format raster.</p>
+<pre class="r"><code>writeRaster(probglm, filename=&quot;GLM_Mydaus_javanensis.tif&quot;)</code></pre>
+</div>
+</div>
+<div id="metode-3-occupancy-modeling" class="section level1">
+<h1>Metode 3: <em>Occupancy modeling</em></h1>
+<p>Pemodelan okupansi merupakan pemodelan proporsi area yang dihuni oleh satwa dengan mempertimbangkan probabilitas deteksi satwa. Jika kita menemukan satwa di suatu unit sampel (misalnya <em>grid</em>), hal itu berarti satwa tersebut menempati unit sampel tersebut. Namun, jika kita tidak menemukan satwa (nondeteksi), hal itu dapat berarti: - satwa menempati unit sampel, tetapi tidak terdeteksi oleh observer, atau - satwa benar-benar tidak menempati unit sampel (<em>absence</em>).</p>
+<p>Berbeda dengan GLM yang mengasumsikan nondeteksi sebagai <em>absence</em>, pemodelan okupansi menggunakan pengambilan sampel berulang (<em>repeated sampling</em>) di setiap unit sampel untuk menghitung probabilitas deteksi <span class="math inline">\(p\)</span>. Replikasi pengambilan sampel dapat berupa pengulangan spasial, misalnya pada survei okupansi harimau se-Pulau Sumatera (SWTS), atau pengulangan temporal, misalnya pada survei <em>camera trap</em>, seperti yang akan kita lakukan pada latihan ini.</p>
+<p>Pemodelan okupansi merupakan pemodelan berhierarki karena terdapat dua parameter yang diestimasi, yaitu probabilitas okupansi <span class="math inline">\(/psi\)</span> dan probabilitas deteksi <span class="math inline">\(p\)</span>.</p>
+<div id="persiapan-data-2" class="section level2">
+<h2>Persiapan Data</h2>
+<pre class="r"><code>library(tidyverse);library(readxl);library(camtrapR)
+
+spdata &lt;- read_excel(&quot;Input Data/DATABASE - BBS_TIGER_SURVEY_2019.xlsx&quot;,
+                     sheet=&quot;Image&quot;) %&gt;% 
+    dplyr::select(LocationID = `Location ID`,
+                  Species = `Genus Species`,
+                  datetime = `Date_Time Captured`) 
+
+spdata</code></pre>
+<pre><code># A tibble: 122,491 x 3
+   LocationID    Species          datetime           
+   &lt;chr&gt;         &lt;chr&gt;            &lt;dttm&gt;             
+ 1 IDN-108-L0001 Argusianus argus 2019-07-02 07:50:01
+ 2 IDN-108-L0001 Argusianus argus 2019-07-02 07:50:02
+ 3 IDN-108-L0001 Argusianus argus 2019-07-05 11:15:47
+ 4 IDN-108-L0001 Argusianus argus 2019-07-05 11:15:48
+ 5 IDN-108-L0001 Argusianus argus 2019-07-05 11:15:49
+ 6 IDN-108-L0001 Argusianus argus 2019-07-14 06:56:02
+ 7 IDN-108-L0001 Argusianus argus 2019-07-14 11:55:21
+ 8 IDN-108-L0001 Argusianus argus 2019-07-14 11:55:21
+ 9 IDN-108-L0001 Argusianus argus 2019-07-16 17:40:17
+10 IDN-108-L0001 Argusianus argus 2019-07-16 17:40:19
+# ... with 122,481 more rows</code></pre>
+<p>Kemudian, kita akan memanggil data pemasangan dan pengambilan kamera dan koordinat untuk menggabungkan data spesies dengan data lokasi kamera.</p>
+<pre class="r"><code>camdata &lt;- read_excel(&quot;Input Data/DATABASE - BBS_TIGER_SURVEY_2019.xlsx&quot;,
+                     sheet=&quot;Deployment&quot;) %&gt;% 
+  dplyr::select(DeploymentID=`Deployment ID`,
+                LocationID=`Location ID`,
+                X,Y,
+                Begin=`Camera Deployment Begin Date`,
+                End=`Camera last picture date`) %&gt;% 
+  dplyr::filter(!is.na(End)) 
+  
+camdata</code></pre>
+<pre><code># A tibble: 126 x 6
+   DeploymentID LocationID      X      Y Begin               End                
+   &lt;chr&gt;        &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt; &lt;dttm&gt;              &lt;dttm&gt;             
+ 1 IDN-108-D00~ IDN-108-L~ 4.10e5 9.42e6 2019-06-28 00:00:00 2019-11-15 00:00:00
+ 2 IDN-108-D00~ IDN-108-L~ 4.12e5 9.42e6 2019-06-28 00:00:00 2019-11-15 00:00:00
+ 3 IDN-108-D00~ IDN-108-L~ 4.12e5 9.42e6 2019-06-28 00:00:00 2019-11-15 00:00:00
+ 4 IDN-108-D00~ IDN-108-L~ 4.04e5 9.42e6 2019-06-29 00:00:00 2019-11-16 00:00:00
+ 5 IDN-108-D00~ IDN-108-L~ 4.06e5 9.42e6 2019-06-29 00:00:00 2019-06-29 00:00:00
+ 6 IDN-108-D00~ IDN-108-L~ 4.06e5 9.42e6 2019-06-29 00:00:00 2019-11-16 00:00:00
+ 7 IDN-108-D00~ IDN-108-L~ 4.08e5 9.42e6 2019-06-30 00:00:00 2019-11-17 00:00:00
+ 8 IDN-108-D00~ IDN-108-L~ 4.08e5 9.42e6 2019-06-30 00:00:00 2019-11-17 00:00:00
+ 9 IDN-108-D00~ IDN-108-L~ 4.12e5 9.42e6 2019-06-27 00:00:00 2019-11-14 00:00:00
+10 IDN-108-D00~ IDN-108-L~ 4.12e5 9.42e6 2019-06-27 00:00:00 2019-11-14 00:00:00
+# ... with 116 more rows</code></pre>
+<p>Membuat camera operation matrix</p>
+<pre class="r"><code>CTmatrix &lt;- cameraOperation(CTtable = camdata,
+                            stationCol = &quot;LocationID&quot;,
+                            cameraCol = &quot;DeploymentID&quot;,
+                            setupCol = &quot;Begin&quot;,
+                            retrievalCol = &quot;End&quot;,
+                            hasProblems = FALSE,
+                            byCamera = FALSE,
+                            allCamsOn = FALSE,
+                            camerasIndependent = FALSE,
+                            dateFormat = &quot;%Y-%m-%d&quot;,
+                            writecsv = TRUE,
+                            outDir = getwd()
+                            )</code></pre>
+<p>Mengekstrak kovariat</p>
+<pre class="r"><code>library(sp);library(raster)
+
+ctloc &lt;- camdata %&gt;% dplyr::select(LocationID, X, Y) %&gt;% distinct() 
+
+utm48s &lt;- CRS(&quot;+proj=utm +zone=48 +south +datum=WGS84 +units=m +no_defs&quot;)
+
+ct_sp &lt;- SpatialPoints(coords=ctloc[,c(&quot;X&quot;,&quot;Y&quot;)], proj4string=utm48s)
+
+ele &lt;- raster(&quot;Predictors/res250m_elevation.asc&quot;)
+slo &lt;- raster(&quot;Predictors/res250m_slope.asc&quot;)
+rou &lt;- raster(&quot;Predictors/res250m_roughness.asc&quot;)
+ndv &lt;- raster(&quot;Predictors/res250m_ndvi.asc&quot;)
+dis &lt;- raster(&quot;Predictors/res250m_distance_to_forest_edge_2019.asc&quot;)
+
+preds &lt;- stack(ele,slo,rou,ndv,dis)
+names(preds) &lt;- c(&quot;ele&quot;,&quot;slo&quot;,&quot;rou&quot;,&quot;ndv&quot;,&quot;dis&quot;)
+predvalues &lt;- raster::extract(preds, ct_sp) %&gt;% as.data.frame()
+ 
+library(PerformanceAnalytics) 
+chart.Correlation(predvalues, histogram=TRUE, pch=19)</code></pre>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-32-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Membuat species detection matrix</p>
+<pre class="r"><code>spdet &lt;- detectionHistory(recordTable = spdata, 
+                          species = &quot;Mydaus javanensis&quot;,
+                          camOp = CTmatrix,
+                          stationCol = &quot;LocationID&quot;,
+                          speciesCol = &quot;Species&quot;,
+                          recordDateTimeCol = &quot;datetime&quot;,
+                          recordDateTimeFormat = &quot;%Y-%m-%d %H:%M:%S&quot;,
+                          occasionLength = 7,
+                          minActiveDaysPerOccasion = 4,
+                          day1 = &quot;survey&quot;,
+                          includeEffort = FALSE,
+                          scaleEffort = FALSE,
+                          occasionStartTime = 0,
+                          datesAsOccasionNames = TRUE,
+                          timeZone = &quot;Asia/Jakarta&quot;,
+                          writecsv = F)</code></pre>
+</div>
+<div id="fit-model-1" class="section level2">
+<h2>Fit model</h2>
+<pre class="r"><code>library(unmarked)
+
+umf &lt;- unmarkedFrameOccu(y = spdet$detection_history, 
+                         siteCovs = predvalues)
+plot(umf)</code></pre>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-34-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Fit models
+mods &lt;- list()
+
+(mods$null &lt;- occu(~1 ~1, data = umf))
+(mods$ndv._ &lt;- occu(~ndv ~1, data = umf))
+
+# Model selection
+fitlist &lt;- fitList(fits=mods)
+(modSel &lt;- modSel(fitlist, nullmod = &#39;null&#39;))</code></pre>
+<pre class="r"><code>(mods$ndv.ele &lt;- occu(~ndv ~ele, data = umf))
+(mods$ndv.ele2 &lt;- occu(~ndv ~ele+I(ele^2), data = umf))
+(mods$ndv.slo &lt;- occu(~ndv ~slo, data = umf))
+(mods$ndv.ndv &lt;- occu(~ndv ~ndv, data = umf))
+(mods$ndv.dis &lt;- occu(~ndv ~dis, data = umf))
+
+# Seleksi model
+fitlist &lt;- fitList(fits=mods)
+(modSel &lt;- modSel(fitlist, nullmod = &#39;null&#39;))</code></pre>
+<pre class="r"><code>(mods$ndv.eleslo &lt;- occu(~ndv ~ele+slo, data = umf))
+(mods$ndv.elendv &lt;- occu(~ndv ~ele+ndv, data = umf))
+(mods$ndv.eledis &lt;- occu(~ndv ~ele+dis, data = umf))
+
+# Seleksi model
+fitlist &lt;- fitList(fits=mods)
+(modSel &lt;- modSel(fitlist, nullmod = &#39;null&#39;))</code></pre>
+<p>Model terbaik blablabla</p>
+<pre class="r"><code># Best model
+bestmod &lt;- mods$ndv.ele
+summary(mods$ndv.ele)</code></pre>
+<pre><code>
+Call:
+occu(formula = ~ndv ~ ele, data = umf)
+
+Occupancy (logit-scale):
+            Estimate      SE     z P(&gt;|z|)
+(Intercept) -2.63821 1.04851 -2.52  0.0119
+ele          0.00441 0.00197  2.24  0.0250
+
+Detection (logit-scale):
+            Estimate   SE     z P(&gt;|z|)
+(Intercept)    -14.0 6.25 -2.24  0.0249
+ndv             15.7 8.21  1.92  0.0553
+
+AIC: 460.7946 
+Number of sites: 65
+optim convergence code: 0
+optim iterations: 102 
+Bootstrap iterations: 0 </code></pre>
+<pre class="r"><code>coef(mods$ndv.ele)  # Logit scale</code></pre>
+<pre><code>     psi(Int)      psi(ele)        p(Int)        p(ndv) 
+ -2.638207318   0.004414873 -14.013445617  15.735498327 </code></pre>
+<pre class="r"><code>plogis(coef(mods$ndv.ele))  # Original scale</code></pre>
+<pre><code>    psi(Int)     psi(ele)       p(Int)       p(ndv) 
+6.671958e-02 5.011037e-01 8.204225e-07 9.999999e-01 </code></pre>
+</div>
+<div id="membuat-response-curve-1" class="section level2">
+<h2>Membuat <em>response curve</em></h2>
+<pre class="r"><code>predpsi &lt;- predict(bestmod, type=&quot;state&quot;)
+
+# Make new covariate data
+occu_newdata &lt;- data.frame(ele = seq(min(predvalues$ele),
+                                     max(predvalues$ele),by=0.1),
+                           slo = mean(predvalues$slo),
+                           ndv = mean(predvalues$ndv),
+                           dis = mean(predvalues$dis))</code></pre>
+<pre class="r"><code>occu_toppred &lt;- predict(bestmod, occu_newdata, type=&quot;state&quot;)
+occu_toppred_df &lt;- data.frame(occu_toppred,occu_newdata) </code></pre>
+<pre class="r"><code>occu_toppred_df %&gt;% 
+  ggplot(aes(x = ele, y = Predicted)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.5, linetype = &quot;dashed&quot;) +
+  geom_path(size = 1) +
+  labs(x = &quot;Elevasi&quot;, y = &quot;Probabilitas okupansi&quot;) +
+  theme_classic() +
+  coord_cartesian(ylim = c(0,1)) </code></pre>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-43-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="prediksi-spasial-1" class="section level2">
+<h2>Prediksi spasial</h2>
+<p>Menggunakan best model</p>
+<pre class="r"><code>predoccu &lt;- predict(preds, bestmod, type=&quot;state&quot;)
+probocc &lt;- calc(predoccu, fun = function(x){plogis(x)})</code></pre>
+<pre class="r"><code>plot(probocc)</code></pre>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-46-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>writeRaster(prob_sp, filename=&quot;Occupancy_Mydaus_javanensis.tif&quot;)</code></pre>
+</div>
+</div>
+<div id="membandingkan-peta-ketiga-metode" class="section level1">
+<h1>Membandingkan Peta Ketiga Metode</h1>
+<pre class="r"><code>par(mfrow=c(1,2))
+plot(probglm, main=&quot;GLM&quot;)
+plot(probocc, main=&quot;Occupancy&quot;)</code></pre>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-48-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div id="referensi" class="section level3 unnumbered">
+<h3>Referensi</h3>
+<div id="refs" class="references">
+<div id="ref-Hansen2013">
+<p>Hansen, M. C. C, P V Potapov, R. Moore, M. Hancher, S. A. a Turubanova, A. Tyukavina, D. Thau, et al. 2013. “High-resolution global maps of 21st-century forest cover change.” <em>Science</em> 342 (November): 850–54. <a href="https://doi.org/10.1126/science.1244693">https://doi.org/10.1126/science.1244693</a>.</p>
+</div>
+<div id="ref-Lubis2018">
+<p>Lubis, M I, S Hussein, H Wandono, and W Marthy. 2018. “Monitoring perubahan tutupan hutan di bentang alam Bukit Barisan Selatan periode 2000-2017.” Bukit Barisan Selatan National Park &amp; WCS Indonesia Program.</p>
+</div>
+<div id="ref-Rondinini2011">
+<p>Rondinini, Carlo, Moreno Di Marco, Federica Chiozza, Giulia Santulli, Daniele Baisero, Piero Visconti, Michael Hoffmann, et al. 2011. “Global habitat suitability models of terrestrial mammals.” <em>Philosophical Transactions of the Royal Society B: Biological Sciences</em> 366: 2633–41. <a href="https://doi.org/10.1098/rstb.2011.0113">https://doi.org/10.1098/rstb.2011.0113</a>.</p>
+</div>
+<div id="ref-Rondinini2006">
+<p>Rondinini, Carlo, Kerrie A. Wilson, Luigi Boitani, Hedley Grantham, and Hugh P. Possingham. 2006. “Tradeoffs of different types of species occurrence data for use in systematic conservation planning.” <em>Ecology Letters</em> 9 (10): 1136–45. <a href="https://doi.org/10.1111/j.1461-0248.2006.00970.x">https://doi.org/10.1111/j.1461-0248.2006.00970.x</a>.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
