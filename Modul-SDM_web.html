@@ -365,6 +365,9 @@ div.tocify {
 <li>
   <a href="Modul-CT.html">Camera Trap</a>
 </li>
+<li>
+  <a href="Modul-SDM_web.html">Distribusi Spesies</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -536,7 +539,7 @@ plot(bbsbuffer, col=&quot;green&quot;); plot(bbs, add=T); plot(sumatra, add=T)</
 <pre class="r"><code># Konversi polygon bbsbuffer menjadi raster dengan resolusi 250x250m
 bbstemp &lt;- raster(vals=NULL,ext=extent(bbsbuffer),resolution=c(250,250),crs=utm48s)</code></pre>
 <div id="elevasi" class="section level2">
-<h2>1.1 Elevasi</h2>
+<h2>1. Elevasi</h2>
 <p>Data elevasi yang digunakan adalah Shuttle Radar Topographic Mission (SRTM) 90m Digital Elevation Model yang dapat diperoleh dari <a href="https://cgiarcsi.community/data/srtm-90m-digital-elevation-database-v4-1/" class="uri">https://cgiarcsi.community/data/srtm-90m-digital-elevation-database-v4-1/</a>. Data SRTM juga tersedia dalam resolusi yang lebih kecil, yaitu 30m, yang dapat diunduh dari <a href="https://earthexplorer.usgs.gov/" class="uri">https://earthexplorer.usgs.gov/</a>, tetapi untuk latihan ini, kita akan memakai yang 90m.</p>
 <p>Pertama, kita akan memanggil data elevasi ke R dengan perintah <code>raster</code>. Data yang asli sebenarnya berupa petak-petak berukuran sekitar 520x520km dan bisa saja area penelitian kita mencakup lebih dari satu petak SRTM. Oleh karena itu, kami sudah menggabungkan petak-petak SRTM untuk seluruh Sumatera pada data raster <strong>Sumatra_srtm90m.tif</strong>.</p>
 <pre class="r"><code># Memanggil data elevasi
@@ -553,7 +556,6 @@ ele &lt;- mask(ele, bbsbuffer)
 
 # Setelah dipotong
 plot(ele)</code></pre>
-<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-8-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Kemudian kita menulis raster ke dalam format .asc (wajib untuk Maxent) di folder bernama <strong>Predictor</strong> di <em>working directory</em> kita. Buat folder <strong>Predictor</strong> terlebih dahulu sebelum menjalankan perintah di bawah ini.</p>
 <pre class="r"><code># Ekspor raster
 writeRaster(ele, &quot;Predictors/res250m_elevation.asc&quot;)
@@ -562,7 +564,7 @@ writeRaster(ele, &quot;Predictors/res250m_elevation.asc&quot;)
 rm(elesumatra)</code></pre>
 </div>
 <div id="kemiringan-lahan-slope-dan-keterjalan-tapak-roughness" class="section level2">
-<h2>1.2 Kemiringan lahan (<em>slope</em>) dan keterjalan tapak (<em>roughness</em>)</h2>
+<h2>2. Kemiringan lahan (<em>slope</em>) dan keterjalan tapak (<em>roughness</em>)</h2>
 <p>Slope dan roughness merupakan data turunan yang dibuat dari data elevasi menggunakan fungsi <em>terrain analysis</em>.</p>
 <pre class="r"><code># Slope
 slo &lt;- terrain(ele, opt=&quot;slope&quot;, unit=&quot;degrees&quot;)
@@ -573,7 +575,7 @@ rou &lt;- terrain(ele, opt=&quot;roughness&quot;)
 writeRaster(rou, &quot;Predictors/res250m_roughness.asc&quot;)</code></pre>
 </div>
 <div id="ndvi" class="section level2">
-<h2>1.3 NDVI</h2>
+<h2>3. NDVI</h2>
 <p><em>Normalized difference vegetation index</em> (NDVI) adalah indeks yang menguantifikasi kepadatan vegetasi berdasarkan spektrum cahaya <em>near-infrared</em> (NIR), yang dipantulkan tumbuhan, dan spektrum cahaya merah (R), yang diserap oleh tumbuhan. NDVI berkisar antara -1 (tidak ada tumbuhan, misalnya badan air) hingga +1 (kepadatan vegetasi tinggi). NDVI dihitung dengan menggunakan nilai reflektansi spektrum cahaya pada vegetasi dari citra satelit multispektral. Berikut adalah rumus untuk kalkulasi NDVI: <span class="math display">\[\text{NDVI }=\displaystyle \frac{(\text{NIR }-\text{ R})}{(\text{NIR }+\text{ R})}\]</span></p>
 <p>Nilai <em>band</em> NIR dan merah dapat diperoleh dari citra satelit Landsat, tetapi jika area studi luas, biasanya akan terdapat “lubang” awan. Namun, kita dapat menggunakan citra Landsat tahun 2019 bebas awan oleh <span class="citation">Hansen et al. (2013)</span> yang dapat diunduh dari <a href="https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.7.html" class="uri">https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.7.html</a>. Karena satu petak data besar dan akan memakan waktu yang lama jika kita run dari R, dalam latihan ini, kita akan menggunakan data yang sudah dipotong. Berdasarkan website tersebut, diketahui bahwa citra terdiri dari empat <em>band</em>, yaitu : - Layer 1: Band 3 (merah)<br />
 - Layer 2: Band 4 (NIR)<br />
@@ -597,7 +599,7 @@ ndv &lt;- (landst[[2]] - landst[[1]]) / (landst[[2]] + landst[[1]])
 writeRaster(ndv, &quot;Predictors/res250m_ndvi.asc&quot;)</code></pre>
 </div>
 <div id="jarak-dari-tepi-hutan" class="section level2">
-<h2>1.4 Jarak dari tepi hutan</h2>
+<h2>4. Jarak dari tepi hutan</h2>
 <p>Jarak dari tepi hutan bernilai 0 jika lokasi berada di luar hutan dan tepat di tepi hutan dan nilai semakin tinggi jika lokasi berada di interior hutan. Untuk mendapatkan variabel ini, kita membutuhkan peta tutupan lahan yang dapat diperoleh dari webgis KLHK. Namun, karena data tutupan lahan ini nasional, biasanya kurang akurat untuk dipakai dalam skala lokal, misalnya satu lokasi TNBBS.</p>
 <p>Khusus di TNBBS, telah tersedia data tutupan lahan yang dibuat dari data Landsat dan diklasifikasi menggunakan metode kombinasi antara <em>Maximum Likelihood Classification</em> (MLC) dan interpretasi secara visual <span class="citation">(Lubis et al. 2018)</span>. Kita akan memakai data tersebut untuk mengukur jarak dari tepi hutan ke interior hutan.</p>
 <p>Data tutupan lahan TNBBS berupa data vektor poligon yang terdiri dari 13 kategori tutupan lahan. Pertama, kita akan men-<em>subset</em> data tutupan lahan yang nonhutan, kemudian mengonversi fitur poligon ke raster sehingga fitur nonhutan memiliki nilai 1 dan hutan bernilai <code>NA</code>. Kita men-<em>subset</em> nonhutan, bukan hutan, karena perintah <code>distance</code> mengukur jarak dari suatu petak raster yang memiliki nilai ke kotak raster terdekat yang bernilai <code>NA</code>.</p>
@@ -659,7 +661,7 @@ dis 0.17282349 0.1272130 0.1507951 0.32315870 1.0000000
 $mean
         ele         slo         rou         ndv         dis 
 554.2617195   7.4218407  97.0944594   0.6806674 752.5917050 </code></pre>
-<p>Tidak ada ketentuan mahabenar universal untuk menentukan tinggi atau tidaknya korelasi. Batas yang biasanya digunakan adalah antara 0,6 atau 0,7, tergantung acuan dan kepercayaan masing-masing.</p>
+<p>Tidak ada ketentuan mahabenar untuk menentukan tinggi atau tidaknya korelasi. Batas yang biasanya digunakan adalah antara 0,6 atau 0,7, tergantung acuan dan kepercayaan masing-masing.</p>
 <p>Berdasarkan hasil uji di atas, terlihat bahwa kelerangan dan keterjalan berkorelasi tinggi (0,94) sehingga kita hanya akan menggunakan salah satunya dalam pemodelan. Menentukan variabel mana yang dipilih juga tidak ada ketentuan khusus. Kita bisa menggunakan pertimbangan ekologis, yaitu berdasarkan pengetahuan kita tentang ekologi spesies, variabel mana yang lebih memberikan pengaruh secara langsung. Atau, bisa juga kita gunakan keduanya dalam pemodelan yang terpisah, tetapi tentunya akan memakan waktu yang lebih banyak.</p>
 <p>Untuk tujuan latihan ini, kita hanya akan menggunakan kelerengan.</p>
 </div>
@@ -780,13 +782,94 @@ inputdat &lt;- left_join(spdata, locdata) %&gt;%
   dplyr::select(-`Location ID`) # menghapus kolom Location ID
   
 # Mengekspor tabel sebagai file .csv
-write.csv(inputdat, &quot;maxent_input_file.csv&quot;)</code></pre>
+write.csv(inputdat, &quot;maxent_input_file.csv&quot;, row.names = F)</code></pre>
 </div>
 <div id="pemodelan" class="section level2">
 <h2>Pemodelan</h2>
-<p>Untuk pemodelan menggunakan Maxent, kita dapat menggunakan perangkat lunak <em>standalone</em> Maxent atau R. Tutorial lengkap penggunaan Maxent dapat diperoleh dari tautan berikut <a href="https://www.amnh.org/content/download/141371/2285439/file/LinC3_SpeciesDistModeling_Ex.pdf" class="uri">https://www.amnh.org/content/download/141371/2285439/file/LinC3_SpeciesDistModeling_Ex.pdf</a>.</p>
-<p>Namun, berikut ini akan diberikan contoh pemodelan Maxent menggunakan R dengan parameter <em>default</em>.</p>
-<p>(TBC)</p>
+<p>Untuk pemodelan menggunakan Maxent, kita dapat menggunakan perangkat lunak <em>standalone</em> Maxent atau R. Tutorial lengkap penggunaan Maxent dapat diperoleh dari tautan berikut <a href="https://www.amnh.org/content/download/141371/2285439/file/LinC3_SpeciesDistModeling_Ex.pdf" class="uri">https://www.amnh.org/content/download/141371/2285439/file/LinC3_SpeciesDistModeling_Ex.pdf</a>. Pada modul pelatihani ini, hanya dibahas penggunaan Maxent menggunakan perangkat lunak <em>standalone</em> karena parameter yang dapat diubah lebih lengkap, misalnya <em>features</em>, menambakan <em>bias file</em>, <em>regularization</em>, dan sebagainya.</p>
+<p>Setelah mengunduh dan mamasang Maxent, jalankan Maxent dengan mengklik <em>file</em> bertipe <em>Batch File</em>. Kemudian, akan tampil jendela Maxent seperti gambar di bawah ini.</p>
+<p><img src="pics/maxent1.JPG" /></p>
+<div id="komponen-utama-yang-perlu-di-assign" class="section level3">
+<h3>Komponen utama yang perlu di-<em>assign</em></h3>
+<div id="data-keberadaan-spesies" class="section level4">
+<h4>1. Data keberadaan spesies</h4>
+<p>Masukkan data keberadaan spesies dengan mengklik tombol <strong>Browse</strong> pada bagian <strong>Samples</strong>. Pilih <em>file</em> .csv yang berisi keberadaan spesies, lalu <strong>Open</strong>. Daftar spesies yang ada di <em>spreadsheet</em> tersebut akan muncul. Jika ada lebih dari spesies, kita bisa memilih apakah kita akan memodelkan semua spesies atau hanya beberapa dengan mengubah tanda centang di samping nama spesies.</p>
+</div>
+<div id="prediktor" class="section level4">
+<h4>2. Prediktor</h4>
+<p>Klik <strong>Browse</strong> di bagian <strong>Environmental layers</strong>, kemudian pilih folder tempat kita menyimpan <em>file</em> raster prediktor. Setelah itu, akan muncul daftar file raster yang ada di folder tersebut dan secara otomatis tercentang semua, tetapi bisa kita ubah secara manual untuk mengikutsertakan atau tidak mengikutsertakan prediktor.</p>
+<p>Setelah menentukan data masukan, centang <strong>Create response curves</strong> dan <strong>Make pictures of predictions</strong>, kemudian kita bisa langsung mengklik tombol <strong>Run</strong> di bawah kiri untuk menjalankan Maxent.</p>
+<p>Namun, ada beberapa pilihan yang dapat kita ubah untuk mengoptimalkan pemodelan kita.</p>
+</div>
+</div>
+<div id="komponen-tambahan" class="section level3">
+<h3>Komponen tambahan</h3>
+<div id="features" class="section level4">
+<h4>1. <em>Features</em></h4>
+<p><em>Features</em> merupakan fungsi yang digunakan untuk memodelkan hubungan prediktor lingkungan dengan spesies, yaitu <em>linear</em>, <em>quadratic</em>, <em>product</em>, <em>threshold</em>, <em>hinga</em>, dan <em>auto features</em>. <em>By default</em>, pilihan yang aktif adalah <em>auto features</em> sehingga hasil pemodelan dapat mencakup kurva respon yang kompleks. Namun, hal ini dapat menyebabkan <em>overfitting</em>. Jika kita menginginkan model yang lebih <em>general</em> dan secara ekologis lebih “masuk akal”, kita dapat memilih beberapa fitur saja.</p>
+<p>Saya pribadi biasanya akan mencoba <em>auto features</em> terlebih dahulu dan jika terdapat kurva respon yang terlalu kompleks, saya akan mencoba lagi dengan hanya memilih <em>linear</em>, <em>quadratic</em>, dan <em>product features</em>.</p>
+<p>Dalam beberapa kondisi, mungkin <em>threshold</em> dan <em>hinge features</em> masuk akal secara ekologi. Misalnya, kesesuaian habitat dapat berkurang pada habitat dengan persentase tajuk hingga 70%, tetapi di bawah itu, habitat tersebut sama sekali tidak bisa dihuni siamang dan tidak mungkin ada siamang di situ (nilai kesesuaian habitat langsung <em>drop</em> ke nilai 0).</p>
+</div>
+<div id="regularization-multiplier" class="section level4">
+<h4>2. <em>Regularization multiplier</em></h4>
+<p>Selain mengubah <em>feature types</em>, kita dapat mengurangi kecenderungan <em>overfitting</em> dengan mengubah <em>regularization multiplier</em>. Angka yang dimasukkan sebagai <em>multiplier</em> diperoleh dengan coba-coba. Pertama, kita menjalankan Maxent dengan <em>default multiplier</em> dahulu. Jika kurva respon terlalu kompleks dan mungkin tidak masuk akal secara ekologi, kita dapat menggunakan <em>multiplier</em> yang lebih besar. Kemudian, hasilnya kita bandingkan.</p>
+</div>
+<div id="sampling-bias" class="section level4">
+<h4>3. <em>Sampling bias</em></h4>
+<p>Walaupun Maxent disebut sebagai metode pemodelan yang hanya menggunakan data <em>presence</em>, sebenarnya Maxent menggunakan titik-titik <em>background</em>, yaitu lokasi (<em>by default</em> maksimal 10.000 titik acak) di permukaan spasial lanskap di mana <em>presence/absence</em> tidak diukur dan mengasumsikan bahwa seluruh lokasi di lanskap disampel secara seimbang.</p>
+<p>Konsekuensi hal ini adalah kondisi habitat di mana spesies “mungkin” ada, tetapi tidak disurvei, dapat diduga sebagai habitat tidak sesuai karena terdapat data <em>background</em> di tempat tersebut yang tidak ada temuan spesies.</p>
+<p>Sebagai contoh, lokasi titik <em>camera trap</em> di IPZ berkisar antara 160-940 mdpl, sedangkan elevasi seluruh lanskap TNBBS + 5 km <em>buffer</em> berkisar antara 0 hingga 1906 mdpl (lihat gambar di bawah ini). Oleh karena itu, kita tidak memiliki rekaman spesies dari kisaran elevasi 940-1906 mdpl dan Maxent akan menganggap elevasi ini merupakan habitat yang tidak sesuai bagi spesies.</p>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-17-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Salah satu cara untuk mengatasi hal ini adalah menggunakan <em>bias file</em>, yaitu <em>file</em> raster yang merepresentasikan upaya survei relatif di seluruh lanskap. Raster tersebut diberi nilai <em>nonzero</em> antara 0 (upaya rendah) hingga 1 (upaya tinggi). Jika data keberadaan spesies berasal dari survei <em>camera trap</em>, <em>bias file</em> dapat dibuat dengan memberikan nilai 1 untuk sel raster di sekitar lokasi pemasangan <em>camera trap</em> dan nilai desimal yang kecil (misalnya 0,1) untuk area yang tidak disurvei. “Di sekitar lokasi <em>camera trap</em>” artinya adalah area dalam radius tertentu di sekitar <em>camera trap</em> dan penentuan radius ini bersifat <em>arbitrary</em>. Hasil dari menggunakan <em>bias file</em> adalah titik <em>background</em> tidak dibuat secara acak di seluruh lanskap, melainkan lebih banyak di area yang nilai upaya survei relatifnya lebih tinggi.</p>
+<p>Untuk latihan ini, kita akan menggunakan radius 1,5 km (setengah dari 3 km) karena lokasi kamera di IPZ TNBBS ditentukan menggunakan petak 3 km x 3 km.</p>
+<pre class="r"><code># Membuat data spasial lokasi kamera
+loc_sp &lt;- SpatialPoints(coords=locdata[,c(&quot;X&quot;,&quot;Y&quot;)], proj4string=utm48s)
+
+# Membuat buffer 1,5 km
+locbuf &lt;- buffer(loc_sp, width=1500)
+plot(locbuf);plot(loc_sp, add=T)
+
+# Convert ke raster 
+# (area survei otomatis diberi nilai 1, yang tidak disurvei bernilai NA)
+locras &lt;- raster::rasterize(locbuf, bbstemp)
+
+# Mengganti nilai raster
+# Area survei tetap 1
+# Yang tidak disurvei (NA) jadi 0,1
+ganti &lt;- data.frame(by = c(1,NA),which= c(1,0.1))
+locras2 &lt;- raster::subs(locras, ganti,by=1,which=2)
+plot(locras2)</code></pre>
+<p>Raster yang dihasilkan mencakupu seluruh <em>extent</em> area studi sehingga perlu kita potong dengan vektor area study <code>bbsbuffer</code>.</p>
+<pre class="r"><code># Memotong dengan bbsbuffer
+bias_file &lt;- mask(locras2, bbsbuffer)
+plot(bias_file)
+
+# Mengekspor ke dalam format .asc
+writeRaster(bias_file, &quot;bias_file_ipz.asc&quot;)</code></pre>
+<p>Untuk menggunakan <em>bias file</em>, klik <strong>Settings</strong> &gt;&gt; <strong>Advances</strong>. Pada bagian <strong>bias file</strong>, klik <strong>Browse</strong>, lalu pilih raster <em>bias file</em>.</p>
+<p>Berikut adalah perbandingan peta prediksi distribusi <em>Mydaus javanensis</em> tanpa dan dengan <em>bias file</em> (tipe replikasi <em>crossvalidate</em>, 10 replikasi, dan pengaturan lainnya <em>default</em>).</p>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-20-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Berikut adalah beberapa bahan bacaan penting untuk mendalami penggunaan Maxent: - Phillips et al. 2017. Opening the black box: an open-source release of Maxent. <a href="https://doi.org/10.1111/ecog.03049-" class="uri">https://doi.org/10.1111/ecog.03049-</a> Elith et al. 2011. A statistical explanation of MaxEnt for ecologists. <a href="https://doi.org/10.1111/j.1472-4642.2010.00725.x" class="uri">https://doi.org/10.1111/j.1472-4642.2010.00725.x</a> - Radosavljevic &amp; Anderson. 2014. Making better Maxent models of species distributions: complexity, overfitting, and evaluation. <a href="https://doi.org/10.1111/jbi.12227" class="uri">https://doi.org/10.1111/jbi.12227</a> - Merow et al. 2013. A practical guide to MaxEnt for modeling species distributions: what it does, and why inputs and settings matter. <a href="https://doi.org/10.1111/j.1600-0587.2013.07872.x" class="uri">https://doi.org/10.1111/j.1600-0587.2013.07872.x</a> - Phillips et al. 2006. Maximum entropy modeling of species geographic distributions. <a href="https://doi.org/10.1016/j.ecolmodel.2005.03.026" class="uri">https://doi.org/10.1016/j.ecolmodel.2005.03.026</a> - Phillips et al. 2004. A maximum entropy approach to species distribution modeling. <a href="https://doi.org/10.1145/1015330.1015412" class="uri">https://doi.org/10.1145/1015330.1015412</a></p>
+</div>
+</div>
+</div>
+<div id="hasil-maxent" class="section level2">
+<h2>Hasil Maxent</h2>
+<p>Hasil Maxent dapat dilihat pada file HTML di folder yang kita <em>assign</em> untuk menyimpan keluaran. Berikut akan dijelaskan beberapa keluaran penting.</p>
+<div id="grafik-auc" class="section level3">
+<h3>1. Grafik AUC</h3>
+</div>
+<div id="kurva-respon" class="section level3">
+<h3>2. Kurva respon</h3>
+</div>
+<div id="prediktor-apa-yang-paling-penting" class="section level3">
+<h3>3. Prediktor apa yang paling penting?</h3>
+<p>Jackknife</p>
+<p>Tabel kontribusi</p>
+</div>
+<div id="peta-prediksi-distribusi-spesies" class="section level3">
+<h3>4. Peta prediksi distribusi spesies</h3>
+</div>
 </div>
 </div>
 <div id="metode-2-generalized-linear-model" class="section level1">
@@ -1063,7 +1146,7 @@ glmpred %&gt;%
   labs(x = &quot;Elevasi&quot;, y = &quot;Probabilitas keberadaan&quot;) +
   theme_classic() +
   coord_cartesian(ylim = c(0,1))</code></pre>
-<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-26-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-30-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="prediksi-spasial" class="section level2">
@@ -1072,7 +1155,7 @@ glmpred %&gt;%
 <pre class="r"><code>probpredict &lt;- predict(preds, stepmod, fun=predict)
 probglm &lt;- calc(probpredict, fun = function(x){plogis(x)})
 plot(probglm)</code></pre>
-<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-27-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-31-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Kita juga bisa mengekspor peta prediksi probabilitas keberadaan <em>Mydaus javanensis</em> ke dalam format raster.</p>
 <pre class="r"><code>writeRaster(probglm, filename=&quot;GLM_Mydaus_javanensis.tif&quot;)</code></pre>
 </div>
@@ -1167,7 +1250,7 @@ predvalues &lt;- raster::extract(preds, ct_sp) %&gt;% as.data.frame()
  
 library(PerformanceAnalytics) 
 chart.Correlation(predvalues, histogram=TRUE, pch=19)</code></pre>
-<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-32-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-36-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Membuat species detection matrix</p>
 <pre class="r"><code>spdet &lt;- detectionHistory(recordTable = spdata, 
                           species = &quot;Mydaus javanensis&quot;,
@@ -1193,7 +1276,7 @@ chart.Correlation(predvalues, histogram=TRUE, pch=19)</code></pre>
 umf &lt;- unmarkedFrameOccu(y = spdet$detection_history, 
                          siteCovs = predvalues)
 plot(umf)</code></pre>
-<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-34-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-38-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># Fit models
 mods &lt;- list()
 
@@ -1268,7 +1351,7 @@ occu_toppred_df &lt;- data.frame(occu_toppred,occu_newdata) </code></pre>
   labs(x = &quot;Elevasi&quot;, y = &quot;Probabilitas okupansi&quot;) +
   theme_classic() +
   coord_cartesian(ylim = c(0,1)) </code></pre>
-<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-43-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-47-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="prediksi-spasial-1" class="section level2">
 <h2>Prediksi spasial</h2>
@@ -1276,7 +1359,7 @@ occu_toppred_df &lt;- data.frame(occu_toppred,occu_newdata) </code></pre>
 <pre class="r"><code>predoccu &lt;- predict(preds, bestmod, type=&quot;state&quot;)
 probocc &lt;- calc(predoccu, fun = function(x){plogis(x)})</code></pre>
 <pre class="r"><code>plot(probocc)</code></pre>
-<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-46-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-50-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>writeRaster(prob_sp, filename=&quot;Occupancy_Mydaus_javanensis.tif&quot;)</code></pre>
 </div>
 </div>
@@ -1285,7 +1368,7 @@ probocc &lt;- calc(predoccu, fun = function(x){plogis(x)})</code></pre>
 <pre class="r"><code>par(mfrow=c(1,2))
 plot(probglm, main=&quot;GLM&quot;)
 plot(probocc, main=&quot;Occupancy&quot;)</code></pre>
-<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-48-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-52-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <div id="referensi" class="section level3 unnumbered">
 <h3>Referensi</h3>
 <div id="refs" class="references">
