@@ -9,10 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Marsya Sibarani" />
+<meta name="author" content="" />
 
 
-<title>Modul Pemodelan Distribusi Spesies</title>
+<title>Pemodelan Distribusi Spesies</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -380,8 +380,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Modul Pemodelan Distribusi Spesies</h1>
-<h4 class="author">Marsya Sibarani</h4>
+<h1 class="title toc-ignore"><strong>Pemodelan Distribusi Spesies</strong></h1>
 <h4 class="date">Oktober 2021</h4>
 
 </div>
@@ -483,10 +482,10 @@ Metode ini merupakan pemodelan distribusi spesies menggunakan algoritma komputer
 <p>Biasanya, tahap inilah yang memakan paling banyak waktu proses pemodelan, bahkan bisa mencapai &gt; 50% total waktu.</p>
 <p>Bentuk data keberadaan spesies berbeda untuk setiap metode sehingga akan dibahas pada setiap bab metode pemodelan. Namun, variabel lingkungan yang akan digunakan hampir sama sehingga akan dibahas terlebih dahulu.</p>
 </div>
-<div id="persiapan-data-pemrosesan-data-spasial-variabel-lingkungan" class="section level1">
-<h1>Persiapan Data: Pemrosesan Data Spasial Variabel Lingkungan</h1>
-<p>Untuk menentukan variabel lingkungan apa saja yang akan digunakan untuk pemodelan, kita harus mengetahui ekologi spesies yang akan dimodelkan dan skala pemodelan. Misalnya, jika kita ingin memodelkan satwa arboreal seperti siamang, faktor utama yang penting bagi keberadaannya adalah struktur tajuk pohon yang memungkinkan mereka bergerak dan sumber pakan, yaitu buah dan daun pohon di hutan primer atau sekunder. Oleh karena itu, kita dapat mengasumsikan bahwa data spasial yang memengaruhi keberadaannya adalan data yang terkait kualitas habitat hutan, misalnya persentase tajuk hutan, tutupan lahan hutan primer dan sekunder, jarak dari tepi hutan, NDVI. Namun, jika spesies yang akan dimodelkan adalah tumbuhan, mungkin faktor lingkungan terkait iklim, cuaca, dan tanah lebih berpengaruh, misalnya curah hujan tahunan, suhu minimal dan maksimal, dan komposisi tanah.</p>
-<p>Selain sumber daya, variabel lingkungan lain yang dapat memengaruhi keberadaan satwa adalah gangguan manusia. Hal ini dapat direpresentasikan sebagai pengaruh langsung, misalnya tutupan lahan perkebunan dan permukiman sebagai nonhabitat (tergantung spesiesnya), maupun secara tidak langsung, misalnya kepadatan manusia kita asumsikan berkorelasi dengan intensitas aktivitas manusia di dalam kawasan hutan atau polusi dan keberadaan jalan sebagai proksi terhadap perburuan dan perambahan. (entar tambahin referensi)</p>
+<div id="pemrosesan-data-spasial-variabel-lingkungan" class="section level1">
+<h1>Pemrosesan Data Spasial Variabel Lingkungan</h1>
+<p>Untuk menentukan variabel lingkungan apa saja yang akan digunakan untuk pemodelan, kita harus mengetahui ekologi spesies yang akan dimodelkan dan skala pemodelan. Misalnya, jika kita ingin memodelkan satwa arboreal seperti siamang, faktor utama yang penting bagi keberadaannya adalah struktur tajuk pohon yang memungkinkan mereka bergerak dan sumber pakan, yaitu buah dan daun pohon di hutan primer atau sekunder. Oleh karena itu, kita dapat mengasumsikan bahwa data spasial yang memengaruhi keberadaannya adalah data yang terkait kualitas habitat hutan, misalnya persentase tajuk hutan, tutupan lahan hutan primer dan sekunder, jarak dari tepi hutan, dan NDVI. Namun, jika spesies yang akan dimodelkan adalah tumbuhan, mungkin faktor lingkungan terkait iklim, cuaca, dan tanah lebih berpengaruh, misalnya curah hujan tahunan, suhu minimal dan maksimal, dan komposisi tanah.</p>
+<p>Selain sumber daya, variabel lingkungan lain yang dapat memengaruhi keberadaan satwa adalah gangguan manusia. Hal ini dapat direpresentasikan sebagai pengaruh langsung, misalnya tutupan lahan perkebunan dan permukiman sebagai nonhabitat (tergantung spesiesnya), maupun secara tidak langsung, misalnya kita asumsikan jarak dari jalan sebagai proksi terhadap perburuan dan perambahan.</p>
 <p>Data spasial yang akan digunakan sebagai prediktor lingkungan dalam pemodelan distribusi spesies harus memiliki <em>extent</em>, resolusi, dan CRS yang sama. Beberapa metode transformasi data spasial yang sering digunakan untuk pemrosesan prediktor lingkungan adalah:</p>
 <ol style="list-style-type: decimal">
 <li><em>Convert vector to raster</em><br />
@@ -497,7 +496,7 @@ Digunakan data dasar sudah dalam raster, tetapi extent, resolusi, atau CRS belum
 Contoh: elevasi, NDVI</li>
 <li><em>Terrain analysis</em><br />
 Untuk memperoleh data turunan dari Digital Elevation Model (DEM)<br />
-Contoh: slope, roughness</li>
+Contoh: kelerengan (<em>slope</em>), keterjalan tapak (<em>roughness</em>)</li>
 <li><em>Euclidean distance</em><br />
 Untuk memperoleh jarak ke suatu fitur<br />
 Contoh: jarak ke tepi hutan, jarak ke pemukiman, jarak ke sungai</li>
@@ -536,9 +535,9 @@ bbsbuffer &lt;- raster::intersect(bbsbuffer,sumatra)
 
 plot(bbsbuffer, col=&quot;green&quot;); plot(bbs, add=T); plot(sumatra, add=T)</code></pre>
 <p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-5-1.png" width="80%" style="display: block; margin: auto;" /></p>
-<p>Hasil dari proses di atas adalah vektor poligon sehingga perlu kita konversi menjadi raster. Kita akan menggunakan <em>extent</em> dari <code>bbsbuffer</code>, resolusi 250mx250m, dan CRS UTM zona 48S. Sel raster diberikan nilai <code>NULL</code> karena yang penting hanya <em>extent</em>, resolusi, dan CRS saja.</p>
+<p>Hasil dari proses di atas adalah vektor poligon sehingga perlu kita konversi menjadi raster. Kita akan menggunakan <em>extent</em> dari <code>bbsbuffer</code>, resolusi 250mx250m, dan CRS UTM zona 48S. Sel raster diberikan nilai 0.</p>
 <pre class="r"><code># Konversi menjadi raster
-bbstemp &lt;- raster(vals=NULL,ext=extent(bbsbuffer),resolution=c(250,250),crs=utm48s)</code></pre>
+bbstemp &lt;- raster(vals=0,ext=extent(bbsbuffer),resolution=c(250,250),crs=utm48s)</code></pre>
 <div id="elevasi" class="section level2">
 <h2>1. Elevasi</h2>
 <p>Data elevasi yang digunakan adalah Shuttle Radar Topographic Mission (SRTM) 90m Digital Elevation Model yang dapat diperoleh dari <a href="https://cgiarcsi.community/data/srtm-90m-digital-elevation-database-v4-1/" class="uri">https://cgiarcsi.community/data/srtm-90m-digital-elevation-database-v4-1/</a>. Data SRTM juga tersedia dalam resolusi yang lebih kecil, yaitu 30m, yang dapat diunduh dari <a href="https://earthexplorer.usgs.gov/" class="uri">https://earthexplorer.usgs.gov/</a>, tetapi untuk latihan ini, kita akan memakai yang 90m.</p>
@@ -579,12 +578,13 @@ writeRaster(rou, &quot;Predictors/res250m_roughness.asc&quot;)</code></pre>
 <div id="ndvi" class="section level2">
 <h2>3. NDVI</h2>
 <p><em>Normalized difference vegetation index</em> (NDVI) adalah indeks yang menguantifikasi kepadatan vegetasi berdasarkan spektrum cahaya <em>near-infrared</em> (NIR), yang dipantulkan tumbuhan, dan spektrum cahaya merah (R), yang diserap oleh tumbuhan. NDVI berkisar antara -1 (tidak ada tumbuhan, misalnya badan air) hingga +1 (kepadatan vegetasi tinggi). NDVI dihitung dengan menggunakan nilai reflektansi spektrum cahaya pada vegetasi dari citra satelit multispektral. Berikut adalah rumus untuk kalkulasi NDVI: <span class="math display">\[\text{NDVI }=\displaystyle \frac{(\text{NIR }-\text{ R})}{(\text{NIR }+\text{ R})}\]</span></p>
-<p>Nilai <em>band</em> NIR dan merah dapat diperoleh dari citra satelit Landsat, tetapi jika area studi luas, biasanya akan terdapat “lubang” awan. Namun, kita dapat menggunakan citra Landsat tahun 2019 bebas awan oleh <span class="citation">Hansen et al. (2013)</span> yang dapat diunduh dari <a href="https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.7.html" class="uri">https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.7.html</a>. Karena satu petak data besar dan akan memakan waktu yang lama jika kita run dari R, dalam latihan ini, kita akan menggunakan data yang sudah dipotong. Berdasarkan website tersebut, diketahui bahwa citra terdiri dari empat <em>band</em>, yaitu:<br />
+<p>Nilai <em>band</em> NIR dan merah dapat diperoleh dari citra satelit Landsat, tetapi jika area studi luas, biasanya akan terdapat “lubang” awan. Namun, kita dapat menggunakan citra Landsat tahun 2019 bebas awan oleh <span class="citation">Hansen et al. (2013)</span> yang dapat diunduh dari <a href="https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.7.html" class="uri">https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.7.html</a>. Berdasarkan website tersebut, diketahui bahwa citra terdiri dari empat <em>band</em>, yaitu:<br />
 - Layer 1: Band 3 (merah)<br />
 - Layer 2: Band 4 (NIR)<br />
 - Layer 3: Band 5 (<em>Short-Wave Infrared</em>/SWIR)<br />
 - Layer 4: Band 7 (SWIR)<br />
 Jadi, kita akan memakai layer pertama (merah) dan kedua (NIR).</p>
+<p>Karena satu petak data besar dan akan memakan waktu yang lama jika kita run dari R, dalam latihan ini, kita akan menggunakan data yang sudah dipotong.</p>
 <pre class="r"><code># Panggil data
 landst &lt;- brick(&quot;Input Data/Hansen_GFC-2019-v1.7_last_00N_100E_clipped.tif&quot;)
 
@@ -599,17 +599,18 @@ landst  &lt;- mask(landst , bbsbuffer)
 ndv &lt;- (landst[[2]] - landst[[1]]) / (landst[[2]] + landst[[1]])
 # angka di dalam kurung kotak menunjukkan urutan nomor layer
 
+# Ekspor raster
 writeRaster(ndv, &quot;Predictors/res250m_ndvi.asc&quot;)</code></pre>
 </div>
 <div id="jarak-dari-tepi-hutan" class="section level2">
 <h2>4. Jarak dari tepi hutan</h2>
-<p>Jarak dari tepi hutan bernilai 0 jika lokasi berada di luar hutan dan tepat di tepi hutan dan nilai semakin tinggi jika lokasi berada di interior hutan. Untuk mendapatkan variabel ini, kita membutuhkan peta tutupan lahan yang dapat diperoleh dari webgis KLHK. Namun, karena data tutupan lahan ini nasional, biasanya kurang akurat untuk dipakai dalam skala lokal, misalnya satu lokasi TNBBS.</p>
+<p>Jarak dari tepi hutan bernilai 0 jika lokasi berada di luar hutan atau tepat di tepi hutan. Nilai semakin tinggi jika lokasi berada di interior hutan. Untuk mendapatkan variabel ini, kita membutuhkan peta tutupan lahan yang dapat diperoleh dari webgis KLHK. Namun, karena data tutupan lahan ini nasional, biasanya kurang akurat untuk dipakai dalam skala lokal, misalnya satu lokasi TNBBS.</p>
 <p>Khusus di TNBBS, telah tersedia data tutupan lahan yang dibuat dari data Landsat dan diklasifikasi menggunakan metode kombinasi antara <em>Maximum Likelihood Classification</em> (MLC) dan interpretasi secara visual <span class="citation">(Lubis et al. 2018)</span>. Kita akan memakai data tersebut untuk mengukur jarak dari tepi hutan ke interior hutan.</p>
 <p>Data tutupan lahan TNBBS berupa data vektor poligon yang terdiri dari 13 kategori tutupan lahan. Pertama, kita akan men-<em>subset</em> data tutupan lahan yang nonhutan, kemudian mengonversi fitur poligon ke raster sehingga fitur nonhutan memiliki nilai 1 dan hutan bernilai <code>NA</code>. Kita men-<em>subset</em> nonhutan, bukan hutan, karena perintah <code>distance</code> mengukur jarak dari suatu petak raster yang memiliki nilai ke kotak raster terdekat yang bernilai <code>NA</code>.</p>
 <pre class="r"><code># Memanggil data
 lulc &lt;- readOGR(&quot;Input Data/lulc_bbs_2000_2019_natural_human_bbsnp.shp&quot;)
 
-# 13 kategori tutupan lahan
+# Melihat 13 kategori tutupan lahan
 sort(unique(lulc$LULC_2019))
 
 # Kategori yang hutan
@@ -642,7 +643,7 @@ writeRaster(dis,&quot;Predictors/res250m_distance_to_forest_edge_2019.asc&quot;)
 <pre class="r"><code># Gabungkan prediktor dalam satu objek `preds`
 preds &lt;- stack(ele, slo, rou, ndv, dis)
 
-# Rename
+# Rename komponen &#39;preds&#39; supaya tidak kepanjangan saat di-plot
 names(preds) &lt;- c(&quot;ele&quot;, &quot;slo&quot;, &quot;rou&quot;, &quot;ndv&quot;, &quot;dis&quot;)
 
 # Visualisasi prediktor
@@ -664,7 +665,7 @@ dis 0.17282349 0.1272130 0.1507951 0.32315870 1.0000000
 $mean
         ele         slo         rou         ndv         dis 
 554.2617195   7.4218407  97.0944594   0.6806674 752.5917050 </code></pre>
-<p>Tidak ada ketentuan mahabenar untuk menentukan tinggi atau tidaknya korelasi. Batas yang biasanya digunakan adalah |r|&gt;0,6 atau |r|&gt;0,7, tergantung acuan dan kepercayaan masing-masing.</p>
+<p>Tidak ada ketentuan saklek untuk menentukan tinggi atau tidaknya korelasi. Batas yang biasanya digunakan adalah |r|&gt;0,6 atau |r|&gt;0,7, tergantung acuan dan kepercayaan masing-masing.</p>
 <p>Berdasarkan hasil uji di atas, terlihat bahwa kelerangan dan keterjalan berkorelasi tinggi (0,94) sehingga kita hanya akan menggunakan salah satunya dalam pemodelan. Menentukan variabel mana yang dipilih juga tidak ada ketentuan khusus. Kita bisa menggunakan pertimbangan ekologis, yaitu berdasarkan pengetahuan kita tentang ekologi spesies, variabel mana yang lebih memberikan pengaruh secara langsung. Atau, bisa juga kita gunakan keduanya dalam pemodelan yang terpisah, tetapi tentunya akan memakan waktu yang lebih banyak. Untuk tujuan latihan ini, kita akan menggunakan kemiringan lereng dan tidak menggunakan keterjalan tapak.</p>
 </div>
 </div>
@@ -672,7 +673,7 @@ $mean
 <h1>Metode 1: Maxent</h1>
 <div id="persiapan-data" class="section level2">
 <h2>Persiapan Data</h2>
-<p>Data yang dibutuhkan untuk pemodelan menggunakan Maxent adalah data keberadaan spesies (<em>presence only</em>) dan variabel lingkungan dalam format raster yang telah kita buat di bagian sebelumnya. Data keberadaan spesies disimpan dalam format .CSV yang terdiri dari 3 kolom: nama spesies, koordinat X, dan koordinat Y. Dalam satu analisis, kita dapat memodelkan lebih dari satu spesies. Sistem koordinat data spesies dan lingkungan harus sama, misalnya keduanya UTM atau keduanya <em>geographic</em> CRS. Berikut adalah contoh data keberadaan spesies dalam CRS UTM 48S.</p>
+<p>Data yang dibutuhkan untuk pemodelan menggunakan Maxent adalah data keberadaan spesies (<em>presence only</em>) dan variabel lingkungan dalam format raster yang telah kita buat di bagian sebelumnya. Data keberadaan spesies disimpan dalam format .CSV yang terdiri dari 3 kolom: nama spesies, koordinat X, dan koordinat Y. Dalam satu kali <em>run</em>, kita dapat memodelkan lebih dari satu spesies. Sistem koordinat data spesies dan lingkungan harus sama, misalnya keduanya UTM atau keduanya <em>geographic</em> CRS. Berikut adalah contoh data keberadaan spesies dalam CRS UTM 48S.</p>
 <table>
 <thead>
 <tr class="header">
@@ -734,7 +735,7 @@ $mean
 </tr>
 </tbody>
 </table>
-<p>Kita akan membuat file .csv untuk input Maxent dari data <em>camera trap</em>. Karena data temuan spesies dan koordinat kamera berada pada <em>sheet</em> yang terpisah, kita perlu menggabungkan keduanya terlebih dahulu.</p>
+<p>Kita akan membuat fail .csv untuk input Maxent dari data <em>camera trap</em>. Karena data temuan spesies dan koordinat kamera berada pada <em>sheet</em> yang terpisah, kita perlu menggabungkan keduanya terlebih dahulu.</p>
 <pre class="r"><code>library(tidyverse);library(readxl)
 
 # Data spesies
@@ -783,32 +784,32 @@ inputdat &lt;- left_join(spdata, locdata) %&gt;%
   distinct() %&gt;% # menghilangkan data duplikasi
   dplyr::select(-`Location ID`) # menghapus kolom Location ID
   
-# Mengekspor tabel sebagai file .csv
+# Mengekspor tabel sebagai fail .csv
 write.csv(inputdat, &quot;maxent_input_file.csv&quot;, row.names = F)</code></pre>
 </div>
 <div id="pemodelan" class="section level2">
 <h2>Pemodelan</h2>
 <p>Untuk pemodelan menggunakan Maxent, kita dapat menggunakan perangkat lunak Maxent atau R. Tutorial lengkap penggunaan Maxent dapat diperoleh dari tautan berikut <a href="https://www.amnh.org/content/download/141371/2285439/file/LinC3_SpeciesDistModeling_Ex.pdf" class="uri">https://www.amnh.org/content/download/141371/2285439/file/LinC3_SpeciesDistModeling_Ex.pdf</a>. Pada modul pelatihan ini, hanya dibahas penggunaan Maxent menggunakan perangkat lunak <em>standalone</em> karena parameter yang dapat diubah lebih lengkap, misalnya <em>feature types</em>, menambakan <em>bias file</em>, <em>regularization</em>, dan sebagainya.</p>
-<p>Setelah mengunduh dan mamasang Maxent, jalankan Maxent dengan mengklik <em>file</em> bertipe <em>Batch File</em>. Kemudian, akan tampil jendela Maxent seperti gambar di bawah ini.</p>
+<p>Setelah mengunduh dan mamasang Maxent, jalankan Maxent dengan mengeklik fail bertipe <em>Batch File</em>. Kemudian, akan tampil jendela Maxent seperti gambar di bawah ini.</p>
 <p><img src="pics/maxent1.JPG" /></p>
 <div id="komponen-utama-yang-perlu-di-assign" class="section level3">
 <h3>Komponen utama yang perlu di-<em>assign</em></h3>
 <div id="data-keberadaan-spesies" class="section level4">
 <h4>1. Data keberadaan spesies</h4>
-<p>Masukkan data keberadaan spesies dengan mengklik tombol <strong>Browse</strong> pada bagian <strong>Samples</strong>. Pilih <em>file</em> .csv yang berisi keberadaan spesies, lalu <strong>Open</strong>. Daftar spesies yang ada di <em>spreadsheet</em> tersebut akan muncul. Jika ada lebih dari spesies, kita bisa memilih apakah kita akan memodelkan semua spesies atau hanya beberapa dengan mengubah tanda centang di samping nama spesies.</p>
+<p>Masukkan data keberadaan spesies dengan mengeklik tombol <strong>Browse</strong> pada bagian <strong>Samples</strong>. Pilih fail .csv yang berisi keberadaan spesies, lalu <strong>Open</strong>. Daftar spesies yang ada di <em>spreadsheet</em> tersebut akan muncul. Jika ada lebih dari satu spesies, kita bisa memilih apakah kita akan memodelkan semua spesies sekaligus atau hanya beberapa dengan mengubah tanda centang di samping nama spesies.</p>
 </div>
 <div id="prediktor" class="section level4">
 <h4>2. Prediktor</h4>
-<p>Klik <strong>Browse</strong> di bagian <strong>Environmental layers</strong>, kemudian pilih folder tempat kita menyimpan <em>file</em> raster prediktor. Setelah itu, akan muncul daftar file raster yang ada di folder tersebut dan secara otomatis tercentang semua, tetapi bisa kita ubah secara manual untuk mengikutsertakan atau tidak mengikutsertakan prediktor.</p>
-<p>Setelah menentukan data masukan, centang <strong>Create response curves</strong> dan <strong>Make pictures of predictions</strong>, kemudian kita bisa langsung mengklik tombol <strong>Run</strong> di bawah kiri untuk menjalankan Maxent.</p>
-<p>Namun, ada beberapa pilihan yang dapat kita ubah untuk mengoptimalkan pemodelan kita.</p>
+<p>Klik <strong>Browse</strong> di bagian <strong>Environmental layers</strong>, kemudian pilih folder tempat kita menyimpan fail raster prediktor. Setelah itu, akan muncul daftar fail raster yang ada di folder tersebut dan secara otomatis tercentang semua, tetapi bisa kita ubah secara manual untuk mengikutsertakan atau tidak mengikutsertakan prediktor. Secara otomatis, Maxent akan menentukan tipe data prediktor sebagai variabel <em>Continuous</em> yang tampak di sebelah kanan nama prediktor. Jika ada prediktor yang kategorikal (misalnya tipe tutupan lahan), kita perlu secara manual mengubahnya menjadi <em>Categorical</em>.</p>
+<p>Setelah menentukan data keberadaan spesies dan prediktor, centang <strong>Create response curves</strong>, <strong>Make pictures of predictions</strong>, dan <strong>Do jackknife to measure variable importance</strong>. Kemudian kita bisa langsung mengeklik tombol <strong>Run</strong> di bawah kiri untuk menjalankan Maxent.</p>
+<p>Selain komponen-komponen utama di atas, ada beberapa pilihan yang dapat kita ubah untuk mengoptimalkan pemodelan Maxent.</p>
 </div>
 </div>
 <div id="komponen-tambahan" class="section level3">
 <h3>Komponen tambahan</h3>
 <div id="features" class="section level4">
 <h4>1. <em>Features</em></h4>
-<p><em>Features</em> merupakan fungsi yang digunakan untuk memodelkan hubungan prediktor lingkungan dengan spesies, yaitu <em>linear</em>, <em>quadratic</em>, <em>product</em>, <em>threshold</em>, <em>hinga</em>, dan <em>auto features</em>. <em>By default</em>, pilihan yang aktif adalah <em>auto features</em> sehingga hasil pemodelan dapat mencakup kurva respon yang kompleks. Namun, hal ini dapat menyebabkan <em>overfitting</em>. Jika kita menginginkan model yang lebih <em>general</em> dan secara ekologis lebih “masuk akal”, kita dapat memilih beberapa fitur saja.</p>
+<p><em>Features</em> merupakan fungsi yang digunakan untuk memodelkan hubungan prediktor lingkungan dengan spesies, yaitu <em>linear</em>, <em>quadratic</em>, <em>product</em>, <em>threshold</em>, <em>hinge</em>, dan <em>auto features</em>. <em>By default</em>, pilihan yang aktif adalah <em>auto features</em> sehingga hasil pemodelan dapat mencakup kurva respon yang kompleks. Namun, hal ini dapat menyebabkan <em>overfitting</em>. Jika kita menginginkan model yang lebih <em>general</em> dan secara ekologis lebih “masuk akal”, kita dapat memilih beberapa fitur saja.</p>
 <p>Saya pribadi biasanya akan mencoba <em>auto features</em> terlebih dahulu dan jika terdapat kurva respon yang terlalu kompleks, saya akan mencoba lagi dengan hanya memilih <em>linear</em>, <em>quadratic</em>, dan <em>product features</em>.</p>
 <p>Dalam beberapa kondisi, mungkin <em>threshold</em> dan <em>hinge features</em> masuk akal secara ekologi. Misalnya, kesesuaian habitat dapat berkurang pada habitat dengan persentase tajuk hingga 70%, tetapi di bawah itu, habitat tersebut sama sekali tidak bisa dihuni siamang dan tidak mungkin ada siamang di situ (nilai kesesuaian habitat langsung <em>drop</em> ke nilai 0).</p>
 </div>
@@ -822,7 +823,7 @@ write.csv(inputdat, &quot;maxent_input_file.csv&quot;, row.names = F)</code></pr
 <p>Konsekuensi hal ini adalah kondisi habitat di mana spesies “mungkin” ada, tetapi tidak disurvei, dapat diduga sebagai habitat tidak sesuai karena terdapat data <em>background</em> di tempat tersebut yang tidak ada temuan spesies.</p>
 <p>Sebagai contoh, lokasi titik <em>camera trap</em> di IPZ berkisar antara 160-940 mdpl, sedangkan elevasi seluruh lanskap TNBBS + 5 km <em>buffer</em> berkisar antara 0 hingga 1906 mdpl (lihat gambar di bawah ini). Oleh karena itu, kita tidak memiliki rekaman spesies dari kisaran elevasi 940-1906 mdpl dan Maxent akan menganggap elevasi ini merupakan habitat yang tidak sesuai bagi spesies.</p>
 <p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-18-1.png" width="80%" style="display: block; margin: auto;" /></p>
-<p>Salah satu cara untuk mengatasi hal ini adalah menggunakan <em>bias file</em>, yaitu <em>file</em> raster yang merepresentasikan upaya survei relatif di seluruh lanskap. Raster tersebut diberi nilai <em>nonzero</em> antara 0 (upaya rendah) hingga 1 (upaya tinggi). Jika data keberadaan spesies berasal dari survei <em>camera trap</em>, <em>bias file</em> dapat dibuat dengan memberikan nilai 1 untuk sel raster di sekitar lokasi pemasangan <em>camera trap</em> dan nilai desimal yang kecil (misalnya 0,1) untuk area yang tidak disurvei. “Di sekitar lokasi <em>camera trap</em>” artinya adalah area dalam radius tertentu di sekitar <em>camera trap</em> dan penentuan radius ini bersifat <em>arbitrary</em>. Hasil dari menggunakan <em>bias file</em> adalah titik <em>background</em> tidak dibuat secara acak di seluruh lanskap, melainkan lebih banyak di area yang nilai upaya survei relatifnya lebih tinggi.</p>
+<p>Salah satu cara untuk mengatasi hal ini adalah menggunakan <em>bias file</em>, yaitu fail raster yang merepresentasikan upaya survei relatif di seluruh lanskap. Raster tersebut diberi nilai <em>nonzero</em> antara 0,… (upaya rendah) hingga 1 (upaya tinggi). Jika data keberadaan spesies berasal dari survei <em>camera trap</em>, <em>bias file</em> dapat dibuat dengan memberikan nilai 1 untuk sel raster di sekitar lokasi pemasangan <em>camera trap</em> dan nilai desimal yang kecil (misalnya 0,1) untuk area yang tidak disurvei. “Di sekitar lokasi <em>camera trap</em>” artinya adalah area dalam radius tertentu di sekitar <em>camera trap</em> dan penentuan radius ini bersifat <em>arbitrary</em>. Hasil dari menggunakan <em>bias file</em> adalah titik <em>background</em> tidak dibuat secara acak di seluruh lanskap, melainkan lebih banyak di area yang nilai upaya survei relatifnya lebih tinggi.</p>
 <p>Untuk latihan ini, kita akan menggunakan radius 1,5 km (setengah dari 3 km) karena lokasi kamera di IPZ TNBBS ditentukan menggunakan petak 3 km x 3 km.</p>
 <pre class="r"><code># Membuat data spasial lokasi kamera
 loc_sp &lt;- SpatialPoints(coords=locdata[,c(&quot;X&quot;,&quot;Y&quot;)], proj4string=utm48s)
@@ -865,11 +866,10 @@ writeRaster(bias_file, &quot;bias_file_ipz.asc&quot;)</code></pre>
 </div>
 <div id="hasil-maxent" class="section level2">
 <h2>Hasil Maxent</h2>
-<p>Hasil Maxent dapat dilihat pada file HTML di folder yang kita <em>assign</em> untuk menyimpan keluaran. Setiap keluaran disertai dengan penjelasan sehingga keluaran dapat dimengerti. Berikut adalah beberapa keluaran penting yang perlu dilaporkan jika melakukan prediksi distribusi satwa menggunakan Maxent.</p>
-<div id="kurva-roc-dan-auc" class="section level4">
-<h4>1. Kurva ROC dan AUC</h4>
-<p>Kurva ROC (<em>receiver operator characteristic</em>) Maxent merupakan kurva yang menunjukkan performa model dalam mengklasifikasi keberadaan spesies. AUC (<em>area under the ROC curve</em>) merupakan pengukuran kemampuan model untuk membedakan kategori data. Semakin tinggi AUC, semakin baik kemampuan model dalam membedakan data keberadaan dan ketidakberadaan spesies. Nilai AUC dapat berkisar antara 0 hingga 1. Nilai 0 berarti bahwa model memprediksi semua data <em>presence</em> sebagai <em>absence</em> dan sebaliknya.</p>
-<p>AUC pada model Maxent biasanya berkisar antara 0,5 hingga 1. Nilai 0,5 berarti bahwa model tidak lebih baik daripada model random dalam memprediksi keberadaan spesies. Jika nilai AUC semakin mendekati 1, model semakin baik dalam memprediksi keberadaan spesies. Nilai AUC yang dianggap baik adalah jika &gt; 0,7. Pada gambar di bawah, nilai AUC model adalah 0,872 sehingga model dapat dianggap baik.</p>
+<p>Hasil Maxent dapat dilihat pada fail HTML di folder untuk menyimpan keluaran. Setiap keluaran disertai dengan penjelasan sehingga keluaran dapat dimengerti. Berikut adalah beberapa keluaran penting yang perlu dilaporkan jika melakukan prediksi distribusi satwa menggunakan Maxent.</p>
+<div id="kurva-auc" class="section level4">
+<h4>1. Kurva AUC</h4>
+<p>Kurva ROC (<em>receiver operator characteristic</em>) Maxent merupakan kurva yang menunjukkan performa model dalam mengklasifikasi keberadaan spesies. AUC (<em>area under the ROC curve</em>) merupakan pengukuran kemampuan model untuk membedakan kategori data. Semakin tinggi AUC, semakin baik kemampuan model dalam membedakan keberadaan spesies. Nilai AUC dapat berkisar antara 0 hingga 1. Nilai mendekati 0 berarti bahwa model memprediksi semua data <em>presence</em> sebagai <em>absence</em> dan sebaliknya; nilai mendekati 1 berarti bahwa model dapat membedakan dengan baik keberadaan spesies. AUC pada model Maxent biasanya berkisar antara 0,5 hingga 1. Nilai 0,5 berarti bahwa model tidak lebih baik daripada model random dalam memprediksi keberadaan spesies. Nilai AUC yang dianggap baik adalah jika &gt; 0,7. Pada gambar di bawah, nilai AUC model adalah 0,872 sehingga model dapat dianggap baik.</p>
 <p><img src="pics/roc.png" /></p>
 <p>Namun, perlu diingat bahwa nilai AUC dapat bernilai tinggi jika spesies yang dimodelkan memiliki area distribusi yang sempit relatif terhadap seluruh area studi. Hal ini tidak selalu berarti model tersebut baik (Maxent Tutorial, 2017)</p>
 </div>
@@ -880,7 +880,7 @@ writeRaster(bias_file, &quot;bias_file_ipz.asc&quot;)</code></pre>
 </div>
 <div id="prediktor-apa-yang-paling-penting" class="section level4">
 <h4>3. Prediktor apa yang paling penting?</h4>
-<p>Terdapat dua cara untuk menentukan variabel lingkungan yang paling penting terhadap distribusi spesies, yaitu 1) tabel kontribusi dan permutasi, 2) <em>Jackknife of training and test gain and AUC</em>. Kita berharap variabel yang paling penting berdasarkan kedua cara tersebut sama, tetapi sering kali hasilnya dapat berbeda. Jika berbeda, saya pribadi cenderung memilih menggunakan hasil dari <em>Jackknife of trianing and test gain</em> karena menunjukkan peningkatan performa model saat menggunakan satu variabel tertentu dan penurunan performa model saat variabel tersebut tidak digunakan (baca keterangan di halaman HTML dan Maxent Tutorial untuk penjelasan lebih rinci).</p>
+<p>Terdapat dua cara untuk menentukan variabel lingkungan yang paling penting terhadap distribusi spesies, yaitu 1) tabel kontribusi dan permutasi dan 2) <em>Jackknife of training and test gain and AUC</em>. Kita berharap variabel yang paling penting berdasarkan kedua cara tersebut sama, tetapi sering kali hasilnya dapat berbeda. Jika berbeda, saya pribadi cenderung memilih menggunakan hasil dari <em>Jackknife of trianing and test gain</em> karena menunjukkan peningkatan performa model saat menggunakan satu variabel tertentu dan penurunan performa model saat variabel tersebut tidak digunakan (baca keterangan di halaman HTML dan Maxent Tutorial untuk penjelasan lebih rinci).</p>
 <p><img src="pics/jack.png" /></p>
 <p>Jika suatu variabel memiliki <em>gain</em> yang rendah, kurva respon variabel tersebut dapat diabaikan. Jadi, yang penting dijelaskan dalam laporan adalah pola kurva respon variabel lingkungan yang memiliki gain tinggi saja.</p>
 </div>
@@ -933,7 +933,7 @@ writeRaster(bias_file, &quot;bias_file_ipz.asc&quot;)</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Salah satu kekurangan dari metode GLM adalah kita tidak dapat memastikan ketidakberadaan spesies. Misalnya, kita survei menggunakan <em>camera trap</em> di 10 lokasi dan spesies target ditemukan di 4 lokasi. Di 6 lokasi lainnya, bukan berarti spesies tersebut benar-benar tidak ada. Bisa jadi spesies target ada, hanya <strong>tidak terdeteksi</strong>. Masalah tentang probabilitas deteksi ini akan dibahas dalam pemodelan okupansi. Namun, asumsi dalam kerangka kerja GLM adalah data <em>absence</em> dianggap sebagai <em>true absence</em>.</p>
+<p>Salah satu kekurangan dari metode GLM adalah kita tidak dapat memastikan ketidakberadaan spesies. Misalnya, kita survei menggunakan <em>camera trap</em> di 10 lokasi dan spesies target ditemukan di 4 lokasi. Di 6 lokasi lainnya, bukan berarti spesies tersebut benar-benar tidak ada. Bisa jadi spesies target ada, hanya <strong>tidak terdeteksi</strong>. Masalah tentang probabilitas deteksi ini akan dibahas dalam pemodelan okupansi. Namun, asumsi dalam kerangka kerja GLM adalah data <em>non-detection</em> dianggap sebagai <em>true absence</em>.</p>
 <p>Data yang akan kita gunakan di latihan ini adalah data rekaman spesies dari <em>camera trap</em> dan kita akan memodelkan distribusi <em>Mydaus javanensis</em>, tetapi sebagai contoh multispesies, kita akan men-<em>subset</em> juga <em>Paguma larvata</em>.</p>
 <pre class="r"><code>library(tidyverse);library(readxl)
 
@@ -1023,7 +1023,7 @@ sploc</code></pre>
  9 IDN-108-L0009 406523  9416378                   1                1
 10 IDN-108-L0010 407969. 9415929                   1                0
 # ... with 55 more rows</code></pre>
-<p>Langkah selanjutnya adalah mengekstrak nilai variabel lingkungan di lokasi kamera. Kita akan kembali menggunakan <em>package</em> untuk analisis data spasial. Aktifkan <em>package</em> terlebih dahulu jika belum.</p>
+<p>Langkah selanjutnya adalah mengekstrak nilai variabel lingkungan di lokasi kamera. Kita akan kembali menggunakan <em>package</em> spasial. Aktifkan <em>package</em> terlebih dahulu jika belum: <code>library(sp);library(raster)</code>.</p>
 <pre class="r"><code># Membuat data spasial titik CT
 locspatial &lt;- SpatialPoints(coords=locdata[,c(&quot;X&quot;,&quot;Y&quot;)], proj4string=utm48s)
 
@@ -1033,8 +1033,9 @@ predvalues &lt;- raster::extract(preds, locspatial)
 # Menggabungkan nilai prediktor dengan data temuan spesies
 glmdata &lt;- cbind(sploc, predvalues)</code></pre>
 </div>
-<div id="fit-model" class="section level2">
-<h2>Fit model</h2>
+<div id="pemodelan-1" class="section level2">
+<h2>Pemodelan</h2>
+<p>Untuk mem-<em>fit</em> model, kita menggunakan perintah <code>glm(...)</code>. Karena variabel respon merupakan data biner (<em>presence/absence</em>), <code>family</code> yang digunakan adalah <code>"binomial"</code>. Khusus untuk variabel elevasi, kita akan mengikutsertakan fungsi kuadratik untuk memperhitungkan kemungkinan bahwa spesies memiliki preferensi ketinggian tertentu.</p>
 <pre class="r"><code>fullmodel &lt;- glm(`Mydaus javanensis` ~ ele+I(ele^2)+slo+ndv+dis,
                  data=glmdata, family=&quot;binomial&quot;)
 summary(fullmodel)</code></pre>
@@ -1067,9 +1068,9 @@ Number of Fisher Scoring iterations: 4</code></pre>
 <p>Kolom <em>Estimate</em> menunjukkan estimasi beta koefisien masing-masing prediktor. Jika nilai <em>Estimate</em> negatif, semakin tinggi nilai prediktor, semakin rendah probabilitas keberadaan spesies. Sebaliknya, jika nilai <em>Estimate</em> positif, semakin tinggi nilai prediktor, semakin tinggi juga probabilitas keberadaan spesies. Namun, kita perlu mengetahui apakah hubungan tersebut signifikan dengan melihat kolom <em>p-value</em>.</p>
 <p>Jika <em>p-value</em> &lt; 0.05, beta koefisien prediktor tersebut signifikan, atau dengan kata lain, prediktor tersebut berpengaruh signifikan terhadap estimasi probabilitas keberadaan spesies. Di contoh ini, tidak ada prediktor yang signifikan pada <em>full model</em>.</p>
 </div>
-<div id="step-wise" class="section level2">
-<h2>Step wise</h2>
-<p>Langkah selanjutnya adalah mendapatkan model <em>parsimonious</em> dengan metode <em>step wise</em>. Model <em>parsimonious</em> adalah model paling sederhana (prediktor paling sedikit) yang memiliki kemampuan prediksi paling besar. Indeks yang digunakan untuk mengevaluasi model <em>parsimonious</em> adalah Akaike Information Criterion (AIC). Semakin kecil nilai AIC, model tersebut semakin <em>parsimonious</em>.</p>
+<div id="seleksi-model" class="section level2">
+<h2>Seleksi model</h2>
+<p>Langkah selanjutnya setelah <em>fit full model</em> adalah mendapatkan model <em>parsimonious</em> dengan metode <em>step wise</em>. Model <em>parsimonious</em> adalah model paling sederhana (prediktor paling sedikit) yang memiliki kemampuan prediksi paling besar. Indeks yang digunakan untuk mengevaluasi model <em>parsimonious</em> adalah Akaike Information Criterion (AIC). Semakin kecil nilai AIC, model tersebut semakin <em>parsimonious</em>.</p>
 <pre class="r"><code>stepmod &lt;- step(fullmodel)</code></pre>
 <pre><code>Start:  AIC=90.82
 `Mydaus javanensis` ~ ele + I(ele^2) + slo + ndv + dis
@@ -1115,10 +1116,11 @@ Step:  AIC=85.16
        Df Deviance    AIC
 &lt;none&gt;      81.162 85.162
 - ele   1   86.616 88.616</code></pre>
-<p>Regresi <em>step wise</em> bekerja dengan cara mengeliminasi prediktor satu per satu, lalu membandingkan dengan satu sama lain serta model lengkap. Jika model yang salah satu prediktornya dieliminasi memiliki nilai AIC lebih rendah dari model lengkap, model tersebut dipilih untuk langkah selanjutnya. Hal tersebut terjadi bertahap hingga diperoleh model dengan AIC terendah.</p>
+<p>Regresi <em>step wise</em> bekerja dengan cara mengeliminasi prediktor satu per satu, lalu membandingkan dengan satu sama lain dan model lengkap. Jika model yang salah satu prediktornya dieliminasi memiliki nilai AIC lebih rendah dari model lengkap, model tersebut dipilih untuk langkah selanjutnya. Hal tersebut terjadi bertahap hingga diperoleh model dengan AIC terendah.</p>
 <p>Pada data kita, pada tahap pertama, model tanpa prediktor <code>slo</code> (kelerengan) memiliki nilai AIC terendah (88.840) jika dibandingkan dengan model tanpa salah satu variabel lain dan model lengkap (<code>&lt;none&gt;</code> pada tabel hasil <em>step wise</em>).</p>
-<p>Pada langkah kedua, “model lengkap”-nya adalah <code>Mydaus javanensis ~ ele + I(ele^2) + ndv + dis</code>, kemudian prediktor dieliminasi satu per satu. Hasilnya adalah model tanpa prediktor <code>I(ele^2)</code> (fungsi kuadratik elevasi), memiliki AIC terendah (86.953).</p>
-<p>Pada langkah ketiga dan seterusnya, diketahui bahwa model <code>Mydaus javanensis ~ ele</code> sebagai model terbaik dengan nilai AIC = 85.162.</p>
+<p>Pada langkah kedua, “model lengkap”-nya adalah model tanpa prediktor <em>slope</em>, yaitu <code>Mydaus javanensis ~ ele + I(ele^2) + ndv + dis</code>, kemudian prediktor dieliminasi satu per satu. Hasilnya adalah model tanpa prediktor <code>I(ele^2)</code> (fungsi kuadratik elevasi), memiliki AIC terendah (86.953).</p>
+<p>Setelah langkah ketiga dan seterusnya, diketahui bahwa model <code>Mydaus javanensis ~ ele</code> sebagai model terbaik dengan nilai AIC = 85.162.</p>
+<p>Untuk melihat koefisien prediktor dan nilai signifikansinya, jalankan perintah berikut.</p>
 <pre class="r"><code>summary(stepmod)</code></pre>
 <pre><code>
 Call:
@@ -1143,10 +1145,11 @@ Residual deviance: 81.162  on 63  degrees of freedom
 AIC: 85.162
 
 Number of Fisher Scoring iterations: 4</code></pre>
+<p>Dari hasil di atas, dapat disimpulkan bahwa prediktor yang berkontribusi signifikan dalam menentukan keberadaan <em>Mydaus javanensis</em> adalah elevasi dengan koefisien 0,003289 (SE = 0,001476; <em>p-value</em> = 0,02588).</p>
 </div>
-<div id="membuat-response-curve" class="section level2">
-<h2>Membuat <em>response curve</em></h2>
-<p>Untuk melihat hubungan antara prediktor dengan prediksi probabilitas keberadaan spesies, kita perlu membuat <em>response curve</em>.</p>
+<div id="membuat-kurva-respon" class="section level2">
+<h2>Membuat kurva respon</h2>
+<p>Untuk melihat hubungan antara prediktor dengan prediksi probabilitas keberadaan spesies, kita perlu membuat kurva respon.</p>
 <div id="elevasi-1" class="section level3">
 <h3>Elevasi</h3>
 <pre class="r"><code># Data baru untuk response curve
@@ -1172,8 +1175,13 @@ glmpred %&gt;%
 <div id="prediksi-spasial" class="section level2">
 <h2>Prediksi spasial</h2>
 <p>Setelah didapatkan model terbaik (model <em>parsimonious</em>), kita akan menggunakannya untuk memprediksi keberadaan <em>Mydaus javanensis</em> di area studi kita dengan perintah <code>predict</code>. Karena kita menggunakan GLM yang variabel responnya biner (1/0), kita perlu mengonversi keluaran dari <code>predict</code> menjadi angka probabilitas yang berkisar antara 0 dan 1 dengan perintah <code>calc</code> dan fungsi <code>plogis</code>.</p>
-<pre class="r"><code>probpredict &lt;- predict(preds, stepmod, fun=predict)
+<pre class="r"><code># Kalkulasi prediksi keberadaan spsies di lanskap studi
+probpredict &lt;- predict(preds, stepmod, fun=predict)
+
+# Mengubah nilai prediksi menjadi skala 0-1 dengan fungsi plogis
 probglm &lt;- calc(probpredict, fun = function(x){plogis(x)})
+
+# Menampilkan peta prediksi
 plot(probglm)</code></pre>
 <p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-32-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Kita juga bisa mengekspor peta prediksi probabilitas keberadaan <em>Mydaus javanensis</em> ke dalam format raster.</p>
@@ -1182,13 +1190,17 @@ plot(probglm)</code></pre>
 </div>
 <div id="metode-3-occupancy-modeling" class="section level1">
 <h1>Metode 3: <em>Occupancy modeling</em></h1>
-<p>Pemodelan okupansi merupakan pemodelan proporsi area yang dihuni oleh satwa dengan mempertimbangkan probabilitas deteksi satwa. Jika kita menemukan satwa di suatu unit sampel (misalnya <em>grid</em>), hal itu berarti satwa tersebut menempati unit sampel tersebut. Namun, jika kita tidak menemukan satwa (nondeteksi), hal itu dapat berarti: - satwa menempati unit sampel, tetapi tidak terdeteksi oleh observer, atau - satwa benar-benar tidak menempati unit sampel (<em>absence</em>).</p>
+<p>Pemodelan okupansi merupakan pemodelan proporsi area yang dihuni oleh satwa dengan mempertimbangkan probabilitas deteksi satwa. Jika kita menemukan satwa di suatu unit sampel (misalnya <em>grid</em>), hal itu berarti satwa tersebut menempati unit sampel tersebut. Namun, jika kita tidak menemukan satwa (nondeteksi), hal itu dapat berarti:<br />
+- satwa menempati unit sampel, tetapi tidak terdeteksi oleh observer, atau - satwa benar-benar tidak menempati unit sampel (<em>absence</em>).</p>
 <p>Berbeda dengan GLM yang mengasumsikan nondeteksi sebagai <em>absence</em>, pemodelan okupansi menggunakan pengambilan sampel berulang (<em>repeated sampling</em>) di setiap unit sampel untuk menghitung probabilitas deteksi <span class="math inline">\(p\)</span>. Replikasi pengambilan sampel dapat berupa pengulangan spasial, misalnya pada survei okupansi harimau se-Pulau Sumatera (SWTS), atau pengulangan temporal, misalnya pada survei <em>camera trap</em>, seperti yang akan kita lakukan pada latihan ini.</p>
-<p>Pemodelan okupansi merupakan pemodelan berhierarki karena terdapat dua parameter yang diestimasi, yaitu probabilitas okupansi <span class="math inline">\(/psi\)</span> dan probabilitas deteksi <span class="math inline">\(p\)</span>.</p>
+<p>Pemodelan okupansi merupakan pemodelan berhierarki karena terdapat dua parameter yang diestimasi, yaitu probabilitas okupansi $$ dan probabilitas deteksi <span class="math inline">\(p\)</span>.</p>
 <div id="persiapan-data-2" class="section level2">
 <h2>Persiapan Data</h2>
+<p>Untuk melakukan pemodelan okupansi, kita perlu membuat matriks deteksi spesies. Baris matriks merupakan lokasi survei dan kolom matriks berisi hasil pengambilan sampel berulang. Setiap pengambilan sampel disebut <em>sampling occasion</em>. Kita akan menggunakan <em>package</em> <code>camtrapR</code> untuk membuat matriks deteksi spesies, <code>tidyverse</code> untuk memodifikasi bentuk data, dan <code>readxl</code> untuk membaca fail .XLSX.</p>
+<p>Pertama, kita akan memanggil data rekaman spesies.</p>
 <pre class="r"><code>library(tidyverse);library(readxl);library(camtrapR)
 
+# Data spesies
 spdata &lt;- read_excel(&quot;Input Data/DATABASE - BBS_TIGER_SURVEY_2019.xlsx&quot;,
                      sheet=&quot;Image&quot;) %&gt;% 
     dplyr::select(LocationID = `Location ID`,
@@ -1211,7 +1223,8 @@ spdata</code></pre>
 10 IDN-108-L0001 Argusianus argus 2019-07-16 17:40:19
 # ... with 122,481 more rows</code></pre>
 <p>Kemudian, kita akan memanggil data pemasangan dan pengambilan kamera dan koordinat untuk menggabungkan data spesies dengan data lokasi kamera.</p>
-<pre class="r"><code>camdata &lt;- read_excel(&quot;Input Data/DATABASE - BBS_TIGER_SURVEY_2019.xlsx&quot;,
+<pre class="r"><code># Data pemasangan dan lokasi kamera
+camdata &lt;- read_excel(&quot;Input Data/DATABASE - BBS_TIGER_SURVEY_2019.xlsx&quot;,
                      sheet=&quot;Deployment&quot;) %&gt;% 
   dplyr::select(DeploymentID=`Deployment ID`,
                 LocationID=`Location ID`,
@@ -1235,8 +1248,8 @@ camdata</code></pre>
  9 IDN-108-D00~ IDN-108-L~ 4.12e5 9.42e6 2019-06-27 00:00:00 2019-11-14 00:00:00
 10 IDN-108-D00~ IDN-108-L~ 4.12e5 9.42e6 2019-06-27 00:00:00 2019-11-14 00:00:00
 # ... with 116 more rows</code></pre>
-<p>Membuat camera operation matrix</p>
-<pre class="r"><code>CTmatrix &lt;- cameraOperation(CTtable = camdata,
+<pre class="r"><code># Membuat camera operation matrix
+CTmatrix &lt;- cameraOperation(CTtable = camdata,
                             stationCol = &quot;LocationID&quot;,
                             cameraCol = &quot;DeploymentID&quot;,
                             setupCol = &quot;Begin&quot;,
@@ -1248,31 +1261,10 @@ camdata</code></pre>
                             dateFormat = &quot;%Y-%m-%d&quot;,
                             writecsv = TRUE,
                             outDir = getwd()
-                            )</code></pre>
-<p>Mengekstrak kovariat</p>
-<pre class="r"><code>library(sp);library(raster)
+                            )
 
-ctloc &lt;- camdata %&gt;% dplyr::select(LocationID, X, Y) %&gt;% distinct() 
-
-utm48s &lt;- CRS(&quot;+proj=utm +zone=48 +south +datum=WGS84 +units=m +no_defs&quot;)
-
-ct_sp &lt;- SpatialPoints(coords=ctloc[,c(&quot;X&quot;,&quot;Y&quot;)], proj4string=utm48s)
-
-ele &lt;- raster(&quot;Predictors/res250m_elevation.asc&quot;)
-slo &lt;- raster(&quot;Predictors/res250m_slope.asc&quot;)
-rou &lt;- raster(&quot;Predictors/res250m_roughness.asc&quot;)
-ndv &lt;- raster(&quot;Predictors/res250m_ndvi.asc&quot;)
-dis &lt;- raster(&quot;Predictors/res250m_distance_to_forest_edge_2019.asc&quot;)
-
-preds &lt;- stack(ele,slo,rou,ndv,dis)
-names(preds) &lt;- c(&quot;ele&quot;,&quot;slo&quot;,&quot;rou&quot;,&quot;ndv&quot;,&quot;dis&quot;)
-predvalues &lt;- raster::extract(preds, ct_sp) %&gt;% as.data.frame()
- 
-library(PerformanceAnalytics) 
-chart.Correlation(predvalues, histogram=TRUE, pch=19)</code></pre>
-<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-37-1.png" width="80%" style="display: block; margin: auto;" /></p>
-<p>Membuat species detection matrix</p>
-<pre class="r"><code>spdet &lt;- detectionHistory(recordTable = spdata, 
+# Membuat species detection matrix
+spdet &lt;- detectionHistory(recordTable = spdata, 
                           species = &quot;Mydaus javanensis&quot;,
                           camOp = CTmatrix,
                           stationCol = &quot;LocationID&quot;,
@@ -1287,16 +1279,652 @@ chart.Correlation(predvalues, histogram=TRUE, pch=19)</code></pre>
                           occasionStartTime = 0,
                           datesAsOccasionNames = TRUE,
                           timeZone = &quot;Asia/Jakarta&quot;,
-                          writecsv = F)</code></pre>
+                          writecsv = F)
+
+# Hasil akhir
+spdet</code></pre>
+<pre><code>$detection_history
+              2019-05-21_2019-05-27 2019-05-28_2019-06-03 2019-06-04_2019-06-10
+IDN-108-L0001                    NA                    NA                    NA
+IDN-108-L0002                    NA                    NA                    NA
+IDN-108-L0003                    NA                    NA                    NA
+IDN-108-L0004                    NA                    NA                    NA
+IDN-108-L0005                    NA                    NA                    NA
+IDN-108-L0006                    NA                    NA                    NA
+IDN-108-L0007                    NA                    NA                    NA
+IDN-108-L0008                    NA                    NA                    NA
+IDN-108-L0009                    NA                    NA                    NA
+IDN-108-L0010                    NA                    NA                    NA
+IDN-108-L0011                    NA                    NA                    NA
+IDN-108-L0012                    NA                    NA                    NA
+IDN-108-L0013                    NA                    NA                    NA
+IDN-108-L0014                    NA                    NA                    NA
+IDN-108-L0015                    NA                    NA                    NA
+IDN-108-L0016                    NA                    NA                    NA
+IDN-108-L0017                    NA                    NA                    NA
+IDN-108-L0018                    NA                    NA                    NA
+IDN-108-L0019                    NA                    NA                    NA
+IDN-108-L0020                    NA                    NA                    NA
+IDN-108-L0021                    NA                    NA                    NA
+IDN-108-L0022                    NA                    NA                    NA
+IDN-108-L0023                    NA                    NA                    NA
+IDN-108-L0024                    NA                    NA                    NA
+IDN-108-L0025                    NA                     0                     0
+IDN-108-L0026                    NA                     0                     0
+IDN-108-L0027                    NA                    NA                    NA
+IDN-108-L0028                    NA                    NA                    NA
+IDN-108-L0029                    NA                    NA                    NA
+IDN-108-L0030                    NA                    NA                    NA
+IDN-108-L0031                    NA                    NA                    NA
+IDN-108-L0032                    NA                     0                     0
+IDN-108-L0033                    NA                     0                     0
+IDN-108-L0034                    NA                     0                     0
+IDN-108-L0035                    NA                    NA                    NA
+IDN-108-L0036                    NA                    NA                    NA
+IDN-108-L0037                    NA                    NA                    NA
+IDN-108-L0038                    NA                    NA                    NA
+IDN-108-L0039                    NA                     0                     0
+IDN-108-L0040                    NA                     0                     0
+IDN-108-L0041                    NA                     0                     0
+IDN-108-L0042                    NA                    NA                    NA
+IDN-108-L0043                    NA                    NA                    NA
+IDN-108-L0044                    NA                    NA                    NA
+IDN-108-L0045                    NA                     0                     0
+IDN-108-L0046                     0                     0                     0
+IDN-108-L0047                     0                     0                     0
+IDN-108-L0048                    NA                     0                     0
+IDN-108-L0049                    NA                     0                     0
+IDN-108-L0050                    NA                     0                     0
+IDN-108-L0051                     0                     0                     0
+IDN-108-L0052                     0                     0                     0
+IDN-108-L0053                    NA                     0                     0
+IDN-108-L0054                    NA                     0                     0
+IDN-108-L0055                     0                     0                     0
+IDN-108-L0056                     0                     0                     0
+IDN-108-L0057                     0                     0                     0
+IDN-108-L0058                     0                     0                     0
+IDN-108-L0059                     0                     0                     0
+IDN-108-L0060                    NA                     0                     0
+IDN-108-L0061                    NA                     0                     0
+IDN-108-L0062                    NA                     0                     0
+IDN-108-L0063                    NA                     0                     0
+IDN-108-L0064                    NA                     0                     0
+IDN-108-L0065                    NA                     0                     0
+              2019-06-11_2019-06-17 2019-06-18_2019-06-24 2019-06-25_2019-07-01
+IDN-108-L0001                    NA                    NA                     0
+IDN-108-L0002                    NA                    NA                     0
+IDN-108-L0003                    NA                    NA                    NA
+IDN-108-L0004                    NA                    NA                    NA
+IDN-108-L0005                    NA                    NA                    NA
+IDN-108-L0006                    NA                    NA                     0
+IDN-108-L0007                    NA                    NA                     0
+IDN-108-L0008                    NA                    NA                     0
+IDN-108-L0009                    NA                    NA                    NA
+IDN-108-L0010                    NA                    NA                    NA
+IDN-108-L0011                    NA                    NA                    NA
+IDN-108-L0012                    NA                    NA                    NA
+IDN-108-L0013                    NA                    NA                    NA
+IDN-108-L0014                    NA                    NA                    NA
+IDN-108-L0015                    NA                    NA                    NA
+IDN-108-L0016                    NA                    NA                    NA
+IDN-108-L0017                    NA                    NA                    NA
+IDN-108-L0018                    NA                    NA                    NA
+IDN-108-L0019                    NA                    NA                    NA
+IDN-108-L0020                    NA                    NA                     0
+IDN-108-L0021                    NA                    NA                    NA
+IDN-108-L0022                    NA                    NA                    NA
+IDN-108-L0023                    NA                    NA                    NA
+IDN-108-L0024                    NA                    NA                    NA
+IDN-108-L0025                     0                     0                     0
+IDN-108-L0026                     0                     0                     0
+IDN-108-L0027                    NA                    NA                     0
+IDN-108-L0028                    NA                    NA                    NA
+IDN-108-L0029                    NA                    NA                    NA
+IDN-108-L0030                    NA                    NA                     0
+IDN-108-L0031                    NA                    NA                    NA
+IDN-108-L0032                     0                     0                     0
+IDN-108-L0033                     0                     0                     0
+IDN-108-L0034                     0                     0                     0
+IDN-108-L0035                    NA                    NA                    NA
+IDN-108-L0036                    NA                    NA                     0
+IDN-108-L0037                    NA                    NA                     0
+IDN-108-L0038                    NA                    NA                    NA
+IDN-108-L0039                     0                     0                     0
+IDN-108-L0040                     0                     0                     0
+IDN-108-L0041                     0                     0                     0
+IDN-108-L0042                    NA                    NA                    NA
+IDN-108-L0043                    NA                    NA                    NA
+IDN-108-L0044                    NA                    NA                    NA
+IDN-108-L0045                     0                     0                     0
+IDN-108-L0046                     0                     0                     0
+IDN-108-L0047                     0                     0                     0
+IDN-108-L0048                     0                     0                     0
+IDN-108-L0049                     0                     0                     0
+IDN-108-L0050                     0                     0                     0
+IDN-108-L0051                     0                     0                     0
+IDN-108-L0052                     0                     0                     0
+IDN-108-L0053                     0                     0                     0
+IDN-108-L0054                     0                     0                     0
+IDN-108-L0055                     0                     0                     0
+IDN-108-L0056                     0                     0                     0
+IDN-108-L0057                     0                     0                     0
+IDN-108-L0058                     0                     0                     0
+IDN-108-L0059                     0                     0                     0
+IDN-108-L0060                     0                     0                     0
+IDN-108-L0061                     0                     0                     0
+IDN-108-L0062                     0                     0                     0
+IDN-108-L0063                     0                     0                     0
+IDN-108-L0064                     0                     0                     0
+IDN-108-L0065                     0                     0                     0
+              2019-07-02_2019-07-08 2019-07-09_2019-07-15 2019-07-16_2019-07-22
+IDN-108-L0001                     1                     0                     1
+IDN-108-L0002                     1                     0                     0
+IDN-108-L0003                     0                     0                     0
+IDN-108-L0004                     0                     0                     0
+IDN-108-L0005                     0                     0                     1
+IDN-108-L0006                     0                     0                     0
+IDN-108-L0007                     0                     0                     0
+IDN-108-L0008                     0                     0                     0
+IDN-108-L0009                     0                     0                     0
+IDN-108-L0010                     0                     0                     0
+IDN-108-L0011                     0                     0                     0
+IDN-108-L0012                     0                     0                     0
+IDN-108-L0013                     0                     0                     0
+IDN-108-L0014                     0                     0                     0
+IDN-108-L0015                     0                     0                     0
+IDN-108-L0016                     1                     0                     0
+IDN-108-L0017                     0                     0                     0
+IDN-108-L0018                     0                     0                     0
+IDN-108-L0019                     0                     0                     0
+IDN-108-L0020                     0                     0                     0
+IDN-108-L0021                     0                     0                     0
+IDN-108-L0022                     1                     0                     0
+IDN-108-L0023                     0                     0                     0
+IDN-108-L0024                     0                     0                     0
+IDN-108-L0025                     0                     1                     0
+IDN-108-L0026                     0                     0                     0
+IDN-108-L0027                     0                     0                     0
+IDN-108-L0028                     0                     0                     1
+IDN-108-L0029                     0                     0                     0
+IDN-108-L0030                     0                     0                     0
+IDN-108-L0031                     0                     0                     0
+IDN-108-L0032                     0                     0                     0
+IDN-108-L0033                     0                     0                     0
+IDN-108-L0034                     0                     0                     0
+IDN-108-L0035                    NA                     0                     0
+IDN-108-L0036                     0                     0                     0
+IDN-108-L0037                     0                     0                     0
+IDN-108-L0038                     0                     0                     0
+IDN-108-L0039                     0                     0                     0
+IDN-108-L0040                     0                     0                     0
+IDN-108-L0041                     0                     0                     0
+IDN-108-L0042                     0                     0                     0
+IDN-108-L0043                     0                     0                     0
+IDN-108-L0044                     0                     0                     0
+IDN-108-L0045                     0                     0                     0
+IDN-108-L0046                     0                     0                     0
+IDN-108-L0047                     0                     0                     0
+IDN-108-L0048                     0                     0                     0
+IDN-108-L0049                     0                     1                     0
+IDN-108-L0050                     0                     0                     0
+IDN-108-L0051                     0                     0                     0
+IDN-108-L0052                     0                     1                     0
+IDN-108-L0053                     0                     0                     0
+IDN-108-L0054                     0                     0                     0
+IDN-108-L0055                     0                     0                     0
+IDN-108-L0056                     0                     0                     0
+IDN-108-L0057                     0                     0                     0
+IDN-108-L0058                     0                     0                     0
+IDN-108-L0059                     0                     0                     0
+IDN-108-L0060                     0                     0                     0
+IDN-108-L0061                     0                     0                     0
+IDN-108-L0062                     0                     0                     0
+IDN-108-L0063                     0                     0                     0
+IDN-108-L0064                     0                     0                     0
+IDN-108-L0065                     0                     0                     0
+              2019-07-23_2019-07-29 2019-07-30_2019-08-05 2019-08-06_2019-08-12
+IDN-108-L0001                     0                     0                     1
+IDN-108-L0002                     0                     1                     0
+IDN-108-L0003                     0                     0                     0
+IDN-108-L0004                     0                     0                     0
+IDN-108-L0005                     0                     0                     0
+IDN-108-L0006                     0                     0                     0
+IDN-108-L0007                     1                     0                     0
+IDN-108-L0008                     0                     0                     0
+IDN-108-L0009                     0                     0                     0
+IDN-108-L0010                     0                     0                     0
+IDN-108-L0011                     0                     0                     1
+IDN-108-L0012                     1                     0                     0
+IDN-108-L0013                     0                     0                     0
+IDN-108-L0014                     0                     0                     0
+IDN-108-L0015                     0                     0                     0
+IDN-108-L0016                     0                     0                     0
+IDN-108-L0017                     0                     1                     0
+IDN-108-L0018                     0                     1                     0
+IDN-108-L0019                    NA                    NA                    NA
+IDN-108-L0020                     0                     0                     0
+IDN-108-L0021                     0                     0                     0
+IDN-108-L0022                     1                     0                     0
+IDN-108-L0023                     0                     0                     0
+IDN-108-L0024                     0                     0                     0
+IDN-108-L0025                     0                     0                     0
+IDN-108-L0026                     0                     0                     0
+IDN-108-L0027                     0                     0                     0
+IDN-108-L0028                     0                     0                     0
+IDN-108-L0029                     0                     0                     1
+IDN-108-L0030                     0                     0                     0
+IDN-108-L0031                     0                     0                     0
+IDN-108-L0032                     0                     0                     0
+IDN-108-L0033                     0                     0                     0
+IDN-108-L0034                     1                     0                     0
+IDN-108-L0035                     0                     0                     0
+IDN-108-L0036                     0                     0                     0
+IDN-108-L0037                     0                     0                     0
+IDN-108-L0038                     0                     0                     0
+IDN-108-L0039                     0                     0                     0
+IDN-108-L0040                     0                     0                     0
+IDN-108-L0041                     0                     0                     1
+IDN-108-L0042                     0                     0                     0
+IDN-108-L0043                     0                     0                     0
+IDN-108-L0044                     0                     0                     0
+IDN-108-L0045                     0                     0                     0
+IDN-108-L0046                     0                     0                     0
+IDN-108-L0047                     0                     0                     0
+IDN-108-L0048                     0                     0                     0
+IDN-108-L0049                     0                     0                     0
+IDN-108-L0050                     0                     0                     0
+IDN-108-L0051                     0                     0                     0
+IDN-108-L0052                     0                     0                     0
+IDN-108-L0053                     0                     0                     0
+IDN-108-L0054                     0                     0                     0
+IDN-108-L0055                     1                     0                     1
+IDN-108-L0056                     0                     0                     0
+IDN-108-L0057                     0                     0                     0
+IDN-108-L0058                     0                     0                     0
+IDN-108-L0059                     0                     0                     0
+IDN-108-L0060                     0                     0                     0
+IDN-108-L0061                     0                     0                     0
+IDN-108-L0062                     0                     0                     0
+IDN-108-L0063                     0                     0                     0
+IDN-108-L0064                     0                     0                     0
+IDN-108-L0065                     0                     0                     0
+              2019-08-13_2019-08-19 2019-08-20_2019-08-26 2019-08-27_2019-09-02
+IDN-108-L0001                     1                     1                     0
+IDN-108-L0002                     1                     0                     0
+IDN-108-L0003                     0                     0                     0
+IDN-108-L0004                     0                     0                     0
+IDN-108-L0005                     0                     0                     0
+IDN-108-L0006                     0                     0                     0
+IDN-108-L0007                     0                     0                     0
+IDN-108-L0008                     1                     0                     0
+IDN-108-L0009                     0                     0                     0
+IDN-108-L0010                     0                     0                     0
+IDN-108-L0011                     1                     0                     0
+IDN-108-L0012                     0                     0                     0
+IDN-108-L0013                     0                     0                     0
+IDN-108-L0014                     0                     0                     0
+IDN-108-L0015                     0                     0                     0
+IDN-108-L0016                     0                     0                     0
+IDN-108-L0017                     0                     0                     0
+IDN-108-L0018                     1                     1                     0
+IDN-108-L0019                    NA                    NA                    NA
+IDN-108-L0020                     0                     0                     0
+IDN-108-L0021                     0                     0                     0
+IDN-108-L0022                     0                     1                     0
+IDN-108-L0023                     1                     1                     1
+IDN-108-L0024                     0                     0                     0
+IDN-108-L0025                     0                     0                     0
+IDN-108-L0026                     0                     0                     0
+IDN-108-L0027                     0                     0                     0
+IDN-108-L0028                     0                     1                     0
+IDN-108-L0029                     0                     0                     0
+IDN-108-L0030                     0                     0                     0
+IDN-108-L0031                     0                     0                     0
+IDN-108-L0032                     0                     0                     0
+IDN-108-L0033                     0                     0                     0
+IDN-108-L0034                     0                     0                     0
+IDN-108-L0035                     0                     0                     0
+IDN-108-L0036                     0                     0                     0
+IDN-108-L0037                     0                     0                     0
+IDN-108-L0038                     0                     0                     0
+IDN-108-L0039                     0                     0                     0
+IDN-108-L0040                     0                     0                     0
+IDN-108-L0041                     0                     0                     0
+IDN-108-L0042                     0                     0                     0
+IDN-108-L0043                     0                     0                     0
+IDN-108-L0044                     0                     0                     0
+IDN-108-L0045                     0                     0                     0
+IDN-108-L0046                     1                     1                     0
+IDN-108-L0047                     0                     0                     0
+IDN-108-L0048                     0                     0                     0
+IDN-108-L0049                     0                     0                     0
+IDN-108-L0050                     0                     0                     0
+IDN-108-L0051                     0                     0                     0
+IDN-108-L0052                     0                     0                     1
+IDN-108-L0053                     0                     0                     0
+IDN-108-L0054                     0                     0                     0
+IDN-108-L0055                     0                     1                     0
+IDN-108-L0056                     0                     0                     0
+IDN-108-L0057                     0                     0                     0
+IDN-108-L0058                     0                     0                     0
+IDN-108-L0059                     0                     0                     0
+IDN-108-L0060                     0                     0                     0
+IDN-108-L0061                     0                     0                     0
+IDN-108-L0062                     0                     0                     0
+IDN-108-L0063                     0                     0                     0
+IDN-108-L0064                     0                     0                     0
+IDN-108-L0065                     0                     0                     0
+              2019-09-03_2019-09-09 2019-09-10_2019-09-16 2019-09-17_2019-09-23
+IDN-108-L0001                     0                     0                     0
+IDN-108-L0002                     0                     1                     0
+IDN-108-L0003                     0                     0                     0
+IDN-108-L0004                     0                     0                     0
+IDN-108-L0005                     0                     1                     0
+IDN-108-L0006                     0                     0                     0
+IDN-108-L0007                     0                     0                     0
+IDN-108-L0008                     0                     0                     0
+IDN-108-L0009                     0                     0                     1
+IDN-108-L0010                     0                     0                     0
+IDN-108-L0011                     0                     0                     0
+IDN-108-L0012                     0                     0                     0
+IDN-108-L0013                     0                     0                     0
+IDN-108-L0014                     0                     0                     0
+IDN-108-L0015                     0                     0                     0
+IDN-108-L0016                     0                     0                     0
+IDN-108-L0017                     1                     0                     0
+IDN-108-L0018                     1                     0                     0
+IDN-108-L0019                    NA                    NA                    NA
+IDN-108-L0020                     0                     0                     0
+IDN-108-L0021                     0                     0                     0
+IDN-108-L0022                     1                     1                     0
+IDN-108-L0023                     0                     0                     0
+IDN-108-L0024                     0                     0                     0
+IDN-108-L0025                     0                     0                     0
+IDN-108-L0026                     0                     0                     0
+IDN-108-L0027                     0                     0                     0
+IDN-108-L0028                     0                     0                     0
+IDN-108-L0029                     0                     0                     0
+IDN-108-L0030                     0                     0                     0
+IDN-108-L0031                     0                     0                     0
+IDN-108-L0032                     0                     0                     0
+IDN-108-L0033                     0                     0                     0
+IDN-108-L0034                     0                     0                     0
+IDN-108-L0035                     0                     0                     0
+IDN-108-L0036                     0                     0                     0
+IDN-108-L0037                     0                     0                     0
+IDN-108-L0038                     0                     0                     0
+IDN-108-L0039                     0                     0                     0
+IDN-108-L0040                     0                     0                     0
+IDN-108-L0041                     0                     0                     0
+IDN-108-L0042                     0                     0                     0
+IDN-108-L0043                     0                     0                     0
+IDN-108-L0044                     0                     0                     0
+IDN-108-L0045                     0                     0                     0
+IDN-108-L0046                     0                     1                     0
+IDN-108-L0047                     0                     0                     0
+IDN-108-L0048                     0                     0                     0
+IDN-108-L0049                     0                     0                     0
+IDN-108-L0050                     0                     0                     0
+IDN-108-L0051                     0                     0                     0
+IDN-108-L0052                     0                     0                     0
+IDN-108-L0053                     0                     0                     0
+IDN-108-L0054                     0                     0                     0
+IDN-108-L0055                     0                     0                     0
+IDN-108-L0056                     0                     0                     0
+IDN-108-L0057                     0                     0                     0
+IDN-108-L0058                     0                     0                     0
+IDN-108-L0059                     0                     0                     0
+IDN-108-L0060                     0                     0                     0
+IDN-108-L0061                     0                     0                     0
+IDN-108-L0062                     0                     0                     0
+IDN-108-L0063                     0                     0                     0
+IDN-108-L0064                     0                     0                     0
+IDN-108-L0065                     0                     0                     0
+              2019-09-24_2019-09-30 2019-10-01_2019-10-07 2019-10-08_2019-10-14
+IDN-108-L0001                     0                     0                     0
+IDN-108-L0002                     0                     0                     0
+IDN-108-L0003                     0                     0                     0
+IDN-108-L0004                     0                     0                     0
+IDN-108-L0005                     0                     1                     1
+IDN-108-L0006                     0                     0                     0
+IDN-108-L0007                     0                     1                     0
+IDN-108-L0008                     0                     0                     0
+IDN-108-L0009                     0                     0                     0
+IDN-108-L0010                     0                     0                     0
+IDN-108-L0011                     0                     0                     0
+IDN-108-L0012                     0                     0                     0
+IDN-108-L0013                     0                     0                     0
+IDN-108-L0014                     0                     0                     0
+IDN-108-L0015                     0                     0                     0
+IDN-108-L0016                     0                     0                     0
+IDN-108-L0017                     0                     0                     0
+IDN-108-L0018                     0                     0                     0
+IDN-108-L0019                    NA                    NA                    NA
+IDN-108-L0020                     0                     0                     0
+IDN-108-L0021                     0                     0                     0
+IDN-108-L0022                     0                     1                     1
+IDN-108-L0023                     1                     0                     0
+IDN-108-L0024                     0                     0                     0
+IDN-108-L0025                     0                     0                     0
+IDN-108-L0026                     0                     0                     0
+IDN-108-L0027                     0                     0                     0
+IDN-108-L0028                     0                     0                     0
+IDN-108-L0029                     0                     0                     0
+IDN-108-L0030                     0                     0                     0
+IDN-108-L0031                     0                     0                     0
+IDN-108-L0032                     0                     0                     0
+IDN-108-L0033                     0                     0                     1
+IDN-108-L0034                     0                     0                     0
+IDN-108-L0035                     0                     0                     0
+IDN-108-L0036                     0                     0                     0
+IDN-108-L0037                     0                     0                     0
+IDN-108-L0038                     0                     0                     0
+IDN-108-L0039                     0                     0                     0
+IDN-108-L0040                     0                     0                     0
+IDN-108-L0041                     0                     0                     0
+IDN-108-L0042                     0                     0                     0
+IDN-108-L0043                     0                     0                     0
+IDN-108-L0044                     0                     0                     0
+IDN-108-L0045                     0                     0                     0
+IDN-108-L0046                     0                     0                     0
+IDN-108-L0047                     0                     0                     0
+IDN-108-L0048                     0                     0                     0
+IDN-108-L0049                     0                     0                     0
+IDN-108-L0050                     0                     0                     0
+IDN-108-L0051                     0                     0                     0
+IDN-108-L0052                     0                     0                     0
+IDN-108-L0053                     0                     0                     0
+IDN-108-L0054                     0                     0                     0
+IDN-108-L0055                     0                     0                     0
+IDN-108-L0056                     0                     0                     0
+IDN-108-L0057                     0                     0                     0
+IDN-108-L0058                     0                     0                     0
+IDN-108-L0059                     0                     0                     0
+IDN-108-L0060                     0                     0                     0
+IDN-108-L0061                     0                     0                     0
+IDN-108-L0062                     0                     0                     0
+IDN-108-L0063                     0                     0                     0
+IDN-108-L0064                     0                     0                     0
+IDN-108-L0065                     0                     0                     0
+              2019-10-15_2019-10-21 2019-10-22_2019-10-28 2019-10-29_2019-11-04
+IDN-108-L0001                     1                     0                     0
+IDN-108-L0002                     0                     1                     0
+IDN-108-L0003                     0                     0                     0
+IDN-108-L0004                     0                     0                     0
+IDN-108-L0005                     0                     0                     0
+IDN-108-L0006                     0                     0                     0
+IDN-108-L0007                     0                     0                     0
+IDN-108-L0008                     0                     0                     0
+IDN-108-L0009                     0                     0                     0
+IDN-108-L0010                     0                     0                     0
+IDN-108-L0011                     0                     0                     0
+IDN-108-L0012                     0                     0                     0
+IDN-108-L0013                     0                     0                     0
+IDN-108-L0014                     0                     0                     0
+IDN-108-L0015                     0                     0                     0
+IDN-108-L0016                     0                     0                     0
+IDN-108-L0017                     0                     1                     0
+IDN-108-L0018                     0                     0                     0
+IDN-108-L0019                    NA                    NA                    NA
+IDN-108-L0020                     0                     0                     0
+IDN-108-L0021                     0                     0                     0
+IDN-108-L0022                     0                     0                     0
+IDN-108-L0023                     0                     0                     0
+IDN-108-L0024                     0                     0                     0
+IDN-108-L0025                     0                    NA                    NA
+IDN-108-L0026                     0                    NA                    NA
+IDN-108-L0027                     0                     0                     0
+IDN-108-L0028                     0                     1                     0
+IDN-108-L0029                     0                     0                     0
+IDN-108-L0030                     0                     0                     0
+IDN-108-L0031                     0                     0                     0
+IDN-108-L0032                     0                    NA                    NA
+IDN-108-L0033                     1                    NA                    NA
+IDN-108-L0034                     0                    NA                    NA
+IDN-108-L0035                     0                     0                     0
+IDN-108-L0036                     0                     0                     0
+IDN-108-L0037                     0                     0                     0
+IDN-108-L0038                     0                     0                     0
+IDN-108-L0039                     0                    NA                    NA
+IDN-108-L0040                     0                    NA                    NA
+IDN-108-L0041                     0                    NA                    NA
+IDN-108-L0042                     0                     0                     0
+IDN-108-L0043                     0                     0                     0
+IDN-108-L0044                     0                    NA                    NA
+IDN-108-L0045                     0                    NA                    NA
+IDN-108-L0046                    NA                    NA                    NA
+IDN-108-L0047                    NA                    NA                    NA
+IDN-108-L0048                     0                    NA                    NA
+IDN-108-L0049                     0                    NA                    NA
+IDN-108-L0050                     0                    NA                    NA
+IDN-108-L0051                    NA                    NA                    NA
+IDN-108-L0052                    NA                    NA                    NA
+IDN-108-L0053                     0                    NA                    NA
+IDN-108-L0054                     0                    NA                    NA
+IDN-108-L0055                     0                    NA                    NA
+IDN-108-L0056                     0                    NA                    NA
+IDN-108-L0057                    NA                    NA                    NA
+IDN-108-L0058                    NA                    NA                    NA
+IDN-108-L0059                     0                    NA                    NA
+IDN-108-L0060                     0                    NA                    NA
+IDN-108-L0061                     0                    NA                    NA
+IDN-108-L0062                     0                    NA                    NA
+IDN-108-L0063                     0                    NA                    NA
+IDN-108-L0064                     0                    NA                    NA
+IDN-108-L0065                     0                    NA                    NA
+              2019-11-05_2019-11-11 2019-11-12_2019-11-18 2019-11-19_2019-11-22
+IDN-108-L0001                     0                     0                    NA
+IDN-108-L0002                     0                     0                    NA
+IDN-108-L0003                     0                     0                    NA
+IDN-108-L0004                     0                     0                    NA
+IDN-108-L0005                     1                     0                    NA
+IDN-108-L0006                     0                    NA                    NA
+IDN-108-L0007                     0                     0                    NA
+IDN-108-L0008                     0                     0                    NA
+IDN-108-L0009                     0                     0                    NA
+IDN-108-L0010                     1                     0                    NA
+IDN-108-L0011                     0                     0                    NA
+IDN-108-L0012                     0                     0                    NA
+IDN-108-L0013                     0                     0                    NA
+IDN-108-L0014                     0                     0                    NA
+IDN-108-L0015                     0                     0                    NA
+IDN-108-L0016                     0                     0                    NA
+IDN-108-L0017                     0                     0                    NA
+IDN-108-L0018                     0                     0                    NA
+IDN-108-L0019                    NA                    NA                    NA
+IDN-108-L0020                     0                     1                    NA
+IDN-108-L0021                     0                     0                    NA
+IDN-108-L0022                     0                     1                    NA
+IDN-108-L0023                     0                     0                    NA
+IDN-108-L0024                     0                     0                    NA
+IDN-108-L0025                    NA                    NA                    NA
+IDN-108-L0026                    NA                    NA                    NA
+IDN-108-L0027                     0                     0                    NA
+IDN-108-L0028                     0                    NA                    NA
+IDN-108-L0029                     0                     0                    NA
+IDN-108-L0030                     0                     0                    NA
+IDN-108-L0031                     0                     0                    NA
+IDN-108-L0032                    NA                    NA                    NA
+IDN-108-L0033                    NA                    NA                    NA
+IDN-108-L0034                    NA                    NA                    NA
+IDN-108-L0035                     0                     0                     0
+IDN-108-L0036                     0                     0                    NA
+IDN-108-L0037                     0                    NA                    NA
+IDN-108-L0038                     0                     0                    NA
+IDN-108-L0039                    NA                    NA                    NA
+IDN-108-L0040                    NA                    NA                    NA
+IDN-108-L0041                    NA                    NA                    NA
+IDN-108-L0042                     0                     0                    NA
+IDN-108-L0043                     0                     0                    NA
+IDN-108-L0044                    NA                    NA                    NA
+IDN-108-L0045                    NA                    NA                    NA
+IDN-108-L0046                    NA                    NA                    NA
+IDN-108-L0047                    NA                    NA                    NA
+IDN-108-L0048                    NA                    NA                    NA
+IDN-108-L0049                    NA                    NA                    NA
+IDN-108-L0050                    NA                    NA                    NA
+IDN-108-L0051                    NA                    NA                    NA
+IDN-108-L0052                    NA                    NA                    NA
+IDN-108-L0053                    NA                    NA                    NA
+IDN-108-L0054                    NA                    NA                    NA
+IDN-108-L0055                    NA                    NA                    NA
+IDN-108-L0056                    NA                    NA                    NA
+IDN-108-L0057                    NA                    NA                    NA
+IDN-108-L0058                    NA                    NA                    NA
+IDN-108-L0059                    NA                    NA                    NA
+IDN-108-L0060                    NA                    NA                    NA
+IDN-108-L0061                    NA                    NA                    NA
+IDN-108-L0062                    NA                    NA                    NA
+IDN-108-L0063                    NA                    NA                    NA
+IDN-108-L0064                    NA                    NA                    NA
+IDN-108-L0065                    NA                    NA                    NA</code></pre>
+<p>Selanjutnya, kita akan mengekstrak nilai variabel lingkungan pada lokasi kamera.</p>
+<pre class="r"><code>library(sp);library(raster)
+
+# Membuat tabel koordinat kamera
+ctloc &lt;- camdata %&gt;% dplyr::select(LocationID, X, Y) %&gt;% distinct() 
+
+# CRS yang digunakan
+utm48s &lt;- CRS(&quot;+proj=utm +zone=48 +south +datum=WGS84 +units=m +no_defs&quot;)
+
+# Mengubah tabel koordinat menjadi data spasial
+ct_sp &lt;- SpatialPoints(coords=ctloc[,c(&quot;X&quot;,&quot;Y&quot;)], proj4string=utm48s)
+
+# Memanggil raster prediktor
+ele &lt;- raster(&quot;Predictors/res250m_elevation.asc&quot;)
+slo &lt;- raster(&quot;Predictors/res250m_slope.asc&quot;)
+rou &lt;- raster(&quot;Predictors/res250m_roughness.asc&quot;)
+ndv &lt;- raster(&quot;Predictors/res250m_ndvi.asc&quot;)
+dis &lt;- raster(&quot;Predictors/res250m_distance_to_forest_edge_2019.asc&quot;)
+
+# Menggabungkan prediktor lingkungan menjadi satu objek
+preds &lt;- stack(ele,slo,rou,ndv,dis)
+
+# Rename komponen prediktor
+names(preds) &lt;- c(&quot;ele&quot;,&quot;slo&quot;,&quot;rou&quot;,&quot;ndv&quot;,&quot;dis&quot;)
+
+# Mengekstrak nilai prediktor di lokasi kamera
+predvalues &lt;- raster::extract(preds, ct_sp) %&gt;% as.data.frame()
+ 
+# Melihat korelasi antarprediktor 
+library(PerformanceAnalytics) 
+chart.Correlation(predvalues, histogram=TRUE, pch=19)</code></pre>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-36-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
-<div id="fit-model-1" class="section level2">
-<h2>Fit model</h2>
+<div id="pemodelan-2" class="section level2">
+<h2>Pemodelan</h2>
+<p><em>Package</em> yang digunakan untuk melakukan pemodelan okupansi adalah <code>unmarked</code>. Pasang <em>package</em> tersebut terlebih dahulu jika belum ada.</p>
 <pre class="r"><code>library(unmarked)
 
 umf &lt;- unmarkedFrameOccu(y = spdet$detection_history, 
                          siteCovs = predvalues)
 plot(umf)</code></pre>
-<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-39-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-37-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Berbeda dengan GLM, biasanya pemodelan okupansi dilakukan dari model konstan terlebih dahulu, kemudian menambahkan prediktor satu per satu dan membandingkan nilai AIC-nya. Namun, sebenarnya kita juga bisa melakukan seleksi model dari model lengkap (<em>full model</em>) dan satu per satu mengeliminasi prediktor. Hal ini dapat dilakukan jika prediktor kita tidak terlalu banyak.</p>
+<p>Jika prediktor banyak, tentu akan memakan banyak waktu untuk mencoba seluruh kombinasi model. Alternatif lainnya adalah menyusun beberapa model kandidat yang mencakup kombinasi beberapa prediktor yang memiliki makna ekologis saja.</p>
+<p>Dalam contoh latihan ini, kita akan mencoba melakukan pemodelan okupansi dari model konstan dan satu per satu menambahkan prediktor.</p>
+<p>Keputusan lainnya yang perlu kita buat adalah apakah kita akan menyusun model kandidat untuk parameter probabilitas okupansi $$ atau probabilitas deteksi <span class="math inline">\(p\)</span> terlebih dahulu? Hal ini juga tergantung aliran kepercayaan masing-masing. Biasanya, saya pribadi akan memodelkan <span class="math inline">\(p\)</span> dahulu dengan <span class="math inline">\(\psi\)</span> konstan. Lalu, jika sudah didapatkan <em>best model</em> untuk <span class="math inline">\(p\)</span>, saya akan menyusun model kandidat untuk memodelkan <span class="math inline">\(\psi\)</span>.</p>
+<p>Pertama, kita akan <em>fit</em> model konstan <span class="math inline">\(p \sim 1 , \psi \sim 1\)</span>, lalu menambahkan prediktor NDVI untuk probabilitas deteksi <span class="math inline">\(p\)</span>.</p>
 <pre class="r"><code># Fit models
 mods &lt;- list()
 
@@ -1352,7 +1980,7 @@ Bootstrap iterations: 0 </code></pre>
 <pre><code>    psi(Int)     psi(ele)       p(Int)       p(ndv) 
 6.671958e-02 5.011037e-01 8.204225e-07 9.999999e-01 </code></pre>
 </div>
-<div id="membuat-response-curve-1" class="section level2">
+<div id="membuat-response-curve" class="section level2">
 <h2>Membuat <em>response curve</em></h2>
 <pre class="r"><code>predpsi &lt;- predict(bestmod, type=&quot;state&quot;)
 
@@ -1371,7 +1999,7 @@ occu_toppred_df &lt;- data.frame(occu_toppred,occu_newdata) </code></pre>
   labs(x = &quot;Elevasi&quot;, y = &quot;Probabilitas okupansi&quot;) +
   theme_classic() +
   coord_cartesian(ylim = c(0,1)) </code></pre>
-<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-48-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-46-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="prediksi-spasial-1" class="section level2">
 <h2>Prediksi spasial</h2>
@@ -1379,7 +2007,7 @@ occu_toppred_df &lt;- data.frame(occu_toppred,occu_newdata) </code></pre>
 <pre class="r"><code>predoccu &lt;- predict(preds, bestmod, type=&quot;state&quot;)
 probocc &lt;- calc(predoccu, fun = function(x){plogis(x)})</code></pre>
 <pre class="r"><code>plot(probocc)</code></pre>
-<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-51-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-49-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>writeRaster(prob_sp, filename=&quot;Occupancy_Mydaus_javanensis.tif&quot;)</code></pre>
 </div>
 </div>
@@ -1388,7 +2016,7 @@ probocc &lt;- calc(predoccu, fun = function(x){plogis(x)})</code></pre>
 <pre class="r"><code>par(mfrow=c(1,2))
 plot(probglm, main=&quot;GLM&quot;)
 plot(probocc, main=&quot;Occupancy&quot;)</code></pre>
-<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-53-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="Modul-SDM_web_files/figure-html/unnamed-chunk-51-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <div id="referensi" class="section level3 unnumbered">
 <h3>Referensi</h3>
 <div id="refs" class="references">
