@@ -363,10 +363,13 @@ div.tocify {
   <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="Modul-CT.html">Camera Trap</a>
+  <a href="Modul-CT.html">1. Camera Trap</a>
 </li>
 <li>
-  <a href="Modul-SDM_web.html">Distribusi Spesies</a>
+  <a href="Modul-SDM_web.html">2. Distribusi Spesies</a>
+</li>
+<li>
+  <a href="about.html">Tentang Saya</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -482,8 +485,8 @@ Metode ini merupakan pemodelan distribusi spesies menggunakan algoritma komputer
 <p>Biasanya, tahap inilah yang memakan paling banyak waktu proses pemodelan, bahkan bisa mencapai &gt; 50% total waktu.</p>
 <p>Bentuk data keberadaan spesies berbeda untuk setiap metode sehingga akan dibahas pada setiap bab metode pemodelan. Namun, variabel lingkungan yang akan digunakan hampir sama sehingga akan dibahas terlebih dahulu.</p>
 </div>
-<div id="pemrosesan-data-spasial-variabel-lingkungan" class="section level1">
-<h1>Pemrosesan Data Spasial Variabel Lingkungan</h1>
+<div id="pemrosesan-variabel-lingkungan" class="section level1">
+<h1>Pemrosesan Variabel Lingkungan</h1>
 <p>Untuk menentukan variabel lingkungan apa saja yang akan digunakan untuk pemodelan, kita harus mengetahui ekologi spesies yang akan dimodelkan dan skala pemodelan. Misalnya, jika kita ingin memodelkan satwa arboreal seperti siamang, faktor utama yang penting bagi keberadaannya adalah struktur tajuk pohon yang memungkinkan mereka bergerak dan sumber pakan, yaitu buah dan daun pohon di hutan primer atau sekunder. Oleh karena itu, kita dapat mengasumsikan bahwa data spasial yang memengaruhi keberadaannya adalah data yang terkait kualitas habitat hutan, misalnya persentase tajuk hutan, tutupan lahan hutan primer dan sekunder, jarak dari tepi hutan, dan NDVI. Namun, jika spesies yang akan dimodelkan adalah tumbuhan, mungkin faktor lingkungan terkait iklim, cuaca, dan tanah lebih berpengaruh, misalnya curah hujan tahunan, suhu minimal dan maksimal, dan komposisi tanah.</p>
 <p>Selain sumber daya, variabel lingkungan lain yang dapat memengaruhi keberadaan satwa adalah gangguan manusia. Hal ini dapat direpresentasikan sebagai pengaruh langsung, misalnya tutupan lahan perkebunan dan permukiman sebagai nonhabitat (tergantung spesiesnya), maupun secara tidak langsung, misalnya kita asumsikan jarak dari jalan sebagai proksi terhadap perburuan dan perambahan.</p>
 <p>Data spasial yang akan digunakan sebagai prediktor lingkungan dalam pemodelan distribusi spesies harus memiliki <em>extent</em>, resolusi, dan CRS yang sama. Beberapa metode transformasi data spasial yang sering digunakan untuk pemrosesan prediktor lingkungan adalah:</p>
@@ -1024,8 +1027,25 @@ sploc</code></pre>
 10 IDN-108-L0010 407969. 9415929                   1                0
 # ... with 55 more rows</code></pre>
 <p>Langkah selanjutnya adalah mengekstrak nilai variabel lingkungan di lokasi kamera. Kita akan kembali menggunakan <em>package</em> spasial. Aktifkan <em>package</em> terlebih dahulu jika belum: <code>library(sp);library(raster)</code>.</p>
-<pre class="r"><code># Membuat data spasial titik CT
+<pre class="r"><code>library(sp);library(raster)
+
+# CRS yang digunakan
+utm48s &lt;- CRS(&quot;+proj=utm +zone=48 +south +datum=WGS84 +units=m +no_defs&quot;)
+
+# Membuat data spasial titik CT
 locspatial &lt;- SpatialPoints(coords=locdata[,c(&quot;X&quot;,&quot;Y&quot;)], proj4string=utm48s)
+
+# Memanggil raster variabel lingkungan
+# (raster ini dibuat pada bagian Pemrosesan Variabel Lingkungan)
+ele &lt;- raster(&quot;Predictors/res250m_elevation.asc&quot;)
+slo &lt;- raster(&quot;Predictors/res250m_slope.asc&quot;)
+rou &lt;- raster(&quot;Predictors/res250m_roughness.asc&quot;)
+ndv &lt;- raster(&quot;Predictors/res250m_ndvi.asc&quot;)
+dis &lt;- raster(&quot;Predictors/res250m_distance_to_forest_edge_2019.asc&quot;)
+# Menggabungkan kelima prediktor menjadi satu raster stack
+preds &lt;- stack(ele, slo, rou, ndv, dis)
+# Rename komponen objek preds
+names(preds) &lt;- c(&quot;ele&quot;, &quot;slo&quot;, &quot;rou&quot;, &quot;ndv&quot;, &quot;dis&quot;)
 
 # Mengekstrak variabel lingkungan
 predvalues &lt;- raster::extract(preds, locspatial)
